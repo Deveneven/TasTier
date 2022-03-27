@@ -23,5 +23,3 @@ jobs:
       run: dotnet build --no-restore ./src
     - name: Test
       run: dotnet test --no-build --verbosity normal ./src
-    - name: Test2
-      run: echo 'test2'
