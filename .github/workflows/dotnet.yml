@@ -56,5 +56,5 @@ jobs:
       shell: pwsh
       run: |
         src/./.sonar/scanner/dotnet-sonarscanner begin /k:"Deveneven_TasTier" /o:"tastierteam" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-        dotnet clean ./src/
+        dotnet build --no-restore ./src
         src/./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
