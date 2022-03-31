@@ -34,22 +34,22 @@ jobs:
       id: cache-sonar-scanner
       uses: actions/cache@v1
       with:
-        path: src/./.sonar/scanner
+        path: backend/./.sonar/scanner
         key: ${{ runner.os }}-sonar-scanner
         restore-keys: ${{ runner.os }}-sonar-scanner
     - name: Install SonarCloud scanner
       if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
       shell: pwsh
       run: |
-        New-Item -Path src/./.sonar/scanner -ItemType Directory
-        dotnet tool update dotnet-sonarscanner --tool-path src/./.sonar/scanner
+        New-Item -Path backend/./.sonar/scanner -ItemType Directory
+        dotnet tool update dotnet-sonarscanner --tool-path backend/./.sonar/scanner
     - name: Build and analyze
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       shell: pwsh
       run: |
-        src/./.sonar/scanner/dotnet-sonarscanner begin /k:"Deveneven_TasTier" /o:"tastierteam" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-        dotnet build ./src
-        dotnet test --no-build --verbosity normal ./src
-        src/./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        backend/./.sonar/scanner/dotnet-sonarscanner begin /k:"Deveneven_TasTier" /o:"tastierteam" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet build ./backend
+        dotnet test --no-build --verbosity normal ./backend
+        backend/./.sonar/scanner/dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
