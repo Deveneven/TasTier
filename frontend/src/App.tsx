@@ -1,14 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import SignInScreen from './Screen/SignInScreen';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-          <Route path='/' element={<SignInScreen/>}/>
+        <Route path='/' element={<SignInScreen/>}/>
       </Routes>
     </BrowserRouter>
   );
