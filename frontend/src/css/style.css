@@ -1,0 +1,41 @@
+:root {
+  --font-name: ;
+}
+
+:root {
+  --background-color: white;
+  --primary-color: ;
+  --secondary-color: ;
+  --tertiary-color: ;
+  --font-primary-color: ;
+  --font-secondary-color: ;
+  --font-tertiary-color: ;
+}
+
+html {
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-name);
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}/*# sourceMappingURL=style.css.map */
