@@ -1,15 +1,21 @@
 import React from 'react';
 import './App.css';
+import './css/style.css';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import SignInScreen from './Screen/SignInScreen';
-
+import RegisterPopOut from './Shared/RegisterPopOut/RegisterPopOut';
+import {ThemeProvider} from '@mui/material/styles';
+import theme from './MUI styles/mainTheme';
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<SignInScreen/>}/>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SignInScreen />} />
+          <Route path="/test" element={<RegisterPopOut />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

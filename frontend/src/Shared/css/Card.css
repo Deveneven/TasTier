@@ -1,0 +1,13 @@
+.card {
+  border: 1px solid grey;
+  padding: 5px;
+  background-color: aliceblue;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: inherit;
+  text-align: center;
+}
+.card .title {
+  font-size: 5vh;
+}/*# sourceMappingURL=Card.css.map */

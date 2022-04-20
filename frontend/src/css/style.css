@@ -1,15 +1,16 @@
 :root {
-  --font-name: ;
+  --main-font: "Helvetica Neue", sans-serif;
+  --secondary-font: "Oriya MN", sans-serif;
 }
 
 :root {
-  --background-color: white;
-  --primary-color: ;
-  --secondary-color: ;
-  --tertiary-color: ;
-  --font-primary-color: ;
-  --font-secondary-color: ;
-  --font-tertiary-color: ;
+  --main-orange: hsl(28, 100%, 50%);
+  --main-white: hsl(0, 0%, 100%);
+  --bg-white: hsl(0, 0%, 100%);
+  --bg-white-dark: hsl(0, 0%, 94%);
+  --fnt-primary-color: hsla(0, 0%, 0%, 0.5);
+  --fnt-secondary-color: hsl(222, 36%, 37%);
+  --fnt-tertiary-color: hsl(28, 100%, 50%);
 }
 
 html {
@@ -26,16 +27,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-name);
-  background: var(--background-color);
-  color: var(--text-color);
-}
-
-.visually-hidden {
-  position: absolute;
-  left: -10000px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+  font-family: var(--main-font);
+  background: var(--bg-white-dark);
+  color: var(--fnt-primary-color);
 }/*# sourceMappingURL=style.css.map */
