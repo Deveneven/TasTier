@@ -14,9 +14,10 @@ function SignInScreen() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <Typography component="h1" variant="h5">
-              Sign in
+            Sign in
           </Typography>
           <TextField
             margin="normal"
