@@ -1,0 +1,26 @@
+:root {
+  /////////////////////////
+  ////// general colors ///
+  /////////////////////////
+
+  // used for buttons mostly
+  --main-orange: hsl(28, 100%, 50%);
+  --main-white: hsl(0, 0%, 100%);
+
+  /////////////////////////////
+  ////// background colors ////
+  /////////////////////////////
+
+  --bg-white: hsl(0, 0%, 100%);
+  --bg-white-dark: hsl(0, 0%, 94%);
+
+  /////////////////////////////
+  ////// font colors //////////
+  /////////////////////////////
+
+  --fnt-primary-color: hsla(0, 0%, 0%, 0.5);
+  --fnt-secondary-color: hsl(222, 36%, 37%);
+  --fnt-tertiary-color: hsl(28, 100%, 50%);
+}
+
+
