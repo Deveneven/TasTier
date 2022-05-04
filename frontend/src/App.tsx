@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import './css/style.css';
+import './scss/style.scss';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import SignInScreen from './Screen/SignInScreen';
 import RegisterPopOut from './Shared/RegisterPopOut/RegisterPopOut';
