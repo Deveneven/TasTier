@@ -19,5 +19,21 @@ namespace TasTierAPI.Services
 
             return rmd.getMockRecipes();
         }
+
+        public bool CheckCredidentials(string login, string password)
+        {
+            AccountMockData amd = new AccountMockData();
+            IEnumerable<Account> accounts = new List<Account>();
+            accounts = amd.GetAccounts();
+            foreach(Account acc in accounts)
+            {
+                if((acc.login == login)&&(acc.password == password))
+                {
+                    return true;
+                }
+            }
+            return false;
+
+        }
     }
 }

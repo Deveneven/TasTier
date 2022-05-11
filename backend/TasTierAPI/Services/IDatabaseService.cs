@@ -7,5 +7,6 @@ namespace TasTierAPI.Services
     public interface IDatabaseService
     {
         public IEnumerable<Recipe> GetRecipes();
+        public bool CheckCredidentials(string login,string password);
     }
 }
