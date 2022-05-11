@@ -6,7 +6,7 @@ namespace TasTierAPI.MockData
 {
     public class RecipeMockData
     {
-        public IEnumerable<Recipe> getMockRecipes()
+        public IEnumerable<Recipe> GetMockRecipes()
         {
             IngriedientInRecipe carrots = new IngriedientInRecipe
             {

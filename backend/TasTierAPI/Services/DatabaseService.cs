@@ -17,7 +17,7 @@ namespace TasTierAPI.Services
         {
             RecipeMockData rmd = new RecipeMockData();
 
-            return rmd.getMockRecipes();
+            return rmd.GetMockRecipes();
         }
 
         public bool CheckCredidentials(string login, string password)
