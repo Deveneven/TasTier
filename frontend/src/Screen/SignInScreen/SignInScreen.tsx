@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import {Avatar, Box, Button, Card, TextField} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import {Facebook, LockOutlined} from '@material-ui/icons';
-import RegisterPopOut from '../../Shared/RegisterPopOut/RegisterPopOut';
+import RegisterPopOut from '../../Shared/Components/RegisterPopOut/RegisterPopOut';
 import {useNavigate} from 'react-router-dom';
 
 const SignInScreen = () => {
