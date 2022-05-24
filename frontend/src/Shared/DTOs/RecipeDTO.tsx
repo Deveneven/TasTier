@@ -1,6 +1,7 @@
-import UserDTO from '../DTOs/UserDTO';
+import {UserDTO} from '../DTOs/UserDTO';
 
 export interface RecipeDTO {
+  Id: number,
   Name: string,
   Difficulty: number,
   Time: string,
