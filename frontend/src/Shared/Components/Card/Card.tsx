@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -7,6 +7,7 @@ import './CustomCard.scss';
 import {RecipeDTO} from '../../DTOs/RecipeDTO';
 import {
   Avatar,
+  Button,
   CardHeader,
   Collapse,
   IconButton,
@@ -14,15 +15,18 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
 } from '@mui/material';
-import {Chat, ThumbUpAltOutlined} from '@material-ui/icons';
+import {Chat, ExpandMore, ThumbUpAltOutlined} from '@material-ui/icons';
 
 type CustomCardProps = {
   data: RecipeDTO;
 };
 
 const CustomCard = ({data}: CustomCardProps) => {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <Card className="card">
       <CardHeader
@@ -39,9 +43,23 @@ const CustomCard = ({data}: CustomCardProps) => {
         </IconButton>
       </CardActions>
       <CardContent>{data.Description}</CardContent>
-      <Collapse>
+      <Button
+        fullWidth={true}
+        onClick={() => {
+          setExpanded(!expanded);
+        }}
+      >
+        <ExpandMore />
+      </Button>
+      <Collapse in={expanded}>
         <TableContainer>
           <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Calories</TableCell>
+              </TableRow>
+            </TableHead>
             <TableBody>
               {data.Ingredients.map((ingredient) => (
                 <TableRow key={ingredient.Id}>
