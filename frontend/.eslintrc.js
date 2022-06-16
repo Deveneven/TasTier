@@ -28,6 +28,8 @@ module.exports = {
   'rules': {
     "require-jsdoc": 'off',
     'linebreak-style': 'off',
-    'max-len': [90]
+    'max-len': ['error', {
+      'code': 90
+    }]
   },
 };
