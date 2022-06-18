@@ -11,14 +11,10 @@ import {
   CardHeader,
   Collapse,
   IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
 } from '@mui/material';
 import {Chat, ExpandMore, ThumbUpAltOutlined} from '@material-ui/icons';
+import IngredientTable from '../IngredientTable/IngredientTable';
+import Comment from '../Comment/Comment';
 
 type CustomCardProps = {
   data: RecipeDTO;
@@ -26,7 +22,11 @@ type CustomCardProps = {
 
 const CustomCard = ({data}: CustomCardProps) => {
   const [expanded, setExpanded] = useState(false);
+  const [commentIsVisible, setCommentIsVisible] = useState(false);
 
+  const addNewComment = () => {
+    setCommentIsVisible(!commentIsVisible);
+  };
   return (
     <Card className="card">
       <CardHeader
@@ -35,7 +35,7 @@ const CustomCard = ({data}: CustomCardProps) => {
       />
       <CardMedia component="img" height="200" image={data.Image} />
       <CardActions>
-        <IconButton>
+        <IconButton onClick={addNewComment}>
           <Chat />
         </IconButton>
         <IconButton>
@@ -52,25 +52,11 @@ const CustomCard = ({data}: CustomCardProps) => {
         <ExpandMore />
       </Button>
       <Collapse in={expanded}>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Calories</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.Ingredients.map((ingredient) => (
-                <TableRow key={ingredient.Id}>
-                  <TableCell>{ingredient.Name}</TableCell>
-                  <TableCell>{ingredient.Calories}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <IngredientTable data={data.Ingredients}/>
       </Collapse>
+      {!!commentIsVisible ?
+      <Comment /> :
+      ''}
     </Card>
   );
 };

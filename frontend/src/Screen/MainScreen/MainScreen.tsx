@@ -16,41 +16,45 @@ const MainScreen = () => {
       Avatar: '',
       Email: 'kowalski@tlen.pl',
     };
-    const ingrid: IngredientDTO = {
-      Id: 0,
-      Amount: 100,
-      Unit: 'g',
-      Name: 'ryż',
-      Calories: 210,
-      Allergen: false,
-    };
     const ingList: Array<IngredientDTO> = [];
     for (let i = 0; i < 10; i++) {
-      ingrid.Id = i;
+      const ingrid: IngredientDTO = {
+        Id: i,
+        Amount: 100,
+        Unit: 'g',
+        Name: 'ryż',
+        Calories: 210,
+        Allergen: false,
+      };
       ingList.push(ingrid);
     }
-    const recipe: RecipeDTO = {
-      Id: 0,
-      Name: 'Pancakes',
-      Difficulty: 1,
-      Time: '',
-      Image: '',
-      Description:
-        // eslint-disable-next-line max-len
-        'Jajka roztrzepać i wymieszać z mlekiem, następnie połączyć z pozostałymi składnikami na końcu dodać masło. Odstawić na 15 minut.',
-      User: user,
-      Date: new Date('2022/05/24'),
-      Rating: 233,
-      Ingredients: ingList,
-    };
-
+    const recipies: Array<RecipeDTO> = [];
     for (let i = 0; i < 10; i++) {
-      recipe.Id = i;
-      setDataAll((v) => [...v, recipe]);
+      const recipe: RecipeDTO = {
+        Id: i,
+        Name: 'Pancakes',
+        Difficulty: 1,
+        Time: '',
+        Image: '',
+        Description:
+          // eslint-disable-next-line max-len
+          'Jajka roztrzepać i wymieszać z mlekiem, następnie połączyć z pozostałymi składnikami na końcu dodać masło. Odstawić na 15 minut.',
+        User: user,
+        Date: new Date('2022/05/24'),
+        Rating: 233,
+        Ingredients: ingList,
+      };
+      recipies.push(recipe);
     }
+    setDataAll(recipies);
   }, []);
   return (
-    <Grid container spacing={4} className="main">
+    <Grid
+      container
+      spacing={4}
+      direction='column'
+      alignItems='center'
+      justifyContent='center'>
       {dataAll?.map((recipe: RecipeDTO) => {
         return (
           <Grid item key={recipe.Id} xs={12} md={6}>
