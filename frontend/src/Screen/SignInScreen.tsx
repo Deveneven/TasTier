@@ -68,9 +68,7 @@ function SignInScreen() {
           <Button variant="text" startIcon={<Facebook />}>
             Login with Facebook
           </Button>
-          <Link href="#"
-            underline='none'
-          >
+          <Link href="#" underline="none">
             {'Dont have an account? Sign Up'}
           </Link>
         </Card>
