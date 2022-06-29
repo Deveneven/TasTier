@@ -6,7 +6,7 @@ import SignInScreen from './Screen/SignInScreen/SignInScreen';
 import {ThemeProvider} from '@mui/material/styles';
 import theme from './MUI styles/mainTheme';
 import MainScreen from './Screen/MainScreen/MainScreen';
-import Navbar from './Shared/Navbar/Navbar';
+import Navbar from './Shared/Components/Navbar/Navbar';
 function App() {
   return (
     <ThemeProvider theme={theme}>

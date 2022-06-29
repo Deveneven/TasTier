@@ -5,6 +5,7 @@ import {RecipeDTO} from '../../Shared/DTOs/RecipeDTO';
 import {UserDTO} from '../../Shared/DTOs/UserDTO';
 import './MainScreen.scss';
 import {IngredientDTO} from '../../Shared/DTOs/IngredientDTO';
+import Navbar from '../../Shared/Components/Navbar/Navbar';
 const MainScreen = () => {
   const [dataAll, setDataAll] = useState<RecipeDTO[]>([]);
   useEffect(() => {
@@ -55,6 +56,7 @@ const MainScreen = () => {
       direction='column'
       alignItems='center'
       justifyContent='center'>
+      <Navbar/>
       {dataAll?.map((recipe: RecipeDTO) => {
         return (
           <Grid item key={recipe.Id} xs={12} md={6}>
