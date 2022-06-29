@@ -6,6 +6,7 @@ import SignInScreen from './Screen/SignInScreen/SignInScreen';
 import {ThemeProvider} from '@mui/material/styles';
 import theme from './MUI styles/mainTheme';
 import MainScreen from './Screen/MainScreen/MainScreen';
+import Navbar from './Shared/Navbar/Navbar';
 function App() {
   return (
     <ThemeProvider theme={theme}>
@@ -13,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<MainScreen />} />
           <Route path="/signin" element={<SignInScreen />} />
+          <Route path="/" element={<SignInScreen />} />
+          <Route path="/test" element={<Navbar />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
