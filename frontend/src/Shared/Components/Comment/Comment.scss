@@ -1,0 +1,25 @@
+.comment {
+  width: 100%;
+  display: inline-flex;
+  padding: 2vh;
+  padding-left: 2vh;
+  padding-right: 2vh;
+  padding-bottom: 1vh;
+  height: 10vh;
+  textarea {
+    resize: none;
+    width: 100%;
+  }
+  .MuiAvatar-root {
+    margin-right: 10px;
+    margin-top: 1vh;
+  }
+  .MuiIcon-root {
+    background-color: white;
+  }
+  .MuiButtonBase-root {
+    padding: 1vh;
+    margin-left: 1vh;
+    background-color: lightgrey;
+  }
+}
