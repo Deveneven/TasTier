@@ -34,7 +34,6 @@ function Navbar() {
       margin: 'auto',
     },
   }));
-
   const Search = styled(Box)(({theme}) => ({
     display: 'flex',
     backgroundColor: '#F0F0F0',
@@ -48,6 +47,28 @@ function Navbar() {
       display: 'none',
     },
   }));
+  const SearchSizeSmallBox = styled(Box)(({theme}) => ({
+    backgroundColor: 'white',
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: '1rem',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  }));
+  const SearchSizeSmall = styled(Box)(({theme}) => ({
+    display: 'flex',
+    backgroundColor: '#F0F0F0',
+    padding: '0.4rem 0.8rem',
+    borderRadius: '25px',
+    width: '80%',
+    margin: 'auto',
+    alignItems: 'center',
+    gap: '1rem',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  }));
   const IconContainer = styled(Box)(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
@@ -58,6 +79,9 @@ function Navbar() {
       width: '100%',
       margin: 'auto',
       gap: '2rem',
+    },
+    [theme.breakpoints.up('xs')]: {
+      gap: '1rem',
     },
   }));
   return (
@@ -112,6 +136,12 @@ function Navbar() {
           <UserMenu />
         </IconContainer>
       </StyledToolbar>
+      <SearchSizeSmallBox>
+        <SearchSizeSmall>
+          <SearchIcon />
+          <InputBase placeholder="search..." />
+        </SearchSizeSmall>
+      </SearchSizeSmallBox>
     </AppBar>
   );
 }
