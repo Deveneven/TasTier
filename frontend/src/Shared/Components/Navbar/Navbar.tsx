@@ -95,7 +95,9 @@ function Navbar() {
             fontFamily: 'Oriya MN',
             letterSpacing: 2,
             fontWeight: 600,
-            fontSize: {lg: '3rem', md: '2rem'},
+            fontSize: {md: '2rem'},
+            margin: '0.5rem',
+            marginLeft: '2rem',
           }}
         >
           TASTIER

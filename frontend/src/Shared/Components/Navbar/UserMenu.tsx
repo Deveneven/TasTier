@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SettingsIcon from '@material-ui/icons/Settings';
+import {Link} from 'react-router-dom';
 const UserMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userLoggedState, setUserLoggedState] = React.useState(false);
@@ -97,9 +98,11 @@ const UserMenu = () => {
               <SettingsIcon fontSize="medium" /> Account settings
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => setUserLoggedState(false)}>
-              Log Out
-            </MenuItem>{' '}
+            <Link to="../signin">
+              <MenuItem onClick={() => setUserLoggedState(false)}>
+                Log Out
+              </MenuItem>{' '}
+            </Link>
           </>
         )}
       </Menu>
@@ -140,9 +143,7 @@ const UserMenu = () => {
             transformOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           >
-            <MenuItem onClick={() => setLocalStorage()}>Log in</MenuItem>
-            <Divider />
-            <MenuItem>Register</MenuItem>
+            <MenuItem onClick={() => setLocalStorage()}>Log in</MenuItem>{' '}
           </Menu>
         </>
       )}
