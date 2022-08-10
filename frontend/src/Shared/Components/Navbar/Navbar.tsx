@@ -25,13 +25,23 @@ function Navbar() {
     display: 'flex',
     justifyContent: 'space-evenly',
     padding: '1rem 0',
-    [theme.breakpoints.down('md')]: {
-      justifyContent: 'space-between',
+    width: '100%',
+    [theme.breakpoints.down('xl')]: {
+      justifyContent: 'space-evenly',
+      margin: 'auto',
       padding: '0.5rem 1rem',
     },
     [theme.breakpoints.up('xl')]: {
       width: '80%',
       margin: 'auto',
+    },
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: 'white',
+      position: 'fixed',
+      bottom: 0,
+    },
+    [theme.breakpoints.down('md')]: {
+      justifyContent: 'space-between',
     },
   }));
   const Search = styled(Box)(({theme}) => ({
@@ -54,6 +64,7 @@ function Navbar() {
     marginBottom: '1rem',
     [theme.breakpoints.up('md')]: {
       display: 'none',
+      marginTop: '2rem',
     },
   }));
   const SearchSizeSmall = styled(Box)(({theme}) => ({
@@ -64,7 +75,7 @@ function Navbar() {
     width: '80%',
     margin: 'auto',
     alignItems: 'center',
-    gap: '1rem',
+    gap: '0.5rem',
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
@@ -95,9 +106,8 @@ function Navbar() {
             fontFamily: 'Oriya MN',
             letterSpacing: 2,
             fontWeight: 600,
-            fontSize: {md: '2rem'},
+            fontSize: '2rem',
             margin: '0.5rem',
-            marginLeft: '2rem',
           }}
         >
           TASTIER
@@ -139,6 +149,21 @@ function Navbar() {
         </IconContainer>
       </StyledToolbar>
       <SearchSizeSmallBox>
+        <Typography
+          variant="h3"
+          noWrap
+          sx={{
+            display: {xs: 'block', sm: 'none'},
+            fontFamily: 'Oriya MN',
+            letterSpacing: 2,
+            fontWeight: 600,
+            fontSize: '2rem',
+            textAlign: 'center',
+            margin: '1rem',
+          }}
+        >
+          TASTIER
+        </Typography>
         <SearchSizeSmall>
           <SearchIcon />
           <InputBase placeholder="search..." />

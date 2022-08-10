@@ -23,14 +23,15 @@ const UserMenu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const user = {name: 'testUser'};
-  const setLocalStorage = () => {
-    localStorage.setItem('user', JSON.stringify(user));
-    setUserLoggedState(true);
-  };
   return (
     <React.Fragment>
-      <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+      <Box
+        sx={{
+          display: {sm: 'flex', xs: 'none'},
+          alignItems: 'center',
+          textAlign: 'center',
+        }}
+      >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -44,6 +45,9 @@ const UserMenu = () => {
           </IconButton>
         </Tooltip>
       </Box>
+      <IconButton size="small" sx={{ml: 2, display: {sm: 'none', xs: 'block'}}}>
+        <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+      </IconButton>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -143,7 +147,7 @@ const UserMenu = () => {
             transformOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           >
-            <MenuItem onClick={() => setLocalStorage()}>Log in</MenuItem>{' '}
+            <MenuItem>Log in</MenuItem>{' '}
           </Menu>
         </>
       )}
