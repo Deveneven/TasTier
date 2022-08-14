@@ -85,7 +85,6 @@ const SignInScreen = () => {
             />
           </Card>
         </Grid>
-        <Grid item md={7} xs={0}></Grid>
       </Grid>
       <RegisterPopOut />
     </div>
