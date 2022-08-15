@@ -1,13 +1,15 @@
 /* eslint-disable arrow-parens */
 /* eslint-disable react/jsx-key */
 import React from 'react';
+import {useState} from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import {IconButton, styled} from '@mui/material';
+import {IconButton, styled, Button} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
 const ShoppingList = () => {
   const IconContainer = styled(Box)(({theme}) => ({
     display: 'flex',
@@ -20,30 +22,40 @@ const ShoppingList = () => {
     },
   }));
 
-  const lists = [
-    'List title number 1',
-    'List title number 2',
-    'List title number 3',
-    'List title number 4',
-  ];
-
+  const [lists, setLists] = useState([
+    {id: 1, name: 'List title number 1'},
+    {id: 2, name: 'List title number 2'},
+    {id: 3, name: 'List title number 3'},
+    {id: 4, name: 'List title number 4'},
+  ]);
+  const navigate = useNavigate();
   return (
     <Container maxWidth="md" sx={{marginTop: '8rem'}}>
       <Box
         sx={{
           bgcolor: 'white',
-          height: '40vh',
-          minHeight: '600px',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center', // space-evenly;
           margin: 'auto',
           padding: '2rem',
         }}
       >
-        <Typography component="h1" variant="h4" sx={{textAlign: ' center'}}>
+        <Typography
+          component="h1"
+          variant="h4"
+          sx={{textAlign: ' center', marginBottom: '4rem'}}
+        >
           Your Groceries
         </Typography>
+        {lists.length < 1 && (
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{textAlign: ' center', marginBottom: '4rem'}}
+          >
+            There are no lists created yet !
+          </Typography>
+        )}
         {lists.map(list => {
           return (
             <Grid
@@ -52,12 +64,11 @@ const ShoppingList = () => {
               direction="row"
               alignItems="center"
               justifyContent="center"
-              margin="auto"
               width="100%"
             >
               <Grid item md={10} sx={{marginRight: 'auto'}}>
                 <Typography component="h4" variant="h6">
-                  {list}
+                  {list.name}
                 </Typography>
               </Grid>
               <Grid item md={2}>
@@ -67,20 +78,37 @@ const ShoppingList = () => {
                     component="span"
                     color="inherit"
                   >
-                    <EditIcon fontSize="medium" />
+                    <EditIcon
+                      fontSize="medium"
+                      onClick={() => {
+                        navigate(`./edit/${list.id}`);
+                      }}
+                    />
                   </IconButton>
                   <IconButton
                     aria-label="upload picture"
                     component="span"
                     color="inherit"
                   >
-                    <DeleteIcon fontSize="medium" />
+                    <DeleteIcon
+                      fontSize="medium"
+                      onClick={() => {
+                        setLists(lists.filter(item => item.id !== list.id));
+                      }}
+                    />
                   </IconButton>
                 </IconContainer>
               </Grid>
             </Grid>
           );
         })}
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{margin: 'auto', mt: 4, mb: 2, width: '60%'}}
+        >
+          Add List
+        </Button>
       </Box>
     </Container>
   );
