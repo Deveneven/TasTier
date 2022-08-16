@@ -87,7 +87,6 @@ const SignInScreen = () => {
           </Card>
         </Grid>
       </Grid>
-      <RegisterPopOut />
     </div>
   );
 };

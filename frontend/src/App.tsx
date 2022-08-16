@@ -10,8 +10,9 @@ import MainScreen from './Screen/MainScreen/MainScreen';
 import ShoppingScreen from './Screen/ShoppingScreen/ShoppingScreen';
 import ListScreen from './Screen/ShoppingScreen/ListScreen';
 import {ShoppingListDTO} from './Shared/DTOs/ShoppingListDTO';
+import RecipeEditScreen from './Screen/RecipeEditScreen/RecipeEditScreen';
 function App() {
-  // chwilowy useState, przy połączeniu api zastąpi się, a edycja listy będzie po id listy
+  // chwilowy useState, przy po��czeniu api zast�pi si�, a edycja listy b�dzie po id listy
   const [lists, setLists] = useState<ShoppingListDTO[]>([
     {Id: 1, Name: 'List title number 1', Friends: []},
     {Id: 2, Name: 'List title number 2', Friends: []},
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<MainScreen />} />
           <Route path="/signin" element={<SignInScreen />} />
           <Route path="/" element={<SignInScreen />} />
+          <Route path="/recipe/0" element={<RecipeEditScreen/>} />
           <Route
             path="/shoppinglist"
             element={<ShoppingScreen lists={lists} setLists={setLists} />}
