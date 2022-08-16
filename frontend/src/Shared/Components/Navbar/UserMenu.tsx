@@ -54,6 +54,7 @@ const UserMenu = () => {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
+        disableScrollLock={true}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -118,6 +119,7 @@ const UserMenu = () => {
             open={open}
             onClose={handleClose}
             onClick={handleClose}
+            disableScrollLock={true}
             PaperProps={{
               elevation: 0,
               sx: {

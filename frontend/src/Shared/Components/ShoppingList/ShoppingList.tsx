@@ -10,6 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import {IconButton, styled, Button} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
+import AddListPopOut from './AddListPopOut';
 const ShoppingList = () => {
   const IconContainer = styled(Box)(({theme}) => ({
     display: 'flex',
@@ -29,6 +30,7 @@ const ShoppingList = () => {
     {id: 4, name: 'List title number 4'},
   ]);
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   return (
     <Container maxWidth="md" sx={{marginTop: '8rem'}}>
       <Box
@@ -106,10 +108,19 @@ const ShoppingList = () => {
           type="submit"
           variant="contained"
           sx={{margin: 'auto', mt: 4, mb: 2, width: '60%'}}
+          onClick={() => {
+            setOpen(true);
+          }}
         >
           Add List
         </Button>
       </Box>
+      <AddListPopOut
+        open={open}
+        setOpen={setOpen}
+        setLists={setLists}
+        lists={lists}
+      />
     </Container>
   );
 };
