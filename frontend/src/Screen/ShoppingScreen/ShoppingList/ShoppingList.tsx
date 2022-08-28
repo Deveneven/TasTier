@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable arrow-parens */
 /* eslint-disable react/jsx-key */
 import React from 'react';
@@ -11,7 +12,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import {IconButton, styled, Button} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import AddListPopOut from './AddListPopOut';
-const ShoppingList = () => {
+const ShoppingList = ({lists, setLists}) => {
   const IconContainer = styled(Box)(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
@@ -22,13 +23,6 @@ const ShoppingList = () => {
       margin: 'auto',
     },
   }));
-
-  const [lists, setLists] = useState([
-    {id: 1, name: 'List title number 1'},
-    {id: 2, name: 'List title number 2'},
-    {id: 3, name: 'List title number 3'},
-    {id: 4, name: 'List title number 4'},
-  ]);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   return (
@@ -95,6 +89,7 @@ const ShoppingList = () => {
                     <DeleteIcon
                       fontSize="medium"
                       onClick={() => {
+                        console.log(lists.filter(item => item.id == list.id));
                         setLists(lists.filter(item => item.id !== list.id));
                       }}
                     />

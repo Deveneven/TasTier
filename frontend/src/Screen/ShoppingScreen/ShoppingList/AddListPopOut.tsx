@@ -30,11 +30,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
     marginTop: '2rem',
   };
   const [usersSharedList, setUsersSharedList] = React.useState([
-    {key: 0, label: 'Angular', avatar: 'A'},
-    {key: 1, label: 'jQuery', avatar: 'J'},
-    {key: 2, label: 'Polymer', avatar: 'P'},
-    {key: 3, label: 'React', avatar: 'R'},
-    {key: 4, label: 'Vue.js', avatar: 'V'},
+    {key: 0, label: 'Test', avatar: 'A'},
   ]);
 
   const deleteUserFromSharedList = userToDelete => {
@@ -61,6 +57,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
         {
           id: lists.length + 1,
           name: listName,
+          friends: usersSharedList,
         },
       ]);
       handleClose();

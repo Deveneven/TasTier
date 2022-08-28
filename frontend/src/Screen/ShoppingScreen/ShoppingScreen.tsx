@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
+
 import React from 'react';
-import ShoppingList from '../../Shared/Components/ShoppingList/ShoppingList';
+import ShoppingList from './ShoppingList/ShoppingList';
 import Navbar from '../../Shared/Components/Navbar/Navbar';
-const ShoppingScreen = () => {
+const ShoppingScreen = ({lists, setLists}) => {
   return (
     <>
       <Navbar />
-      <ShoppingList />
+      <ShoppingList lists={lists} setLists={setLists} />
     </>
   );
 };
