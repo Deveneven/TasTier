@@ -1,6 +1,7 @@
 /* eslint-disable arrow-parens */
 /* eslint-disable quote-props */
 import React from 'react';
+import {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -12,11 +13,23 @@ import AddIcon from '@material-ui/icons/Add';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SettingsIcon from '@material-ui/icons/Settings';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+
 const UserMenu = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userLoggedState, setUserLoggedState] = React.useState(false);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    if (localStorage.getItem('loggedState') === 'loggedIn') {
+      setUserLoggedState(true);
+    } else {
+      setUserLoggedState(false);
+    }
+  }, []);
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -102,9 +115,19 @@ const UserMenu = () => {
             <MenuItem sx={{display: 'flex', gap: '1rem'}}>
               <SettingsIcon fontSize="medium" /> Account settings
             </MenuItem>
+            <MenuItem
+              sx={{display: 'flex', gap: '1rem'}}
+              onClick={() => {
+                navigate('../shoppinglist');
+              }}
+            >
+              <ShoppingCartIcon fontSize="medium" /> Shopping Lists
+            </MenuItem>
             <Divider />
             <Link to="../signin">
-              <MenuItem onClick={() => setUserLoggedState(false)}>
+              <MenuItem
+                onClick={() => localStorage.setItem('loggedState', 'loggedOut')}
+              >
                 Log Out
               </MenuItem>{' '}
             </Link>
@@ -149,7 +172,9 @@ const UserMenu = () => {
             transformOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
           >
-            <MenuItem>Log in</MenuItem>{' '}
+            <Link to="../signin">
+              <MenuItem>Log in</MenuItem>{' '}
+            </Link>
           </Menu>
         </>
       )}

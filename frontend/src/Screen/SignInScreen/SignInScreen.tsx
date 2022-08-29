@@ -12,13 +12,14 @@ const SignInScreen = () => {
 
   const signIn = () => {
     console.log('Logowanie');
+    localStorage.setItem('loggedState', 'loggedIn');
     navigate('/');
   };
 
   return (
     <div>
       <Grid container>
-        <Grid item md={5} xs={12}>
+        <Grid item md={5} xs={12} sx={{margin: 'auto', marginTop: '4rem'}}>
           <Card
             sx={{
               marginTop: '10px',
