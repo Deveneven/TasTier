@@ -30,12 +30,12 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
     marginTop: '2rem',
   };
   const [usersSharedList, setUsersSharedList] = React.useState([
-    {key: 0, label: 'Test', avatar: 'A'},
+    {Id: 1, Name: 'Test', Avatar: 'A'},
   ]);
 
   const deleteUserFromSharedList = userToDelete => {
     setUsersSharedList(
-      usersSharedList.filter(user => user.key !== userToDelete.key)
+      usersSharedList.filter(user => user.Id !== userToDelete.Id)
     );
   };
   const [user, setUser] = React.useState('');
@@ -44,9 +44,9 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
     setUsersSharedList(prevUsers => [
       ...prevUsers,
       {
-        key: usersSharedList.length + 1,
-        label: user,
-        avatar: user.slice(0, 1).toUpperCase(),
+        Id: usersSharedList.length + 1,
+        Name: user,
+        Avatar: user.slice(0, 1).toUpperCase(),
       },
     ]);
   };
@@ -55,9 +55,9 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
       setLists(prevLists => [
         ...prevLists,
         {
-          id: lists.length + 1,
-          name: listName,
-          friends: usersSharedList,
+          Id: lists.length + 1,
+          Name: listName,
+          Friends: usersSharedList,
         },
       ]);
       handleClose();
@@ -134,9 +134,9 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
               {usersSharedList.map(data => {
                 return (
                   <Chip
-                    key={data.key}
-                    avatar={<Avatar>{data.avatar}</Avatar>}
-                    label={data.label}
+                    key={data.Id}
+                    avatar={<Avatar>{data.Avatar}</Avatar>}
+                    label={data.Name}
                     variant="outlined"
                     onDelete={() => {
                       deleteUserFromSharedList(data);

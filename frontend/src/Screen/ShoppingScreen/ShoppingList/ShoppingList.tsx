@@ -64,7 +64,7 @@ const ShoppingList = ({lists, setLists}) => {
             >
               <Grid item md={10} sx={{marginRight: 'auto'}}>
                 <Typography component="h4" variant="h6">
-                  {list.name}
+                  {list.Name}
                 </Typography>
               </Grid>
               <Grid item md={2}>
@@ -77,7 +77,7 @@ const ShoppingList = ({lists, setLists}) => {
                     <EditIcon
                       fontSize="medium"
                       onClick={() => {
-                        navigate(`./edit/${list.id}`);
+                        navigate(`./edit/${list.Id}`);
                       }}
                     />
                   </IconButton>
@@ -89,8 +89,8 @@ const ShoppingList = ({lists, setLists}) => {
                     <DeleteIcon
                       fontSize="medium"
                       onClick={() => {
-                        console.log(lists.filter(item => item.id == list.id));
-                        setLists(lists.filter(item => item.id !== list.id));
+                        console.log(lists.filter(item => item.Id == list.Id));
+                        setLists(lists.filter(item => item.Id !== list.Id));
                       }}
                     />
                   </IconButton>

@@ -9,13 +9,14 @@ import theme from './MUI styles/mainTheme';
 import MainScreen from './Screen/MainScreen/MainScreen';
 import ShoppingScreen from './Screen/ShoppingScreen/ShoppingScreen';
 import ListScreen from './Screen/ShoppingScreen/ListScreen';
+import {ShoppingListDTO} from './Shared/DTOs/ShoppingListDTO';
 function App() {
   // chwilowy useState, przy połączeniu api zastąpi się, a edycja listy będzie po id listy
-  const [lists, setLists] = useState([
-    {id: 1, name: 'List title number 1', friends: {}},
-    {id: 2, name: 'List title number 2', friends: {}},
-    {id: 3, name: 'List title number 3', friends: {}},
-    {id: 4, name: 'List title number 4', friends: {}},
+  const [lists, setLists] = useState<ShoppingListDTO[]>([
+    {Id: 1, Name: 'List title number 1', Friends: []},
+    {Id: 2, Name: 'List title number 2', Friends: []},
+    {Id: 3, Name: 'List title number 3', Friends: []},
+    {Id: 4, Name: 'List title number 4', Friends: []},
   ]);
   return (
     <ThemeProvider theme={theme}>

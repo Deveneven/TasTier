@@ -16,6 +16,7 @@ const MainScreen = () => {
       Nickname: 'KowalSwojegoLosu',
       Avatar: '',
       Email: 'kowalski@tlen.pl',
+      Id: 1234,
     };
     const ingList: Array<IngredientDTO> = [];
     for (let i = 0; i < 10; i++) {

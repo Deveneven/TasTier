@@ -17,13 +17,16 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
+import {ShoppingListDTO} from '../../../Shared/DTOs/ShoppingListDTO';
+import {UserDTO} from '../../../Shared/DTOs/UserDTO';
+
 const ListScreen = ({listId, lists, setLists}) => {
   console.log(listId);
-  const [list, setList] = useState();
+  const [list, setList] = useState<ShoppingListDTO>();
 
   useEffect(() => {
-    const temp = lists.filter(l => l.id == listId.id);
-    console.log(temp[0]);
+    const temp = lists.filter(l => l.Id == listId.id);
+    console.log(lists.filter(l => l.Id == listId.id));
     setList(temp[0]);
     console.log(lists);
   }, []);
@@ -52,7 +55,7 @@ const ListScreen = ({listId, lists, setLists}) => {
           variant="h4"
           sx={{textAlign: ' center', margin: 'auto'}}
         >
-          {list && list['name']}
+          {list && list.Name}
         </Typography>
         <IconButton
           size="large"
@@ -64,22 +67,39 @@ const ListScreen = ({listId, lists, setLists}) => {
       </Box>
       <Dialog onClose={handleClose} open={open}>
         <DialogTitle>You share this grocery list with:</DialogTitle>
-        {/* <List sx={{pt: 0}}>
-          {list['friends'].friends &&
-            list['friends'].friends!.map(email => (
-              <ListItem button key={email}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <PersonIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={email} />
-              </ListItem>
-            ))}
-        </List> */}
+        <List sx={{pt: 0}}>
+          {list &&
+            list.Friends?.map((friend: UserDTO) => {
+              console.log(friend);
+              return (
+                <ListItem button key={friend.Id}>
+                  <ListItemAvatar>
+                    <Avatar sx={{width: 32, height: 32, marginTop: '0.25rem'}}>
+                      {<PersonIcon />}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={friend.Name} />
+                </ListItem>
+              );
+            })}
+        </List>
       </Dialog>
     </Container>
   );
 };
 
 export default ListScreen;
+
+{
+  /* {list.Friends &&
+            list.Friends.map(key => (
+              <ListItem button key={key}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <PersonIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={key} />
+              </ListItem>
+            ))} */
+}
