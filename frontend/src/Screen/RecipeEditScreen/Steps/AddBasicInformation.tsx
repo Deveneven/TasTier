@@ -1,25 +1,12 @@
 import {TextField} from '@material-ui/core';
 import {Autocomplete, Grid} from '@mui/material';
 import React from 'react';
-import './AddBasicInfo.scss';
 const AddBasicInformation = (props: any) => {
-  const [value, setValue] = React.useState([]);
-  const handleKeyDown = (event) => {
-    console.log(event);
-    switch (event.key) {
-      case 'Enter': {
-        // event.preventDefault();
-        // event.stopPropagation();
-        if (event.target.value.length > 0) {
-          console.log(...value);
-          console.log(event.target.value);
-          setValue([]);
-          //  setValue([...value, event.target.value]);
-        }
-        break;
-      }
-      default:
-    }
+  const [value, setValue] = React.useState<string[]>([]);
+
+  const setTags = (event, newValue) => {
+    setValue(newValue);
+    props.onChange({type: 'text', name: 'tags', value: newValue});
   };
   return (
     <Grid
@@ -28,32 +15,33 @@ const AddBasicInformation = (props: any) => {
       <Grid item xs={12} md={12}>
         <TextField
           fullWidth
-          label="Nazwa dania"
+          label="Name of dish"
           name="name"
           onChange={props.onChange}
         />
       </Grid>
       <Grid item xs={12} md={12}>
-        <textarea className='decription-textarea'/>
+        <TextField
+          fullWidth
+          label="Short description"
+          name="description"
+          onChange={props.onChange}
+        />
       </Grid>
       <Grid item xs={12} md={12}>
         <Autocomplete
           multiple
           freeSolo
-          id="tags-outlined"
+          options={['miesne', 'wege', 'gluten']}
           value={value}
-          onChange={props.onChange}
-          options={[]}
+          onChange={setTags}
           filterSelectedOptions
           renderInput={(params) => {
-            params.inputProps.onKeyDown = handleKeyDown;
             return (
               <TextField
                 {...params}
-                variant="outlined"
                 label="filterSelectedOptions"
                 placeholder="Favorites"
-                margin="normal"
                 fullWidth
               />
             );

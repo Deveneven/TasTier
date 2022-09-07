@@ -19,7 +19,7 @@ const RecipeEditScreen = () => {
     }
   };
   const onValueChange = (event: any) => {
-    const {type, name, value} = event.target;
+    const {type, name, value} = !!event.target ? event.target : event;
     console.log('On Walue Change');
     console.log(type);
     console.log(name);
