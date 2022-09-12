@@ -1,6 +1,7 @@
 /* eslint-disable arrow-parens */
 /* eslint-disable quote-props */
 import React from 'react';
+import {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -12,10 +13,23 @@ import AddIcon from '@material-ui/icons/Add';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SettingsIcon from '@material-ui/icons/Settings';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+
 const UserMenu = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userLoggedState, setUserLoggedState] = React.useState(false);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    if (localStorage.getItem('loggedState') === 'loggedIn') {
+      setUserLoggedState(true);
+    } else {
+      setUserLoggedState(false);
+    }
+  }, []);
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -24,7 +38,13 @@ const UserMenu = () => {
   };
   return (
     <React.Fragment>
-      <Box sx={{display: 'flex', alignItems: 'center', textAlign: 'center'}}>
+      <Box
+        sx={{
+          display: {sm: 'flex', xs: 'none'},
+          alignItems: 'center',
+          textAlign: 'center',
+        }}
+      >
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -38,12 +58,16 @@ const UserMenu = () => {
           </IconButton>
         </Tooltip>
       </Box>
+      <IconButton size="small" sx={{ml: 2, display: {sm: 'none', xs: 'block'}}}>
+        <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+      </IconButton>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
         onClose={handleClose}
         onClick={handleClose}
+        disableScrollLock={true}
         PaperProps={{
           elevation: 0,
           sx: {
@@ -91,20 +115,69 @@ const UserMenu = () => {
             <MenuItem sx={{display: 'flex', gap: '1rem'}}>
               <SettingsIcon fontSize="medium" /> Account settings
             </MenuItem>
+            <MenuItem
+              sx={{display: 'flex', gap: '1rem'}}
+              onClick={() => {
+                navigate('../shoppinglist');
+              }}
+            >
+              <ShoppingCartIcon fontSize="medium" /> Shopping Lists
+            </MenuItem>
             <Divider />
-            <MenuItem onClick={() => setUserLoggedState(false)}>
-              Log Out
-            </MenuItem>{' '}
-          </>
-        )}
-        {!userLoggedState && (
-          <>
-            <MenuItem onClick={() => setUserLoggedState(true)}>Log in</MenuItem>
-            <Divider />
-            <MenuItem>Register</MenuItem>
+            <Link to="../signin">
+              <MenuItem
+                onClick={() => localStorage.setItem('loggedState', 'loggedOut')}
+              >
+                Log Out
+              </MenuItem>{' '}
+            </Link>
           </>
         )}
       </Menu>
+      {!userLoggedState && (
+        <>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            disableScrollLock={true}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                mt: 1.5,
+                '& .MuiAvatar-root': {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                '&:before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: 'background.paper',
+                  transform: 'translateY(-50%) rotate(45deg)',
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{horizontal: 'right', vertical: 'top'}}
+            anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+          >
+            <Link to="../signin">
+              <MenuItem>Log in</MenuItem>{' '}
+            </Link>
+          </Menu>
+        </>
+      )}
     </React.Fragment>
   );
 };

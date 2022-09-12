@@ -16,6 +16,7 @@ const MainScreen = () => {
       Nickname: 'KowalSwojegoLosu',
       Avatar: '',
       Email: 'kowalski@tlen.pl',
+      Id: 1234,
     };
     const ingList: Array<IngredientDTO> = [];
     for (let i = 0; i < 10; i++) {
@@ -50,21 +51,24 @@ const MainScreen = () => {
     setDataAll(recipies);
   }, []);
   return (
-    <Grid
-      container
-      spacing={4}
-      direction='column'
-      alignItems='center'
-      justifyContent='center'>
-      <Navbar/>
-      {dataAll?.map((recipe: RecipeDTO) => {
-        return (
-          <Grid item key={recipe.Id} xs={12} md={6}>
-            <CustomCard data={recipe} />
-          </Grid>
-        );
-      })}
-    </Grid>
+    <>
+      <Navbar />
+      <Grid
+        container
+        spacing={4}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+      >
+        {dataAll?.map((recipe: RecipeDTO) => {
+          return (
+            <Grid item key={recipe.Id} xs={12} md={6}>
+              <CustomCard data={recipe} />
+            </Grid>
+          );
+        })}
+      </Grid>
+    </>
   );
 };
 export default MainScreen;
