@@ -103,7 +103,10 @@ const UserMenu = () => {
               <Avatar /> User123
             </MenuItem>
             <Divider />
-            <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+            <MenuItem sx={{display: 'flex', gap: '1rem'}}
+              onClick={() => {
+                navigate('../recipe/0');
+              }}>
               <AddIcon fontSize="medium" /> Add recipe
             </MenuItem>
             <MenuItem sx={{display: 'flex', gap: '1rem'}}>
