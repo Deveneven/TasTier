@@ -2,6 +2,7 @@ import {Button, Card, Step, StepLabel, Stepper} from '@mui/material';
 import React, {useState} from 'react';
 import './RecipeEditScreen.scss';
 import AddBasicInformation from './Steps/AddBasicInformation';
+import AddIngridiensList from './Steps/AddIngredientsList';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -27,7 +28,7 @@ const RecipeEditScreen = () => {
   };
   const stepList = [{id: 0, name: 'Uzupelnij informacje',
     content: <AddBasicInformation onChange={onValueChange}/>},
-  {id: 1, name: 'Uzupelnij informacje2', content: <AddBasicInformation/>},
+  {id: 1, name: 'Uzupelnij informacje2', content: <AddIngridiensList/>},
   {id: 2, name: 'Uzupelnij informacje3', content: <AddBasicInformation/>}];
 
   return (
