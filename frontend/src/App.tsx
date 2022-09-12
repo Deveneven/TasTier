@@ -11,6 +11,7 @@ import ShoppingScreen from './Screen/ShoppingScreen/ShoppingScreen';
 import ListScreen from './Screen/ShoppingScreen/ListScreen';
 import {ShoppingListDTO} from './Shared/DTOs/ShoppingListDTO';
 import RecipeEditScreen from './Screen/RecipeEditScreen/RecipeEditScreen';
+import RecipeEditScreen from './Screen/RecipeEditScreen/RecipeEditScreen';
 function App() {
   // chwilowy useState, przy po��czeniu api zast�pi si�, a edycja listy b�dzie po id listy
   const [lists, setLists] = useState<ShoppingListDTO[]>([
@@ -35,6 +36,7 @@ function App() {
             path="/shoppinglist/edit/:id"
             element={<ListScreen lists={lists} setLists={setLists} />}
           />
+          <Route path="/recipe/0" element={<RecipeEditScreen/>} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
