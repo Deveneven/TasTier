@@ -10,7 +10,7 @@ const BaseLayout = (props: Props) => {
   return (
     <>
       <Navbar/>
-      <Card>
+      <Card className='base-layout-card'>
         {props.children}
       </Card>
     </>

@@ -1,4 +1,4 @@
-import {Button} from '@mui/material';
+import {Button, Grid} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
 import {IngredientDTO} from '../../../Shared/DTOs/IngredientDTO';
@@ -22,10 +22,16 @@ const AddIngredientsList = () => {
     setIngredients([...ingredients, ingrid]);
   };
   return (
-    <>
-      <IngredientTable data={ingredients}/>
-      <Button onClick={AddIngredientToList}>Add</Button>
-    </>
+    <Grid
+      container
+      spacing={4}>
+      <Grid item xs={12} md={12}>
+        <IngredientTable data={ingredients}/>
+      </Grid>
+      <Grid item>
+        <Button onClick={AddIngredientToList}>Add</Button>
+      </Grid>
+    </Grid>
   );
 };
 export default AddIngredientsList;
