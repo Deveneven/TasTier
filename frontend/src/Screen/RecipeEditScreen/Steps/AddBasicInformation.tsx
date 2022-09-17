@@ -1,6 +1,7 @@
 import {TextField} from '@material-ui/core';
-import {Autocomplete, Grid} from '@mui/material';
+import {Grid} from '@mui/material';
 import React from 'react';
+import CustomAutocomplete from '../../../Shared/Components/Autocomplete/CustomAutocomplete';
 const AddBasicInformation = (props: any) => {
   const [value, setValue] = React.useState<string[]>([]);
 
@@ -14,6 +15,8 @@ const AddBasicInformation = (props: any) => {
       spacing={4}>
       <Grid item xs={12} md={12}>
         <TextField
+          required
+          variant='outlined'
           fullWidth
           label="Name of dish"
           name="name"
@@ -22,6 +25,8 @@ const AddBasicInformation = (props: any) => {
       </Grid>
       <Grid item xs={12} md={12}>
         <TextField
+          multiline
+          variant='outlined'
           fullWidth
           label="Short description"
           name="description"
@@ -29,23 +34,16 @@ const AddBasicInformation = (props: any) => {
         />
       </Grid>
       <Grid item xs={12} md={12}>
-        <Autocomplete
+        <CustomAutocomplete
+          required
           multiple
           freeSolo
           options={['miesne', 'wege', 'gluten']}
           value={value}
           onChange={setTags}
           filterSelectedOptions
-          renderInput={(params) => {
-            return (
-              <TextField
-                {...params}
-                label="filterSelectedOptions"
-                placeholder="Favorites"
-                fullWidth
-              />
-            );
-          }}
+          label='Tags'
+          placeholder="Set tags"
         />
       </Grid>
     </Grid>
