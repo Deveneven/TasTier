@@ -79,7 +79,12 @@ const AddIngredientsList = () => {
         <span>Unit</span>
       </Grid>
       <Grid item xs={12} md={2}>
-        <Button onClick={AddIngredientToList}>Add</Button>
+        <Button
+          fullWidth
+          variant='contained'
+          onClick={AddIngredientToList}>
+            Add
+        </Button>
       </Grid>
     </Grid>
   );

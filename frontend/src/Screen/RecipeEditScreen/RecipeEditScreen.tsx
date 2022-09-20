@@ -4,6 +4,8 @@ import './RecipeEditScreen.scss';
 import AddBasicInformation from './Steps/AddBasicInformation';
 import AddIngridiensList from './Steps/AddIngredientsList';
 import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
+import AddCookingSteps from './Steps/AddCookingSteps';
+import AddPhoto from './Steps/AddPhoto';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -27,10 +29,11 @@ const RecipeEditScreen = () => {
     console.log(name);
     console.log(value);
   };
-  const stepList = [{id: 0, name: 'Uzupelnij informacje',
+  const stepList = [{id: 0, name: 'Complete the basic information',
     content: <AddBasicInformation onChange={onValueChange}/>},
-  {id: 1, name: 'Uzupelnij informacje2', content: <AddIngridiensList/>},
-  {id: 2, name: 'Uzupelnij informacje3', content: <AddBasicInformation/>}];
+  {id: 1, name: 'Add a list of ingredients', content: <AddIngridiensList/>},
+  {id: 2, name: 'Add steps', content: <AddCookingSteps/>},
+  {id: 3, name: 'Add photo', content: <AddPhoto/>}];
 
   return (
     <BaseLayout>
