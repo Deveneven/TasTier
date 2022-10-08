@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import {
@@ -13,9 +12,7 @@ import {useNavigate} from 'react-router-dom';
 import ExploreOutlinedIcon from '@material-ui/icons/ExploreOutlined';
 import {Search as SearchIcon} from '@material-ui/icons';
 import HomeIcon from '@material-ui/icons/Home';
-// eslint-disable-next-line max-len
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
-// eslint-disable-next-line max-len
 import RestaurantMenuOutlinedIcon from '@material-ui/icons/RestaurantMenuOutlined';
 // /// Own imports ///// //
 import BottomNavigate from './BottomNavigate';
@@ -84,13 +81,13 @@ function Navbar() {
             variant="h3"
             noWrap
             sx={{
-              display: {xs: 'none', sm: 'block'},
-              fontFamily: 'Oriya MN',
-              letterSpacing: 2,
-              fontWeight: 600,
-              fontSize: '2rem',
-              margin: '0.5rem',
-              transition: 'all .2s ease-in',
+              'display': {xs: 'none', sm: 'block'},
+              'fontFamily': 'Oriya MN',
+              'letterSpacing': 2,
+              'fontWeight': 600,
+              'fontSize': '2rem',
+              'margin': '0.5rem',
+              'transition': 'all .2s ease-in',
               '&:hover': {cursor: 'pointer', transform: 'scale(1.05)'},
             }}
             onClick={() => {

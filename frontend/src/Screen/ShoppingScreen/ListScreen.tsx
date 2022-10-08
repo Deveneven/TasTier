@@ -1,15 +1,19 @@
-/* eslint-disable react/prop-types */
-
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import ListEdit from './ShoppingList/ListEdit';
 import Navbar from '../../Shared/Components/Navbar/Navbar';
-const ListScreen = ({lists, setLists}) => {
+import {ShoppingListDTO} from '../../Shared/DTOs/ShoppingListDTO';
+
+type ListScreenProps = {
+lists: Array<ShoppingListDTO>;
+ };
+
+const ListScreen = ({lists} : ListScreenProps) => {
   const listId = useParams();
   return (
     <>
       <Navbar />
-      <ListEdit listId={listId} lists={lists} setLists={setLists} />{' '}
+      <ListEdit listId={Number(listId.Id)} lists={lists} />
     </>
   );
 };

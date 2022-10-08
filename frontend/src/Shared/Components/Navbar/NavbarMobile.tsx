@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import React from 'react';
 import {Box, InputBase, styled, Typography} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
@@ -37,14 +36,14 @@ function NavbarMobile() {
           variant="h3"
           noWrap
           sx={{
-            display: {xs: 'block', sm: 'none'},
-            fontFamily: 'Oriya MN',
-            letterSpacing: 2,
-            fontWeight: 600,
-            fontSize: '2rem',
-            textAlign: 'center',
-            margin: '1rem',
-            transition: 'all .2s ease-in',
+            'display': {xs: 'block', sm: 'none'},
+            'fontFamily': 'Oriya MN',
+            'letterSpacing': 2,
+            'fontWeight': 600,
+            'fontSize': '2rem',
+            'textAlign': 'center',
+            'margin': '1rem',
+            'transition': 'all .2s ease-in',
             '&:hover': {cursor: 'pointer', transform: 'scale(1.05)'},
           }}
           onClick={() => {

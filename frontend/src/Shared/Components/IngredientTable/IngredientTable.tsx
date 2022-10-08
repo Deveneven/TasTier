@@ -1,5 +1,3 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable indent */
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import './IngredientTable.scss';
@@ -15,7 +13,7 @@ import {
 import {IngredientDTO} from '../../DTOs/IngredientDTO';
 
 type IngredientTableProps = {
-  data: Array<IngredientDTO>;
+data: Array<IngredientDTO>;
 };
 
 const IngredientTable = ({data}: IngredientTableProps) => {
@@ -25,8 +23,8 @@ const IngredientTable = ({data}: IngredientTableProps) => {
   const [testData, setTestData] = useState<Array<IngredientDTO>>(data);
   useEffect(() => {
     const sum = data.reduce(
-      (partSum, ingredient) => partSum + ingredient.Calories,
-      0
+        (partSum, ingredient) => partSum + ingredient.Calories,
+        0,
     );
     console.log(sum);
     console.log(testData);
@@ -57,8 +55,7 @@ const IngredientTable = ({data}: IngredientTableProps) => {
                     <DeleteIcon
                       onClick={() => {
                         setTestData(
-                          // eslint-disable-next-line arrow-parens
-                          testData.filter(item => item.Id !== ingredient.Id)
+                            testData.filter((item) => item.Id !== ingredient.Id),
                         );
                         console.log(ingredient.Id);
                         console.log(testData);

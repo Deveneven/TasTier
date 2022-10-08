@@ -73,12 +73,6 @@ function App() {
     {Id: 3, Name: 'List title number 3', Friends: [], IngredientsList: []},
     {Id: 4, Name: 'List title number 4', Friends: [], IngredientsList: []},
   ]);
-  // Id: number,
-  // Name: string,
-  // Calories: number,
-  // Allergen: boolean,
-  // Amount: number,
-  // Unit: string
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -92,7 +86,7 @@ function App() {
           />
           <Route
             path="/shoppinglist/edit/:id"
-            element={<ListScreen lists={lists} setLists={setLists} />}
+            element={<ListScreen lists={lists} />}
           />
         </Routes>
       </BrowserRouter>

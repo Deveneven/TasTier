@@ -1,9 +1,14 @@
-/* eslint-disable react/prop-types */
-
 import React from 'react';
 import ShoppingList from './ShoppingList/ShoppingList';
 import Navbar from '../../Shared/Components/Navbar/Navbar';
-const ShoppingScreen = ({lists, setLists}) => {
+import {ShoppingListDTO} from '../../Shared/DTOs/ShoppingListDTO';
+
+type ShoppingScreenProps = {
+lists: Array<ShoppingListDTO>;
+setLists;
+};
+
+const ShoppingScreen = ({lists, setLists}:ShoppingScreenProps) => {
   return (
     <>
       <Navbar />

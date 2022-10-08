@@ -39,7 +39,6 @@ const MainScreen = () => {
         Time: '',
         Image: '',
         Description:
-          // eslint-disable-next-line max-len
           'Jajka roztrzepać i wymieszać z mlekiem, następnie połączyć z pozostałymi składnikami na końcu dodać masło. Odstawić na 15 minut.',
         User: user,
         Date: new Date('2022/05/24'),

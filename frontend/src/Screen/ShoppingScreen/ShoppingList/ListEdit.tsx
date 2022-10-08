@@ -1,7 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-/* eslint-disable arrow-parens */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import {useState, useEffect} from 'react';
 import Container from '@mui/material/Container';
@@ -18,22 +14,24 @@ import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
 import {ShoppingListDTO} from '../../../Shared/DTOs/ShoppingListDTO';
 import {UserDTO} from '../../../Shared/DTOs/UserDTO';
-import {IngredientDTO} from '../../../Shared/DTOs/IngredientDTO';
-import Grid from '@mui/material/Grid';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import {IconButton, styled, Button} from '@mui/material';
+import {IconButton} from '@mui/material';
 import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
-const ListScreen = ({listId, lists, setLists}) => {
+
+type ListScreenProps = {
+  listId: number;
+  lists: Array<ShoppingListDTO>;
+};
+
+const ListScreen = ({listId, lists} : ListScreenProps) => {
   console.log(listId);
   const [list, setList] = useState<ShoppingListDTO>();
 
   useEffect(() => {
-    const temp = lists.filter(l => l.Id == listId.id);
-    console.log(lists.filter(l => l.Id == listId.id));
+    const temp = lists.filter((l) => l.Id == listId);
+    console.log(lists.filter((l) => l.Id == listId));
     setList(temp[0]);
     console.log(lists);
-  }, []);
+  }, [listId, lists]);
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -81,13 +79,9 @@ const ListScreen = ({listId, lists, setLists}) => {
             <PersonPinIcon fontSize="large" />
           </IconButton>
         </Box>
-        {/* tu wkleic  */}
         {list && (
           <IngredientTable
             data={list.IngredientsList}
-            // setLists={setLists}
-            // lists={lists}
-            // id={listId}
           />
         )}
       </Box>
@@ -115,48 +109,3 @@ const ListScreen = ({listId, lists, setLists}) => {
 };
 
 export default ListScreen;
-{
-  /* {list &&
-          list.IngredientsList?.map((ingredient: IngredientDTO) => {
-            return (
-              // eslint-disable-next-line react/jsx-key
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                justifyContent="center"
-                width="100%"
-                margin="auto"
-                border="2px solid black"
-              >
-                <Grid item md={9} sx={{paddingLeft: '1rem'}}>
-                  <Typography component="h4" variant="h6">
-                    {ingredient.Name}
-                  </Typography>
-                </Grid>
-                <Grid item md={2}>
-                  <Typography component="h4" variant="h6">
-                    {ingredient.Amount} {ingredient.Unit}
-                  </Typography>
-                </Grid>
-                <Grid item md={1}>
-                  <Container>
-                    <IconButton
-                      aria-label="upload picture"
-                      component="span"
-                      color="inherit"
-                    >
-                      <DeleteIcon
-                        fontSize="medium"
-                        // onClick={() => {
-                        //   console.log(lists.filter(item => item.Id == list.Id));
-                        //   setLists(lists.filter(item => item.Id !== list.Id));
-                        // }}
-                      />
-                    </IconButton>
-                  </Container>
-                </Grid>
-              </Grid>
-            );
-          })} */
-}
