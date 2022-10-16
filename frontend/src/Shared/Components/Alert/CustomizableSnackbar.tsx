@@ -2,6 +2,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import React from 'react';
 
+// przerobić snackbar na sam alert
 type Props = {
 message: String;
 open: boolean;
