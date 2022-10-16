@@ -1,5 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-tabs */
 import {createTheme} from '@mui/material/styles';
 
 const theme = createTheme({
@@ -24,8 +22,8 @@ const theme = createTheme({
             'marginTop': '1rem',
             '&:hover': {backgroundColor: 'inherit'},
           }),
-	   }),
-	   },
+        }),
+      },
     },
   },
 });
