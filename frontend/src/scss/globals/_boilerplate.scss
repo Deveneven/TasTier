@@ -16,3 +16,11 @@ body {
   background: var(--bg-white-dark);
   color: var(--fnt-primary-color);
 }
+
+.button-secondary{
+	color:black !important;
+	margin:1rem !important;
+	&:hover{
+		background-color:inherit !important;
+	}
+}

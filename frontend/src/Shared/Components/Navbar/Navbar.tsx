@@ -20,7 +20,6 @@ import UserMenu from './UserMenu';
 import NavbarMobile from './NavbarMobile';
 function Navbar() {
   const navigate = useNavigate();
-
   const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
     justifyContent: 'space-evenly',

@@ -13,7 +13,7 @@ const ListScreen = ({lists} : ListScreenProps) => {
   return (
     <>
       <Navbar />
-      <ListEdit listId={Number(listId.Id)} lists={lists} />
+      <ListEdit listId={Number(listId.id)} lists={lists} />
     </>
   );
 };
