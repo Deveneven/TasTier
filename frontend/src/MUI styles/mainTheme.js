@@ -20,7 +20,12 @@ const theme = createTheme({
             'backgroundColor': 'inherit',
             'color': '#4b4f56',
             'marginTop': '1rem',
+            'textTransform': 'none',
             '&:hover': {backgroundColor: 'inherit'},
+          }),
+          ...(ownerState.variant === 'contained' && {
+            'textTransform': 'none',
+            'fontSize': '1rem',
           }),
         }),
       },

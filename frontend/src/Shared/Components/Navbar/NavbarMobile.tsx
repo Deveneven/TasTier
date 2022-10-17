@@ -33,28 +33,24 @@ function NavbarMobile() {
     <>
       <SearchSizeSmallBox>
         <Typography
+          component="h1"
           variant="h3"
-          noWrap
           sx={{
             'display': {xs: 'block', sm: 'none'},
-            'fontFamily': 'Oriya MN',
-            'letterSpacing': 2,
-            'fontWeight': 600,
             'fontSize': '2rem',
             'textAlign': 'center',
             'margin': '1rem',
-            'transition': 'all .2s ease-in',
-            '&:hover': {cursor: 'pointer', transform: 'scale(1.05)'},
+            '&:hover': {cursor: 'pointer'},
           }}
           onClick={() => {
             navigate(`../`);
           }}
         >
-          TASTIER
+          TasTier
         </Typography>
         <SearchSizeSmall>
           <SearchIcon />
-          <InputBase placeholder="search..." />
+          <InputBase placeholder="search..." sx={{width: '100%'}}/>
         </SearchSizeSmall>
       </SearchSizeSmallBox>
     </>

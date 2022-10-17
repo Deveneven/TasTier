@@ -1,0 +1,18 @@
+@import './_fonts.scss';
+h1{
+	font-family : var(--logo-font) !important;
+}
+
+button{
+	font-family: var(--secondary-font) !important;
+	font-weight:500 !important;
+}
+
+span{
+	font-family : var(--main-font) !important;
+	color: #4b4f56 !important;
+}
+
+// --logo-font: 'Courgette', cursive;
+// --main-font: 'Roboto', sans-serif;
+// --secondary-font: 'Montserrat', sans-serif;

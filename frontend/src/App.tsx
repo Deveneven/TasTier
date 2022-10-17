@@ -4,6 +4,8 @@ import './App.css';
 import './scss/style.scss';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import SignInScreen from './Screen/SignInScreen/SignInScreen';
+import RegisterScreen from './Screen/RegisterScreen/RegisterScreen';
+
 import {ThemeProvider} from '@mui/material/styles';
 import theme from './MUI styles/mainTheme';
 import MainScreen from './Screen/MainScreen/MainScreen';
@@ -79,7 +81,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainScreen />} />
           <Route path="/signin" element={<SignInScreen />} />
-          <Route path="/" element={<SignInScreen />} />
+          <Route path="/register" element={<RegisterScreen />} />
           <Route
             path="/shoppinglist"
             element={<ShoppingScreen lists={lists} setLists={setLists} />}

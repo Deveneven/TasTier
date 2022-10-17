@@ -1,3 +1,6 @@
 .MuiSvgIcon-root{
   color: var(--card-icon-color)
 }
+ .MuiGrid-item {
+	max-width: 100% !important;
+  }

@@ -5,13 +5,10 @@
 //     background-size: 100% 100%;
 //     background-blend-mode: darken;
 // }
-body{
-	background-color:#f0f2f5;
-}
 .signin-container{
-	padding-top: 8rem;
 	justify-content:center;
 	margin:auto;
+	padding-top: 8rem;
 	&-menu{
 		margin: auto;
 		&_card{
@@ -25,12 +22,13 @@ body{
 .icon-center {
 	margin:auto;
 }
+
 @media (max-width: 768px) {
 	.signin-container{
 		padding:0;
 		&-menu{
 			&_card{
-				padding: 2rem;
+				padding: 1rem;
 			}
 		}
 	}
