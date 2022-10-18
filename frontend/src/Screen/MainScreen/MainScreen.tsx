@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
-import CustomCard from '../../Shared/Components/Card/Card';
+import CustomCard from '../../Shared/Components/Card/CustomCard';
 import {RecipeDTO} from '../../Shared/DTOs/RecipeDTO';
 import {UserDTO} from '../../Shared/DTOs/UserDTO';
 import './MainScreen.scss';

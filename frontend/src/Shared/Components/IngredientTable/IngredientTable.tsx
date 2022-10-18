@@ -13,7 +13,7 @@ import {
 import {IngredientDTO} from '../../DTOs/IngredientDTO';
 
 type IngredientTableProps = {
-data: Array<IngredientDTO>;
+  data?: Array<IngredientDTO>;
 };
 
 const IngredientTable = ({data}: IngredientTableProps) => {
@@ -22,6 +22,10 @@ const IngredientTable = ({data}: IngredientTableProps) => {
   const isEditable = location.pathname.includes('edit');
   const [testData, setTestData] = useState<Array<IngredientDTO>>(data);
   useEffect(() => {
+    if (!!data) {
+      const sum = data.reduce((partSum, ingredient) => partSum + ingredient.Calories, 0);
+      setCaloriesSum(sum);
+    }
     const sum = data.reduce(
         (partSum, ingredient) => partSum + ingredient.Calories,
         0,
