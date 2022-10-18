@@ -1,7 +1,35 @@
-body{
-    background-image: url('FoodPhoto.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed; 
-    background-size: 100% 100%;
-    background-blend-mode: darken;
+// body{
+//     background-image: url('FoodPhoto.jpg');
+//     background-repeat: no-repeat;
+//     background-attachment: fixed; 
+//     background-size: 100% 100%;
+//     background-blend-mode: darken;
+// }
+.signin-container{
+	justify-content:center;
+	margin:auto;
+	padding-top: 8rem;
+	&-menu{
+		margin: auto;
+		&_card{
+			margin:auto;
+			padding: 4rem;
+			text-align:center;
+		}
+	}
+}
+
+.icon-center {
+	margin:auto;
+}
+
+@media (max-width: 768px) {
+	.signin-container{
+		padding:0;
+		&-menu{
+			&_card{
+				padding: 1rem;
+			}
+		}
+	}
 }

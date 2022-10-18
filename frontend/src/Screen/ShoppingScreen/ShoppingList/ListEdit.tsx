@@ -1,13 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-/* eslint-disable arrow-parens */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import {useState, useEffect} from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -19,17 +14,24 @@ import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
 import {ShoppingListDTO} from '../../../Shared/DTOs/ShoppingListDTO';
 import {UserDTO} from '../../../Shared/DTOs/UserDTO';
+import {IconButton} from '@mui/material';
+import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
 
-const ListScreen = ({listId, lists, setLists}) => {
+type ListScreenProps = {
+  listId: number;
+  lists: Array<ShoppingListDTO>;
+};
+
+const ListScreen = ({listId, lists} : ListScreenProps) => {
   console.log(listId);
   const [list, setList] = useState<ShoppingListDTO>();
 
   useEffect(() => {
-    const temp = lists.filter(l => l.Id == listId.id);
-    console.log(lists.filter(l => l.Id == listId.id));
+    const temp = lists.filter((l) => l.Id == listId);
+    console.log(lists.filter((l) => l.Id == listId));
     setList(temp[0]);
     console.log(lists);
-  }, []);
+  }, [listId, lists]);
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -44,26 +46,44 @@ const ListScreen = ({listId, lists, setLists}) => {
         sx={{
           bgcolor: 'white',
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: 'column',
           margin: 'auto',
           padding: '2rem',
-          justifyContent: 'center',
+          justifyContent: 'space-around',
+          gap: '1rem',
         }}
       >
-        <Typography
-          component="h1"
-          variant="h4"
-          sx={{textAlign: ' center', margin: 'auto'}}
+        <Box
+          sx={{
+            bgcolor: 'white',
+            display: 'flex',
+            flexDirection: 'row',
+            margin: 'auto',
+            padding: '2rem',
+            justifyContent: 'center',
+            width: '100%',
+          }}
         >
-          {list && list.Name}
-        </Typography>
-        <IconButton
-          size="large"
-          sx={{marginRight: 0}}
-          onClick={handleClickOpen}
-        >
-          <PersonPinIcon fontSize="large" />
-        </IconButton>
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{textAlign: ' center', margin: 'auto'}}
+          >
+            {list && list.Name}
+          </Typography>
+          <IconButton
+            size="large"
+            sx={{marginRight: 0}}
+            onClick={handleClickOpen}
+          >
+            <PersonPinIcon fontSize="large" />
+          </IconButton>
+        </Box>
+        {list && (
+          <IngredientTable
+            data={list.IngredientsList}
+          />
+        )}
       </Box>
       <Dialog onClose={handleClose} open={open}>
         <DialogTitle>You share this grocery list with:</DialogTitle>
@@ -89,17 +109,3 @@ const ListScreen = ({listId, lists, setLists}) => {
 };
 
 export default ListScreen;
-
-{
-  /* {list.Friends &&
-            list.Friends.map(key => (
-              <ListItem button key={key}>
-                <ListItemAvatar>
-                  <Avatar>
-                    <PersonIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={key} />
-              </ListItem>
-            ))} */
-}

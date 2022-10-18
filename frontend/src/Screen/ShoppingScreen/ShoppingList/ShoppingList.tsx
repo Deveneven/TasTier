@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable arrow-parens */
-/* eslint-disable react/jsx-key */
 import React from 'react';
 import {useState} from 'react';
 import Container from '@mui/material/Container';
@@ -12,7 +9,13 @@ import EditIcon from '@material-ui/icons/Edit';
 import {IconButton, styled, Button} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import AddListPopOut from './AddListPopOut';
-const ShoppingList = ({lists, setLists}) => {
+import {ShoppingListDTO} from '../../../Shared/DTOs/ShoppingListDTO';
+
+type ShoppingListProps = {
+lists: Array<ShoppingListDTO>;
+setLists;
+  };
+const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
   const IconContainer = styled(Box)(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
@@ -52,7 +55,7 @@ const ShoppingList = ({lists, setLists}) => {
             There are no lists created yet !
           </Typography>
         )}
-        {lists.map(list => {
+        {lists.map((list) => {
           return (
             <Grid
               container
@@ -61,6 +64,7 @@ const ShoppingList = ({lists, setLists}) => {
               alignItems="center"
               justifyContent="center"
               width="100%"
+              key={list.Id}
             >
               <Grid item md={10} sx={{marginRight: 'auto'}}>
                 <Typography component="h4" variant="h6">
@@ -89,8 +93,8 @@ const ShoppingList = ({lists, setLists}) => {
                     <DeleteIcon
                       fontSize="medium"
                       onClick={() => {
-                        console.log(lists.filter(item => item.Id == list.Id));
-                        setLists(lists.filter(item => item.Id !== list.Id));
+                        console.log(lists.filter((item) => item.Id == list.Id));
+                        setLists(lists.filter((item) => item.Id !== list.Id));
                       }}
                     />
                   </IconButton>

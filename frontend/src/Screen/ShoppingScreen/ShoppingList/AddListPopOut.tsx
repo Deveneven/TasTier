@@ -1,7 +1,3 @@
-/* eslint-disable indent */
-/* eslint-disable comma-dangle */
-/* eslint-disable arrow-parens */
-/* eslint-disable react/prop-types */
 import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -16,7 +12,15 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
-const AddListPopOut = ({open, setOpen, setLists, lists}) => {
+
+type AddListPopOutProps = {
+open: boolean;
+setOpen;
+setLists;
+lists;
+  };
+
+const AddListPopOut = ({open, setOpen, setLists, lists} : AddListPopOutProps) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -33,15 +37,15 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
     {Id: 1, Name: 'Test', Avatar: 'A'},
   ]);
 
-  const deleteUserFromSharedList = userToDelete => {
+  const deleteUserFromSharedList = (userToDelete) => {
     setUsersSharedList(
-      usersSharedList.filter(user => user.Id !== userToDelete.Id)
+        usersSharedList.filter((user) => user.Id !== userToDelete.Id),
     );
   };
   const [user, setUser] = React.useState('');
   const [listName, setListName] = React.useState('');
   const addUserFromSharedList = () => {
-    setUsersSharedList(prevUsers => [
+    setUsersSharedList((prevUsers) => [
       ...prevUsers,
       {
         Id: usersSharedList.length + 1,
@@ -52,7 +56,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
   };
   const submitList = () => {
     if (listName !== null) {
-      setLists(prevLists => [
+      setLists((prevLists) => [
         ...prevLists,
         {
           Id: lists.length + 1,
@@ -85,7 +89,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
               name="shopping_list_name"
               autoComplete="Shopping list name"
               autoFocus
-              onChange={e => {
+              onChange={(e) => {
                 setListName(e.target.value);
               }}
             />
@@ -96,7 +100,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
               label="Share list with the user"
               name="User"
               autoComplete="User"
-              onChange={e => {
+              onChange={(e) => {
                 console.log(e.target.value);
                 setUser(e.target.value);
               }}
@@ -131,7 +135,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists}) => {
                   There are no lists created yet !
                 </Typography>
               )}
-              {usersSharedList.map(data => {
+              {usersSharedList.map((data) => {
                 return (
                   <Chip
                     key={data.Id}

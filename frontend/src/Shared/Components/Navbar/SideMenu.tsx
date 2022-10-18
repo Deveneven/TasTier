@@ -13,8 +13,6 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-// eslint-disable-next-line max-len
-// eslint-disable-next-line max-len
 import RestaurantMenuOutlinedIcon from '@material-ui/icons/RestaurantMenuOutlined';
 function SideMenu() {
   const navigate = useNavigate();

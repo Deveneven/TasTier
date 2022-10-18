@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import {
@@ -13,9 +12,7 @@ import {useNavigate} from 'react-router-dom';
 import ExploreOutlinedIcon from '@material-ui/icons/ExploreOutlined';
 import {Search as SearchIcon} from '@material-ui/icons';
 import HomeIcon from '@material-ui/icons/Home';
-// eslint-disable-next-line max-len
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
-// eslint-disable-next-line max-len
 import RestaurantMenuOutlinedIcon from '@material-ui/icons/RestaurantMenuOutlined';
 // /// Own imports ///// //
 import BottomNavigate from './BottomNavigate';
@@ -23,7 +20,6 @@ import UserMenu from './UserMenu';
 import NavbarMobile from './NavbarMobile';
 function Navbar() {
   const navigate = useNavigate();
-
   const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
     justifyContent: 'space-evenly',
@@ -39,13 +35,11 @@ function Navbar() {
       margin: 'auto',
     },
     [theme.breakpoints.down('sm')]: {
-      // backgroundColor: 'white',
-      // position: 'fixed',
-      // bottom: 0,
+
       display: 'none',
     },
     [theme.breakpoints.down('md')]: {
-      justifyContent: 'space-between',
+      justifyContent: 'space-evenly',
     },
   }));
   const Search = styled(Box)(({theme}) => ({
@@ -53,8 +47,7 @@ function Navbar() {
     backgroundColor: '#F0F0F0',
     padding: '0.4rem 1rem',
     borderRadius: '15px',
-    width: '40%',
-    margin: 'auto',
+    width: '25%',
     alignItems: 'center',
     gap: '1rem',
     [theme.breakpoints.down('md')]: {
@@ -81,23 +74,21 @@ function Navbar() {
       <AppBar color="secondary" position="sticky">
         <StyledToolbar>
           <Typography
+            component="h1"
             variant="h3"
             noWrap
             sx={{
-              display: {xs: 'none', sm: 'block'},
-              fontFamily: 'Oriya MN',
-              letterSpacing: 2,
-              fontWeight: 600,
-              fontSize: '2rem',
-              margin: '0.5rem',
-              transition: 'all .2s ease-in',
-              '&:hover': {cursor: 'pointer', transform: 'scale(1.05)'},
+              'display': {xs: 'none', sm: 'block'},
+              'fontSize': '2rem',
+              'margin': '0.5rem',
+              'overflow': 'visible',
+              '&:hover': {cursor: 'pointer'},
             }}
             onClick={() => {
               navigate(`../`);
             }}
           >
-            TASTIER
+            TasTier
           </Typography>
           <Search>
             <SearchIcon />
@@ -117,21 +108,18 @@ function Navbar() {
             <IconButton
               aria-label="upload picture"
               component="span"
-              color="inherit"
             >
               <ExploreOutlinedIcon fontSize="large" />
             </IconButton>
             <IconButton
               aria-label="upload picture"
               component="span"
-              color="inherit"
             >
               <BookmarkBorderOutlinedIcon fontSize="large" />
             </IconButton>
             <IconButton
               aria-label="upload picture"
               component="span"
-              color="inherit"
             >
               <RestaurantMenuOutlinedIcon fontSize="large" />
             </IconButton>
