@@ -1,6 +1,6 @@
 import {Avatar, Button, Grid, TextField} from '@mui/material';
 import React, {useState} from 'react';
-
+import '../../../Shared/Components/Comment/Comment.scss';
 const AddCookingSteps = () => {
   const [stepDescription, setStepDescription] = useState<string>();
   const [steps, setSteps] = useState<string[]>([]);
@@ -39,12 +39,14 @@ const AddCookingSteps = () => {
       {steps?.map((step, index) => {
         return (
           <Grid key={index+1} item xs={12} md={12}>
-            <Avatar>{index+1}</Avatar>
-            <TextField
-              multiline
-              disabled
-              fullWidth
-              defaultValue={step}/>
+            <div className='comment'>
+              <Avatar>{index+1}</Avatar>
+              <TextField
+                multiline
+                disabled
+                fullWidth
+                defaultValue={step}/>
+            </div>
           </Grid>
         );
       })}
