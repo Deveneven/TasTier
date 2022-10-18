@@ -20,19 +20,12 @@ const IngredientTable = ({data}: IngredientTableProps) => {
   const [caloriesSum, setCaloriesSum] = useState(0);
   const location = useLocation();
   const isEditable = location.pathname.includes('edit');
-  const [testData, setTestData] = useState<Array<IngredientDTO>>(data);
+  const [testData, setTestData] = useState<Array<IngredientDTO> | undefined>(data);
   useEffect(() => {
     if (!!data) {
       const sum = data.reduce((partSum, ingredient) => partSum + ingredient.Calories, 0);
       setCaloriesSum(sum);
     }
-    const sum = data.reduce(
-        (partSum, ingredient) => partSum + ingredient.Calories,
-        0,
-    );
-    console.log(sum);
-    console.log(testData);
-    setCaloriesSum(sum);
   }, [data, testData]);
   return (
     <div>
@@ -48,7 +41,7 @@ const IngredientTable = ({data}: IngredientTableProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {testData.map((ingredient: IngredientDTO) => (
+            {testData?.map((ingredient: IngredientDTO) => (
               <TableRow key={ingredient.Id}>
                 <TableCell>{ingredient.Name}</TableCell>
                 <TableCell>{ingredient.Amount}</TableCell>
