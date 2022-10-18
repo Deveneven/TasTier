@@ -1,5 +1,3 @@
-/* eslint-disable arrow-parens */
-/* eslint-disable quote-props */
 import React from 'react';
 import {useEffect} from 'react';
 import Box from '@mui/material/Box';
@@ -30,7 +28,7 @@ const UserMenu = () => {
       setUserLoggedState(false);
     }
   }, []);
-  const handleClick = event => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -61,79 +59,76 @@ const UserMenu = () => {
       <IconButton size="small" sx={{ml: 2, display: {sm: 'none', xs: 'block'}}}>
         <Avatar sx={{width: 32, height: 32}}>M</Avatar>
       </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        disableScrollLock={true}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-            mt: 1.5,
-            '& .MuiAvatar-root': {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
+      {userLoggedState && (
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          onClick={handleClose}
+          disableScrollLock={true}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              'overflow': 'visible',
+              'filter': 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              'mt': 1.5,
+              '& .MuiAvatar-root': {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1,
+              },
+              '&:before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0,
+              },
             },
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0,
-            },
-          },
-        }}
-        transformOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-      >
-        {userLoggedState && (
-          <>
-            <MenuItem>
-              <Avatar /> User123
-            </MenuItem>
-            <Divider />
-            <MenuItem sx={{display: 'flex', gap: '1rem'}}>
-              <AddIcon fontSize="medium" /> Add recipe
-            </MenuItem>
-            <MenuItem sx={{display: 'flex', gap: '1rem'}}>
-              <MenuBookIcon fontSize="medium" /> Your recipes
-            </MenuItem>
-            <MenuItem sx={{display: 'flex', gap: '1rem'}}>
-              <FastfoodIcon fontSize="medium" /> Diet settings
-            </MenuItem>
-            <MenuItem sx={{display: 'flex', gap: '1rem'}}>
-              <SettingsIcon fontSize="medium" /> Account settings
-            </MenuItem>
-            <MenuItem
-              sx={{display: 'flex', gap: '1rem'}}
-              onClick={() => {
-                navigate('../shoppinglist');
-              }}
-            >
-              <ShoppingCartIcon fontSize="medium" /> Shopping Lists
-            </MenuItem>
-            <Divider />
-            <Link to="../signin">
-              <MenuItem
-                onClick={() => localStorage.setItem('loggedState', 'loggedOut')}
-              >
+          }}
+          transformOrigin={{horizontal: 'right', vertical: 'top'}}
+          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+        >
+          <MenuItem>
+            <Avatar /> User123
+          </MenuItem>
+          <Divider />
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+            <AddIcon fontSize="medium" /> Add recipe
+          </MenuItem>
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+            <MenuBookIcon fontSize="medium" /> Your recipes
+          </MenuItem>
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+            <FastfoodIcon fontSize="medium" /> Diet settings
+          </MenuItem>
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+            <SettingsIcon fontSize="medium" /> Account settings
+          </MenuItem>
+          <MenuItem
+            sx={{display: 'flex', gap: '1rem'}}
+            onClick={() => {
+              navigate('../shoppinglist');
+            }}
+          >
+            <ShoppingCartIcon fontSize="medium" /> Shopping Lists
+          </MenuItem>
+          <Divider />
+          <MenuItem
+            onClick={() => localStorage.setItem('loggedState', 'loggedOut')}
+          >  <Link to="../signin">
                 Log Out
-              </MenuItem>{' '}
             </Link>
-          </>
-        )}
-      </Menu>
+          </MenuItem>
+        </Menu>
+      )}
       {!userLoggedState && (
         <>
           <Menu
@@ -146,9 +141,9 @@ const UserMenu = () => {
             PaperProps={{
               elevation: 0,
               sx: {
-                overflow: 'visible',
-                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                mt: 1.5,
+                'overflow': 'visible',
+                'filter': 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                'mt': 1.5,
                 '& .MuiAvatar-root': {
                   width: 32,
                   height: 32,
@@ -171,10 +166,11 @@ const UserMenu = () => {
             }}
             transformOrigin={{horizontal: 'right', vertical: 'top'}}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-          >
-            <Link to="../signin">
-              <MenuItem>Log in</MenuItem>{' '}
-            </Link>
+          > <MenuItem>
+              <Link to="../signin">
+              Log in
+              </Link>
+            </MenuItem>{' '}
           </Menu>
         </>
       )}

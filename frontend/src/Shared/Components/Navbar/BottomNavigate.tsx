@@ -3,9 +3,7 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Avatar from '@mui/material/Avatar';
 import HomeIcon from '@material-ui/icons/Home';
-// eslint-disable-next-line max-len
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
-// eslint-disable-next-line max-len
 import {useNavigate} from 'react-router-dom';
 import MobileDrawer from './MobileDrawer';
 function BottomNavigate() {

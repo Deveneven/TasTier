@@ -39,7 +39,6 @@ const MainScreen = () => {
         Time: '',
         Image: '',
         Description:
-          // eslint-disable-next-line max-len
           'Jajka roztrzepać i wymieszać z mlekiem, następnie połączyć z pozostałymi składnikami na końcu dodać masło. Odstawić na 15 minut.',
         User: user,
         Date: new Date('2022/05/24'),
@@ -55,14 +54,14 @@ const MainScreen = () => {
       <Navbar />
       <Grid
         container
-        spacing={4}
         direction="column"
         alignItems="center"
         justifyContent="center"
+        sx={{pt: '4rem', paddingBottom: '4rem', gap: '4rem'}}
       >
         {dataAll?.map((recipe: RecipeDTO) => {
           return (
-            <Grid item key={recipe.Id} xs={12} md={6}>
+            <Grid item key={recipe.Id} xs={12} md={6} >
               <CustomCard data={recipe} />
             </Grid>
           );

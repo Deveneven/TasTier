@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,8 +8,15 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+
 const RegisterPopOut = (props:any) => {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordConfirmRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
+
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const handleClickOpen = () => {
@@ -29,6 +36,8 @@ const RegisterPopOut = (props:any) => {
     <div>
       <Button variant={props.variant} onClick={handleClickOpen}>
         {props.buttonText}
+        <br />
+        {props.buttonSubText}
       </Button>
       <Dialog
         fullScreen={fullScreen}
@@ -50,15 +59,17 @@ const RegisterPopOut = (props:any) => {
               name="email"
               autoComplete="email"
               autoFocus
+              inputRef={emailRef}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              id="login"
-              label="Login"
-              name="login"
-              autoComplete="login"
+              id="username"
+              label="username"
+              name="username"
+              autoComplete="username"
+              inputRef={usernameRef}
             />
             <TextField
               margin="normal"
@@ -69,6 +80,7 @@ const RegisterPopOut = (props:any) => {
               type="password"
               id="password"
               autoComplete="current-password"
+              inputRef={passwordRef}
             />
             <TextField
               margin="normal"
@@ -76,19 +88,19 @@ const RegisterPopOut = (props:any) => {
               fullWidth
               name="passwordRepeat"
               label="Repeat Password"
-              type="passwordRepeat"
+              type="password"
               id="passwordRepeat"
               autoComplete="current-password"
+              inputRef={passwordConfirmRef}
             />
           </DialogContentText>
-          <Button variant="contained" sx={textCenter} fullWidth>
-            {' '}
-            Register{' '}
+          <Button variant="contained" sx={textCenter} fullWidth >
+            Register
           </Button>
         </DialogContent>
         <DialogActions sx={textCenter}>
-          Already have an account?
-          <Button autoFocus onClick={handleClose}>
+          Already have an account ?
+          <Button autoFocus onClick={handleClose} sx={{margin: 'auto'}}>
             Log in!
           </Button>
         </DialogActions>

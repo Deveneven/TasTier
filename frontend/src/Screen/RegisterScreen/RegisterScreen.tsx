@@ -1,21 +1,18 @@
 import React from 'react';
-import './SignInScreen.scss';
+// import './RegisterScreen.scss';
 import Grid from '@mui/material/Grid';
 import {Avatar, Box, Button, TextField, Card} from '@mui/material';
 import Typography from '@mui/material/Typography';
-import {Facebook, LockOutlined} from '@material-ui/icons';
-import GoogleIcon from '@mui/icons-material/Google';
+import {LockOutlined} from '@material-ui/icons';
 import Divider from '@mui/material/Divider';
-// import RegisterPopOut from '../../Shared/Components/RegisterPopOut/RegisterPopOut'; Chyba pop-ouut do rejestracji jest zbedny
 import {useNavigate} from 'react-router-dom';
 
-const SignInScreen = () => {
+const RegisterScreen = () => {
   const navigate = useNavigate();
 
-  const signIn = () => {
-    console.log('Logowanie');
-    localStorage.setItem('loggedState', 'loggedIn');
-    navigate('/');
+  const register = () => {
+    console.log('Rejestracja');
+    navigate('../signin');
   };
   return (
     <div>
@@ -50,44 +47,45 @@ const SignInScreen = () => {
                 margin="normal"
                 required
                 fullWidth
+                id="username"
+                label="username"
+                name="username"
+                autoComplete="username"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 name="password"
                 label="Password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
               />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="passwordRepeat"
+                label="Repeat Password"
+                type="password"
+                id="passwordRepeat"
+                autoComplete="current-password"
+              />
               <Button
                 fullWidth
                 variant="contained"
-                onClick={signIn}
+                onClick={register}
                 sx={{mt: 3}}
               >
-                Sign In
+                Register
               </Button>
             </Box>
             <Typography component="h1" variant="h6">
               <Divider> OR </Divider>
             </Typography>
-            <Button startIcon={<Facebook style={{color: 'white'}}/>}
-              sx={[{backgroundColor: '#2374E1',
-                color: 'white', width: '100%'}, {
-                '&:hover': {
-                  backgroundColor: '#1864c9',
-                },
-              }]} >
-              Sign in with Facebook
-            </Button>
-            <Button startIcon={<GoogleIcon style={{color: 'white'}}/>}
-              sx={[{backgroundColor: '#DC6356',
-                color: 'white', width: '100%'}, {
-                '&:hover': {
-                  backgroundColor: '#db4a39',
-                },
-              }]} >
-             Sign in with Google
-            </Button>
-            <Button onClick={ () => navigate('../register')}>
-               Dont have an account ?
+            <Button onClick={ () => navigate('../signin')}>
+               Have an account Already ?
               <br />
                Register
             </Button>
@@ -97,4 +95,4 @@ const SignInScreen = () => {
     </div>
   );
 };
-export default SignInScreen;
+export default RegisterScreen;

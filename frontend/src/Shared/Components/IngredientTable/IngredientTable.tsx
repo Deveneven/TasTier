@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 import './IngredientTable.scss';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {
   Table,
   TableBody,
@@ -11,17 +13,23 @@ import {
 import {IngredientDTO} from '../../DTOs/IngredientDTO';
 
 type IngredientTableProps = {
-  data: Array<IngredientDTO>;
+data: Array<IngredientDTO>;
 };
 
 const IngredientTable = ({data}: IngredientTableProps) => {
   const [caloriesSum, setCaloriesSum] = useState(0);
-
+  const location = useLocation();
+  const isEditable = location.pathname.includes('edit');
+  const [testData, setTestData] = useState<Array<IngredientDTO>>(data);
   useEffect(() => {
-    const sum = data.reduce((partSum, ingredient) => partSum + ingredient.Calories, 0);
+    const sum = data.reduce(
+        (partSum, ingredient) => partSum + ingredient.Calories,
+        0,
+    );
     console.log(sum);
+    console.log(testData);
     setCaloriesSum(sum);
-  }, [data]);
+  }, [data, testData]);
   return (
     <div>
       <TableContainer>
@@ -32,20 +40,34 @@ const IngredientTable = ({data}: IngredientTableProps) => {
               <TableCell>Amount</TableCell>
               <TableCell>Unit</TableCell>
               <TableCell>Calories (kcal)</TableCell>
+              {isEditable && <TableCell></TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((ingredient: IngredientDTO) => (
+            {testData.map((ingredient: IngredientDTO) => (
               <TableRow key={ingredient.Id}>
                 <TableCell>{ingredient.Name}</TableCell>
                 <TableCell>{ingredient.Amount}</TableCell>
                 <TableCell>{ingredient.Unit}</TableCell>
                 <TableCell>{ingredient.Calories}</TableCell>
+                {isEditable && (
+                  <TableCell>
+                    <DeleteIcon
+                      onClick={() => {
+                        setTestData(
+                            testData.filter((item) => item.Id !== ingredient.Id),
+                        );
+                        console.log(ingredient.Id);
+                        console.log(testData);
+                      }}
+                    />
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        <div className='calories-Sum'>
+        <div className="calories-Sum">
           <span>Total calories: {caloriesSum} kcal</span>
         </div>
       </TableContainer>
