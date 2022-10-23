@@ -5,7 +5,8 @@ import {RecipeDTO} from '../../Shared/DTOs/RecipeDTO';
 import {UserDTO} from '../../Shared/DTOs/UserDTO';
 import './MainScreen.scss';
 import {IngredientDTO} from '../../Shared/DTOs/IngredientDTO';
-import Navbar from '../../Shared/Components/Navbar/Navbar';
+import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
+
 const MainScreen = () => {
   const [dataAll, setDataAll] = useState<RecipeDTO[]>([]);
   useEffect(() => {
@@ -50,8 +51,7 @@ const MainScreen = () => {
     setDataAll(recipies);
   }, []);
   return (
-    <>
-      <Navbar />
+    <BaseLayout>
       <Grid
         container
         direction="column"
@@ -67,7 +67,7 @@ const MainScreen = () => {
           );
         })}
       </Grid>
-    </>
+    </BaseLayout >
   );
 };
 export default MainScreen;

@@ -16,7 +16,6 @@ import {ShoppingListDTO} from '../../../Shared/DTOs/ShoppingListDTO';
 import {UserDTO} from '../../../Shared/DTOs/UserDTO';
 import {IconButton} from '@mui/material';
 import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
-
 type ListScreenProps = {
   listId: number;
   lists: Array<ShoppingListDTO>;

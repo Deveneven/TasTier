@@ -76,7 +76,13 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : AddListPopOutProps) =>
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" sx={textCenter}>
-          Create Shopping List
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{textAlign: ' center', margin: '2rem'}}
+          >
+                   Create Shopping List
+          </Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -132,7 +138,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : AddListPopOutProps) =>
                   variant="h4"
                   sx={{textAlign: ' center', margin: '2rem'}}
                 >
-                  There are no lists created yet !
+                  There are no users added to share the list yet !
                 </Typography>
               )}
               {usersSharedList.map((data) => {
@@ -158,6 +164,14 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : AddListPopOutProps) =>
           >
             {' '}
             Add{' '}
+          </Button>
+          <Button
+            variant="contained"
+            sx={[textCenter, {float: 'right', display: {xs: 'block', md: 'none'}}]}
+            onClick={handleClose}
+          >
+            {' '}
+            Close
           </Button>
         </DialogContent>
       </Dialog>
