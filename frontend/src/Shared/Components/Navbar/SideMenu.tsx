@@ -81,7 +81,10 @@ function SideMenu() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('../account/settings');
+              }}>
               <ListItemIcon>
                 <SettingsIcon fontSize="large" />
               </ListItemIcon>

@@ -29,7 +29,7 @@ const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   return (
-    <Container maxWidth="md" sx={{marginTop: '8rem'}}>
+    <Container maxWidth="md" >
       <Box
         sx={{
           bgcolor: 'white',
@@ -59,15 +59,13 @@ const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
           return (
             <Grid
               container
-              spacing={4}
               direction="row"
               alignItems="center"
               justifyContent="center"
-              width="100%"
               key={list.Id}
             >
-              <Grid item md={10} sx={{marginRight: 'auto'}}>
-                <Typography component="h4" variant="h6">
+              <Grid item md={10}>
+                <Typography component="h4" variant="h6" sx={{wordWrap: ' break-word'}}>
                   {list.Name}
                 </Typography>
               </Grid>
@@ -77,25 +75,25 @@ const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
                     aria-label="upload picture"
                     component="span"
                     color="inherit"
+                    onClick={() => {
+                      navigate(`./edit/${list.Id}`);
+                    }}
                   >
                     <EditIcon
                       fontSize="medium"
-                      onClick={() => {
-                        navigate(`./edit/${list.Id}`);
-                      }}
                     />
                   </IconButton>
                   <IconButton
                     aria-label="upload picture"
                     component="span"
                     color="inherit"
+                    onClick={() => {
+                      console.log(lists.filter((item) => item.Id == list.Id));
+                      setLists(lists.filter((item) => item.Id !== list.Id));
+                    }}
                   >
                     <DeleteIcon
                       fontSize="medium"
-                      onClick={() => {
-                        console.log(lists.filter((item) => item.Id == list.Id));
-                        setLists(lists.filter((item) => item.Id !== list.Id));
-                      }}
                     />
                   </IconButton>
                 </IconContainer>

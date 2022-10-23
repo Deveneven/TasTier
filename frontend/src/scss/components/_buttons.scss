@@ -1,3 +1,9 @@
 :root {
   --card-icon-color: #808080;
 }
+
+.icon-hover{
+	&:hover{
+		cursor:pointer;
+	}
+}

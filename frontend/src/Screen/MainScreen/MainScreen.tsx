@@ -57,7 +57,7 @@ const MainScreen = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{pt: '4rem', paddingBottom: '4rem', gap: '4rem'}}
+        sx={{gap: '4rem'}}
       >
         {dataAll?.map((recipe: RecipeDTO) => {
           return (
