@@ -8,7 +8,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import Divider from '@mui/material/Divider';
 // import RegisterPopOut from '../../Shared/Components/RegisterPopOut/RegisterPopOut'; Chyba pop-ouut do rejestracji jest zbedny
 import {useNavigate} from 'react-router-dom';
-
+import ResetPasswordButton from '../../Shared/Components/ResetPasswordButton/ResetPasswordButton';
 const SignInScreen = () => {
   const navigate = useNavigate();
 
@@ -56,6 +56,7 @@ const SignInScreen = () => {
                 id="password"
                 autoComplete="current-password"
               />
+              <ResetPasswordButton />
               <Button
                 fullWidth
                 variant="contained"
