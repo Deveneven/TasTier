@@ -3,31 +3,51 @@ import React, {useState} from 'react';
 
 const ValidatedTextField = (props: any) => {
   const [isInvalid, setIsInvalid] = useState(false);
+  const [validResults, setValidResults] = useState<Array<string>>([]);
 
   const onBlur = (event: any) => {
     const {value} = !!event.target ? event.target : event;
+    const results: Array<string> = [];
 
     if (props.required) {
-      checkIsRequired(value);
+      setIsInvalid(value ? false : true);
+      results.push('Field cannot be empty');
+      // setValidResults([...validResults, 'Field cannot be empty']);
     }
     if (props.regex) {
-      checkRegex(value);
+      const regex = new RegExp(props.regex);
+      setIsInvalid(regex.test(value) ? false : true);
+      results.push('Incorrect entry');
+      // setValidResults([...validResults, 'Incorrect entry']);
     }
+    if (props.minLenght) {
+      setIsInvalid(value.length < props.minLenght ? true : false);
+      results.push(`Incorrect lenght min:${props.minLenght}`);
+      // setValidResults([...validResults, `Incorrect lenght min:${props.minLenght}`]);
+    }
+    if (props.maxLenght) {
+      setIsInvalid(value.length > props.maxLenght ? true : false);
+      results.push(`Incorrect lenght max:${props.maxLenght}`);
+      // setValidResults([...validResults, `Incorrect lenght max:${props.maxLenght}`]);
+    }
+    console.log(results);
+    setValidResults(results);
   };
 
-  const checkIsRequired = (value) => {
-    setIsInvalid(value ? false : true);
+  const onFocus = () => {
+    setValidResults([]);
   };
-
-  const checkRegex = (value) => {
-    const regex = new RegExp(props.regex);
-    setIsInvalid(regex.test(value) ? false : true);
-  };
-
   return (
     <TextField
       error={isInvalid}
       onBlur={onBlur}
+      onFocus={onFocus}
+      helperText=
+        {validResults.map((error, index) => {
+          return (
+            <span key={index + 1}>{error}<br /></span>
+          );
+        })}
       {...props}
     />
   );
