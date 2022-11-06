@@ -12,23 +12,19 @@ const ValidatedTextField = (props: any) => {
     if (props.required) {
       setIsInvalid(value ? false : true);
       results.push('Field cannot be empty');
-      // setValidResults([...validResults, 'Field cannot be empty']);
     }
     if (props.regex) {
       const regex = new RegExp(props.regex);
       setIsInvalid(regex.test(value) ? false : true);
       results.push('Incorrect entry');
-      // setValidResults([...validResults, 'Incorrect entry']);
     }
     if (props.minLenght) {
       setIsInvalid(value.length < props.minLenght ? true : false);
       results.push(`Incorrect lenght min:${props.minLenght}`);
-      // setValidResults([...validResults, `Incorrect lenght min:${props.minLenght}`]);
     }
     if (props.maxLenght) {
       setIsInvalid(value.length > props.maxLenght ? true : false);
       results.push(`Incorrect lenght max:${props.maxLenght}`);
-      // setValidResults([...validResults, `Incorrect lenght max:${props.maxLenght}`]);
     }
     console.log(results);
     setValidResults(results);
