@@ -1,7 +1,7 @@
-import {TextField} from '@material-ui/core';
 import {Grid} from '@mui/material';
 import React from 'react';
 import CustomAutocomplete from '../../../Shared/Components/Autocomplete/CustomAutocomplete';
+import ValidatedTextField from '../../../Shared/Components/ValidatedTextField/ValidatedTextField';
 const AddBasicInformation = (props: any) => {
   const [value, setValue] = React.useState<string[]>([]);
 
@@ -14,8 +14,9 @@ const AddBasicInformation = (props: any) => {
       container
       spacing={4}>
       <Grid item xs={12} md={12}>
-        <TextField
+        <ValidatedTextField
           required
+          minLenght={5}
           variant='outlined'
           fullWidth
           label="Name of dish"
@@ -24,7 +25,9 @@ const AddBasicInformation = (props: any) => {
         />
       </Grid>
       <Grid item xs={12} md={12}>
-        <TextField
+        <ValidatedTextField
+          required
+          maxLenght={250}
           multiline
           variant='outlined'
           fullWidth
