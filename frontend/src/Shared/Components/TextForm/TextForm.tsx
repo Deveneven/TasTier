@@ -1,7 +1,8 @@
 import {TextField} from '@material-ui/core';
 import React, {useState} from 'react';
+import './TextForm.scss';
 
-const ValidatedTextField = (props: any) => {
+const TextForm = (props: any) => {
   const [isInvalid, setIsInvalid] = useState(false);
   const [validResults, setValidResults] = useState<Array<string>>([]);
 
@@ -9,30 +10,33 @@ const ValidatedTextField = (props: any) => {
     const {value} = !!event.target ? event.target : event;
     const results: Array<string> = [];
 
-    if (props.required) {
-      setIsInvalid(value ? false : true);
+    if (props.required && !value) {
+      setIsInvalid(true);
       results.push('Field cannot be empty');
     }
     if (props.regex) {
       const regex = new RegExp(props.regex);
-      setIsInvalid(regex.test(value) ? false : true);
-      results.push('Incorrect entry');
+      if (!regex.test(value)) {
+        setIsInvalid(true);
+        results.push('Incorrect entry');
+      }
     }
-    if (props.minLenght) {
-      setIsInvalid(value.length < props.minLenght ? true : false);
+    if (props.minLenght && value.length < props.minLenght ) {
+      setIsInvalid(true);
       results.push(`Incorrect lenght min:${props.minLenght}`);
     }
-    if (props.maxLenght) {
-      setIsInvalid(value.length > props.maxLenght ? true : false);
+    if (props.maxLenght && value.length > props.maxLenght) {
+      setIsInvalid(true);
       results.push(`Incorrect lenght max:${props.maxLenght}`);
     }
-    console.log(results);
     setValidResults(results);
   };
 
   const onFocus = () => {
+    setIsInvalid(false);
     setValidResults([]);
   };
+
   return (
     <TextField
       error={isInvalid}
@@ -41,11 +45,13 @@ const ValidatedTextField = (props: any) => {
       helperText=
         {validResults.map((error, index) => {
           return (
-            <span key={index + 1}>{error}<br /></span>
+            <span className='validation-helper-text' key={index + 1}>
+              {error}<br />
+            </span>
           );
         })}
       {...props}
     />
   );
 };
-export default ValidatedTextField;
+export default TextForm;

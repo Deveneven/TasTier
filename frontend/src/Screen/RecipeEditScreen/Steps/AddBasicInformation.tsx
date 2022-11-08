@@ -1,7 +1,7 @@
 import {Grid} from '@mui/material';
 import React from 'react';
 import CustomAutocomplete from '../../../Shared/Components/Autocomplete/CustomAutocomplete';
-import ValidatedTextField from '../../../Shared/Components/ValidatedTextField/ValidatedTextField';
+import TextForm from '../../../Shared/Components/TextForm/TextForm';
 const AddBasicInformation = (props: any) => {
   const [value, setValue] = React.useState<string[]>([]);
 
@@ -14,7 +14,7 @@ const AddBasicInformation = (props: any) => {
       container
       spacing={4}>
       <Grid item xs={12} md={12}>
-        <ValidatedTextField
+        <TextForm
           required
           minLenght={5}
           variant='outlined'
@@ -25,7 +25,7 @@ const AddBasicInformation = (props: any) => {
         />
       </Grid>
       <Grid item xs={12} md={12}>
-        <ValidatedTextField
+        <TextForm
           required
           maxLenght={250}
           multiline
