@@ -1,11 +1,15 @@
 import {TextField} from '@material-ui/core';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './TextForm.scss';
 
 const TextForm = (props: any) => {
-  const [isInvalid, setIsInvalid] = useState(false);
+  const [isInvalid, setIsInvalid] = useState(true);
   const [validResults, setValidResults] = useState<Array<string>>([]);
-
+  useEffect(() => {
+    if (!!props.checkIsValid) {
+      props.checkIsValid(props.name, !isInvalid);
+    }
+  }, [isInvalid]);
   const onBlur = (event: any) => {
     const {value} = !!event.target ? event.target : event;
     const results: Array<string> = [];
