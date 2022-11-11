@@ -4,17 +4,18 @@ import CustomAutocomplete from '../../../Shared/Components/Autocomplete/CustomAu
 import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
 import {IngredientDTO} from '../../../Shared/DTOs/IngredientDTO';
 
-const AddIngredientsList = () => {
+const AddIngredientsList = (props: any) => {
   const [ingredients, setIngredients] = useState<IngredientDTO[]>([]);
   const [ingredientName, setIngredientName] = useState<string>('');
   const [brandName, setBrandName] = useState<string>('');
   // const [unit, setUnit] = useState<string>('g');
   const [amount, setAmount] = useState<number>(0);
 
-  useEffect(()=>{
-    console.log('Use effect ingredient list');
-  }, []);
-
+  useEffect(() =>{
+    if (!!props.checkIsValid) {
+      props.checkIsValid('ingredientsList', !!ingredients && ingredients.length > 0 ? true : false);
+    }
+  }, [ingredients]);
   const AddIngredientToList = () => {
     console.log(amount);
     let i = ingredients.length;

@@ -1,9 +1,9 @@
 import {Grid} from '@mui/material';
-import React from 'react';
+import React, {useState} from 'react';
 import CustomAutocomplete from '../../../Shared/Components/Autocomplete/CustomAutocomplete';
 import TextForm from '../../../Shared/Components/TextForm/TextForm';
 const AddBasicInformation = (props: any) => {
-  const [value, setValue] = React.useState<string[]>([]);
+  const [value, setValue] = useState<string[]>([]);
 
   const setTags = (event, newValue) => {
     setValue(newValue);
@@ -21,7 +21,7 @@ const AddBasicInformation = (props: any) => {
           fullWidth
           label="Name of dish"
           name="name"
-          onChange={props.onChange}
+          {...props}
         />
       </Grid>
       <Grid item xs={12} md={12}>
@@ -33,7 +33,7 @@ const AddBasicInformation = (props: any) => {
           fullWidth
           label="Short description"
           name="description"
-          onChange={props.onChange}
+          {...props}
         />
       </Grid>
       <Grid item xs={12} md={12}>
