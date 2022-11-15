@@ -106,7 +106,10 @@ const UserMenu = () => {
           <MenuItem sx={{display: 'flex', gap: '1rem'}}>
             <MenuBookIcon fontSize="medium" /> Your recipes
           </MenuItem>
-          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}
+            onClick={() => {
+              navigate('../diets');
+            }}>
             <FastfoodIcon fontSize="medium" /> Diet settings
           </MenuItem>
           <MenuItem

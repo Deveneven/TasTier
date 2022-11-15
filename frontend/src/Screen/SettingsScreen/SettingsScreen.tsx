@@ -8,6 +8,7 @@ import {Button} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import ResetPasswordButton from '../../Shared/Components/ResetPasswordButton/ResetPasswordButton';
+import InputField from './InputField';
 const SettingsScreen = () => {
   const [values, setValues] = useState({name: 'Biogram użytkownika'});
   const CHARACTER_LIMIT = 150;
@@ -53,67 +54,20 @@ M
               </Typography>
               <Button sx={{marginTop: '0', padding: '0', fontFamily: ' var(--secondary-font) !important',
                 textAlign: {sm: 'left', xs: 'center'}}} component="label" >
-Zmień zdjęcie profilowe
+Change profile image
                 <input hidden accept="image/*" type="file" />
               </Button>
             </Grid>
           </Grid>
           {/* Tutaj edycja imienia i nazwiska */}
-          <Grid
-            container
-          >
-            <Grid item md={3}
-            >
-              <Typography component="h4" variant="h6" sx={{marginBlock: '1.2rem', textAlign: {sm: 'right', xs: 'center'}}}>
-                Imię i nazwisko
-              </Typography>
-            </Grid>
-            <Grid item md={8} sx={{marginInline: {xs: '2rem', md: 'auto'}}}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="shopping_list_name"
-                label="Imię i nazwisko"
-                name="shopping_list_name"
-                size="small"
-                defaultValue="Imię i nazwisko"/>
-              <Typography component="h6" variant="caption"
-                sx={{marginTop: '0', padding: '0', fontFamily: ' var(--secondary-font) !important',
-                  color: 'var(--fnt-primary-color)',
-                  textAlign: {sm: 'left', xs: 'center'}}} >
-Pozwól ludziom odkryć Twoje konto, korzystając z swojego imienia i nazwiska łatwiej będzie im Cię odnaleźć.
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-          >
-            <Grid item md={3}
-            >
-              <Typography component="h4" variant="h6" sx={{marginBlock: '1.2rem', textAlign: {sm: 'right', xs: 'center'}}}>
-                Nazwa użytkownika
-              </Typography>
-            </Grid>
-            <Grid item md={8} sx={{marginInline: {xs: '2rem', md: 'auto'}}}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Nazwa użytkownika"
-                name="username"
-                size="small"
-                defaultValue="Nazwa użytkownika"/>
-              <Typography component="h6" variant="caption"
-                sx={{marginTop: '0', padding: '0', fontFamily: ' var(--secondary-font) !important',
-                  color: 'var(--fnt-primary-color)',
-                  textAlign: {sm: 'left', xs: 'center'}}} >
-W większości przypadków możesz zmienić swoją nazwę użytkownika z powrotem  jeszcze przez 14 dni.
-              </Typography>
-            </Grid>
-          </Grid>
-          {/* Biogram */}
+          <InputField value={'John Doe'} label={'Full name'} id={'full_name'}
+            description={'Allow users to find your account, by using your name and last name it will be easier to find you.'}
+          />
+          {/* Tutaj edycja nazwy uzytkownika*/}
+          <InputField value={'johnny2037'} label={'Username'} id={'username'}
+            description={'In most cases you can change your username every 14 days.'}
+          />
+          {/* Biogram  do przerobienia, bo nie wiem jak bedzie wygladala walidacja*/}
           <Grid
             container
           >
@@ -148,44 +102,21 @@ W większości przypadków możesz zmienić swoją nazwę użytkownika z powrote
           >
 Submit
           </Button>
-          <Divider sx={{width: '100%'}}/>
           {/* Divier dzielacy opcje zmiany maila i hasla  */}
-          <Grid
-            container
-            sx={{gap: {xs: '0.5rem', sm: '1rem'}}}
-          >
-            <Grid item md={3}
-            >
-              <Typography component="h4" variant="h6" sx={{marginBlock: '1.2rem',
-                marginBottom: '0.8rem', textAlign: {sm: 'right', xs: 'center'}}}>
-                Email
-              </Typography>
-            </Grid>
-            <Grid item md={8} sx={{marginInline: {xs: '2rem', md: 'auto'}}}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                size="small"
-                defaultValue="email@gmail.com"/>
-              <Typography component="h6" variant="caption"
-                sx={{marginTop: '0', padding: '0', fontFamily: ' var(--secondary-font) !important',
-                  color: 'var(--fnt-primary-color)',
-                  textAlign: {sm: 'left', xs: 'center'}}} >
-Be sure to use this option only when you would like to change your email adress linked to an account
-              </Typography>
-            </Grid>
-            <Button
-              variant="contained"
-              sx={{margin: 'auto'}}
-            >
-Submit
-            </Button>
-          </Grid>
           <Divider sx={{width: '100%'}}/>
+          {/* Tutaj edycja maila uzytkownika */}
+          <InputField value={'johnny2037@gmail.com'} label={'Email'} id={'email'}
+            description={'Be sure to use this option only when you would like to change your email adress linked to an account.'}
+          />
+          <Button
+            variant="contained"
+            sx={{margin: 'auto'}}
+          >
+Submit
+          </Button>
+          {/* Divier dzielacy opcje zmiany maila i hasla  */}
+          <Divider sx={{width: '100%'}}/>
+          {/* Tutaj edycja hasla uzytkownika */}
           <Grid
             container
             sx={{gap: {xs: '0.5rem', sm: '1rem'}}}
