@@ -15,11 +15,11 @@ namespace TasTierAPI.Controllers
             _dbService = dbService;
         }
 
-        [Route("get")]
+        [Route("get/recipes")]
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_dbService.GetRecipes());
+            return Ok(_dbService.GetRecipesDTO());
         }
         [Route("get/ingredients")]
         [HttpGet]
@@ -33,13 +33,6 @@ namespace TasTierAPI.Controllers
         {
             return Ok(_dbService.GetSteps(Id_Recipe));
         }
-        [Route("get/image")]
-        [HttpGet]
-        public IActionResult GetImage(int Id_Recipe)
-        {
-            return Ok(_dbService.GetRecipeImage(Id_Recipe));
-        }
-
 
     }
 }

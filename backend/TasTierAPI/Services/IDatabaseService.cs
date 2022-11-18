@@ -6,11 +6,19 @@ namespace TasTierAPI.Services
 {
     public interface IDatabaseService
     {
+
         public void MakeConnection(string methodQuery);
-        public IEnumerable<Recipe> GetRecipes();
-        public IEnumerable<IngriedientInRecipe> GetIngriedientList(int Id_Recipe);
-        public string GetRecipeImage(int Id_Recipe);
-        public IEnumerable<Step> GetSteps(int Id_Recipe);
+        public List<Recipe> GetRecipes();
+        public List<IngriedientInRecipe> GetIngriedientList(int Id_Recipe);
+       // public IEnumerable<Step> GetSteps(int Id_Recipe);
         public bool CheckCredidentials(string login,string password);
+        public bool Register(string name, string lastname, string password, string email);
+        public IEnumerable<Recipe> GetRecipesDTO();
+        public List<String> GetRecipeImages(int Id_Recipe);
+        public IEnumerable<ShoppingList> GetShoppingLists(int Id_User);
+        public List<string> GetShoppingListUsers(int Id_ShoppingList);
+        public List<IngredientInShoppingList> GetIngredientsInShoppingList(int Id_ShoppingList);
+        public ShoppingListExtendDTO GetSingleShoppingList(int Id_ShoppingList);
+        public IEnumerable<Step> GetSteps(int Id_Recipe);
     }
 }

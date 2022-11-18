@@ -15,6 +15,7 @@ namespace TasTierAPI.Controllers
             _dbService = dbService;
         }
 
+        //MOCK LOGIN B4 GOOGLE/FB
         [Route("login")]
         [HttpGet]
         public IActionResult Login(string login, string password)
@@ -23,6 +24,12 @@ namespace TasTierAPI.Controllers
 
             if (result) { return Ok(result + "\tSuccessfully logged in"); }
             else { return Ok(result + "\tWrong login or password"); }
+        }
+        [Route("register")]
+        [HttpPost]
+        public IActionResult Register(string Name, string LastName,string Password,string Email)
+        {
+            return Ok(_dbService.Register(Name,LastName,Password,Email));
         }
     }
 }
