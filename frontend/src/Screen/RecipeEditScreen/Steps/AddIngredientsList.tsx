@@ -40,7 +40,9 @@ const AddIngredientsList = () => {
       container
       spacing={4}>
       <Grid item xs={12} md={12}>
-        <IngredientTable data={ingredients}/>
+        <IngredientTable
+          isEditable={true}
+          data={ingredients}/>
       </Grid>
       <Grid item xs={12} md={4}>
         <CustomAutocomplete

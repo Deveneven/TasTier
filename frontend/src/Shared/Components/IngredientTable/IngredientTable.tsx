@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
 import './IngredientTable.scss';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import {
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -14,19 +15,28 @@ import {IngredientDTO} from '../../DTOs/IngredientDTO';
 
 type IngredientTableProps = {
   data?: Array<IngredientDTO>;
+  isEditable: boolean;
 };
 
-const IngredientTable = ({data}: IngredientTableProps) => {
+const IngredientTable = (props: IngredientTableProps) => {
   const [caloriesSum, setCaloriesSum] = useState(0);
-  const location = useLocation();
-  const isEditable = location.pathname.includes('edit');
-  const [testData, setTestData] = useState<Array<IngredientDTO> | undefined>(data);
+  const [testData, setTestData] = useState<Array<IngredientDTO> | undefined>(props.data);
+
   useEffect(() => {
-    if (!!data) {
-      const sum = data.reduce((partSum, ingredient) => partSum + ingredient.Calories, 0);
+    if (!!testData) {
+      const sum = testData.reduce((partSum, ingredient) => partSum + ingredient.Calories, 0);
       setCaloriesSum(sum);
     }
-  }, [data, testData]);
+  }, [props.data, testData]);
+
+  const deleteIngredient = (id: number) => {
+    if (!!testData) {
+      setTestData(testData.filter((item) => item.Id !== id));
+    }
+  };
+  const editIngredient = (ingredient: IngredientDTO) => {
+
+  };
   return (
     <div>
       <TableContainer>
@@ -37,7 +47,7 @@ const IngredientTable = ({data}: IngredientTableProps) => {
               <TableCell>Amount</TableCell>
               <TableCell>Unit</TableCell>
               <TableCell>Calories (kcal)</TableCell>
-              {isEditable && <TableCell></TableCell>}
+              {props.isEditable && <TableCell></TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -47,17 +57,14 @@ const IngredientTable = ({data}: IngredientTableProps) => {
                 <TableCell>{ingredient.Amount}</TableCell>
                 <TableCell>{ingredient.Unit}</TableCell>
                 <TableCell>{ingredient.Calories}</TableCell>
-                {isEditable && (
+                {props.isEditable && (
                   <TableCell>
-                    <DeleteIcon
-                      onClick={() => {
-                        setTestData(
-                            testData.filter((item) => item.Id !== ingredient.Id),
-                        );
-                        console.log(ingredient.Id);
-                        console.log(testData);
-                      }}
-                    />
+                    <IconButton onClick={() => deleteIngredient(ingredient.Id)}>
+                      <DeleteIcon/>
+                    </IconButton>
+                    <IconButton onClick={() => editIngredient(ingredient)}>
+                      <EditIcon/>
+                    </IconButton>
                   </TableCell>
                 )}
               </TableRow>

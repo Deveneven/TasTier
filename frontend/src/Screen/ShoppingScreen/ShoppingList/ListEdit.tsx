@@ -81,6 +81,7 @@ const ListScreen = ({listId, lists} : ListScreenProps) => {
         </Box>
         {list && (
           <IngredientTable
+            isEditable={true}
             data={list.IngredientsList}
           />
         )}
