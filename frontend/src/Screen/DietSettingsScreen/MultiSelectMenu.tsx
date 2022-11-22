@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-
+import {Container} from '@mui/material';
 type MultiSelectMenuProps = {
 inputName:string;
 label: string;
@@ -25,11 +25,11 @@ const MultiSelectMenu = ({inputName, label, options} : MultiSelectMenuProps) => 
     );
   };
   return (
-    <div style={{padding: '2rem'}}>
+    <Container sx={{margin: 'auto !important'}}>
       <Typography component="h4" variant="h6" sx={{wordWrap: ' break-word', textAlign: {xs: 'center', sm: 'left'}}}>
         {inputName}
       </Typography>
-      <FormControl sx={{m: 1, width: '300px'}}>
+      <FormControl sx={{width: 'min(600px, 100%)'}}>
         <InputLabel id="demo-multiple-name-label">{label}</InputLabel>
         <Select
           labelId="demo-multiple-name-label"
@@ -42,7 +42,7 @@ const MultiSelectMenu = ({inputName, label, options} : MultiSelectMenuProps) => 
           {options.map((name, key) => ( <MenuItem key={key} value={name}>{name}</MenuItem>))}
         </Select>
       </FormControl>
-    </div>
+    </Container>
   );
 };
 

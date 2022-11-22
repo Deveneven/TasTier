@@ -30,9 +30,9 @@ const DietSettingsScreen = () => {
           display: 'flex',
           flexDirection: 'column',
           margin: 'auto',
-          padding: '2rem',
+          padding: {md: '2rem', xs: '1rem'},
           justifyContent: {xs: 'center'},
-          gap: '4rem',
+          gap: {xs: '2rem', md: '4rem'},
         }}
       >
         <Grid
@@ -41,14 +41,13 @@ const DietSettingsScreen = () => {
           sx={{gap: '1rem'}}
         >
           <Grid item md={1}
-            sx={{margin: {xs: 'auto', sm: '0'}}}
           >
-            <Avatar sx={{width: 56, height: 56}}>
+            <Avatar sx={{width: 56, height: 56, margin: 'auto'}}>
 M
             </Avatar>
           </Grid>
           <Grid item md={10} sx={{textAlign: {xs: 'center', sm: 'left'}, marginBlock: 'auto'}} >
-            <Typography component="h4" variant="h6" sx={{wordWrap: ' break-word', textAlign: {xs: 'center', sm: 'left'}}}>
+            <Typography component="h4" variant="h6" sx={{wordWrap: ' break-word', textAlign: 'left'}}>
                 John Doe diet preferences
             </Typography>
           </Grid>
@@ -57,13 +56,16 @@ M
           container
           margin="auto"
           justifyContent="space-between"
-          sx={{gap: {xs: '1rem', sm: '2rem'}}}
+          sx={{gap: {xs: '2rem', md: '1rem'}, flexDirection: {xs: 'column-reverse', md: 'row'}}}
         >
           <Grid item md={5}
+            sx={{width: 'min(600px, 100%)', margin: 'auto'}}
           >
             < IngredientTableDiets buttonName={'allergen'} tableName={'Your allergens'}/>
           </Grid>
-          <Grid item md={5} >
+          <Grid item md={5}
+            sx={{width: 'min(600px, 100%)', margin: {sm: 'auto', md: '0 auto'}}}
+          >
             <MultiSelectMenu inputName={'Your Diet:'} label={'Diets'} options={options}/>
             <MultiSelectMenu inputName={'Your favorite cousine:'} label={'Cousines'} options={options}/>
           </Grid>
@@ -72,13 +74,15 @@ M
           container
           margin="auto"
           justifyContent="space-between"
-          sx={{gap: {xs: '1rem', sm: '2rem'}}}
+          sx={{gap: {xs: '2rem', md: '2rem'}}}
         >
           <Grid item md={5}
+            sx={{width: 'min(600px, 100%)', margin: 'auto'}}
           >
             < IngredientTableDiets buttonName={'ingredient'} tableName={'Your favorite Ingredients'}/>
           </Grid>
-          <Grid item md={5}>
+          <Grid item md={5}
+            sx={{width: 'min(600px, 100%)', margin: 'auto'}}>
             < IngredientTableDiets buttonName={'ingredient'} tableName={'Your least favorite Ingredients'}/>
           </Grid>
         </Grid>

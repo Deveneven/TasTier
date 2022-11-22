@@ -27,7 +27,7 @@ const IngredientTableDiets = ({tableName, buttonName}:IngredientTableDietsProps)
   const [productName, setProductName] = useState<String>('');
   return (
     <div>
-      <TableContainer>
+      <TableContainer sx={{padding: '0 !important'}}>
         <Table>
           <TableHead>
             <TableRow>
