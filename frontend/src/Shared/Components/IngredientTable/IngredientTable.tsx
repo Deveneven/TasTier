@@ -50,6 +50,8 @@ const IngredientTable = ({data}: IngredientTableProps) => {
                 {isEditable && (
                   <TableCell>
                     <DeleteIcon
+                      focusable
+                      className="icon-hover"
                       onClick={() => {
                         setTestData(
                             testData.filter((item) => item.Id !== ingredient.Id),
