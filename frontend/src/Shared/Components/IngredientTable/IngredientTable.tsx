@@ -50,10 +50,11 @@ const IngredientTable = (props: IngredientTableProps) => {
   };
 
   const AddIngredientToList = () => {
-    console.log(amount);
     let i = testData.length;
-    if (!!ingredientName) {
-      console.log('Bylem tu');
+    const existedIndex = testData.findIndex((elem) => elem.Name == ingredientName);
+    if (existedIndex !== -1) {
+      testData[existedIndex].Amount = amount;
+    } else if (!!ingredientName) {
       const ingrid: IngredientDTO = {
         Id: i++,
         Amount: amount,
@@ -64,6 +65,7 @@ const IngredientTable = (props: IngredientTableProps) => {
       };
       setTestData([...testData, ingrid]);
     }
+
     setIngredientName('');
     setBrandName('');
     setAmount(0);
@@ -167,7 +169,7 @@ const IngredientTable = (props: IngredientTableProps) => {
               fullWidth
               variant='contained'
               onClick={AddIngredientToList}>
-                Add
+              {isEdit ? 'Edit' : 'Add'}
             </Button>
           </Grid>
         </>
