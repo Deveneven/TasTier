@@ -73,7 +73,11 @@ function SideMenu() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('../diets');
+              }}
+            >
               <ListItemIcon>
                 <FastfoodIcon fontSize="large" />
               </ListItemIcon>
@@ -81,11 +85,25 @@ function SideMenu() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('../account/settings');
+              }}>
               <ListItemIcon>
                 <SettingsIcon fontSize="large" />
               </ListItemIcon>
               <ListItemText primary={'Settings'} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton
+              onClick={() => {
+                navigate('../signin');
+              }}>
+              <ListItemIcon>
+                <SettingsIcon fontSize="large" />
+              </ListItemIcon>
+              <ListItemText primary={'Log out'} />
             </ListItemButton>
           </ListItem>
         </List>

@@ -87,7 +87,7 @@ const RegisterScreen = () => {
             <Button onClick={ () => navigate('../signin')}>
                Have an account Already ?
               <br />
-               Register
+               Sign in
             </Button>
           </Card>
         </Grid>

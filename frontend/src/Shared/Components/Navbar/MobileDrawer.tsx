@@ -1,5 +1,4 @@
-import Drawer from '@mui/material/Drawer';
-import React from 'react';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer'; import React from 'react';
 import SideMenu from './SideMenu';
 
 type MobileDrawerProps = {
@@ -10,13 +9,14 @@ setIsDrawerOpen;
 function MobileDrawer({isDrawerOpen, setIsDrawerOpen} : MobileDrawerProps) {
   return (
     <>
-      <Drawer
+      <SwipeableDrawer
         anchor="left"
         open={isDrawerOpen}
+        onOpen={() => setIsDrawerOpen(true)}
         onClose={() => setIsDrawerOpen(false)}
       >
         <SideMenu />
-      </Drawer>
+      </SwipeableDrawer>
     </>
   );
 }
