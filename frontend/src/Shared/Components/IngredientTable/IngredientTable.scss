@@ -14,14 +14,22 @@
 	text-align: center !important;
 }
 
-.calories-Sum {
+.table-panel {
   margin-top: 10px;
-  text-align: right;
-  span {
+  .calories-Sum {
     background-color: var(--main-orange);
     padding: 5px;
     margin-right: 2px;
     border-radius: 5px;
-    color: white !important;
+    color: white;
+    float: right;
+  }
+  .add-button {
+    width: 3vh;
+    height: 3vh;
+    border-radius: 5px;
+    border: "1px solid";
+    color: white;
+    float: left;
   }
 }

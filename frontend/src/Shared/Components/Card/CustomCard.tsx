@@ -52,7 +52,9 @@ const CustomCard = ({data}: CustomCardProps) => {
         <ExpandMore />
       </Button>
       <Collapse in={expanded}>
-        <IngredientTable data={data.Ingredients}/>
+        <IngredientTable
+          isEditable={true}
+          data={data.Ingredients}/>
       </Collapse>
       {!!commentIsVisible ?
       <Comment /> :
