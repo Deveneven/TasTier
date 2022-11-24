@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
 import {IngredientDTO} from '../../../Shared/DTOs/IngredientDTO';
 
-const AddIngredientsList = () => {
+const AddIngredientsList = (props: any) => {
   const [ingredients] = useState<IngredientDTO[]>([]);
 
   useEffect(()=>{
