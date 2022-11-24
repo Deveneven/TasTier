@@ -111,11 +111,11 @@ const UserMenu = () => {
           <MenuItem sx={{display: 'flex', gap: '1rem'}}>
             <MenuBookIcon fontSize="medium" /> Your recipes
           </MenuItem>
-          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}
+            onClick={() => {
+              navigate('../diets');
+            }}>
             <FastfoodIcon fontSize="medium" /> Diet settings
-          </MenuItem>
-          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
-            <SettingsIcon fontSize="medium" /> Account settings
           </MenuItem>
           <MenuItem
             sx={{display: 'flex', gap: '1rem'}}
@@ -124,6 +124,12 @@ const UserMenu = () => {
             }}
           >
             <ShoppingCartIcon fontSize="medium" /> Shopping Lists
+          </MenuItem>
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}
+            onClick={() => {
+              navigate('../account/settings');
+            }}>
+            <SettingsIcon fontSize="medium" /> Account settings
           </MenuItem>
           <Divider />
           <MenuItem

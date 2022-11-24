@@ -35,7 +35,6 @@ function Navbar() {
       margin: 'auto',
     },
     [theme.breakpoints.down('sm')]: {
-
       display: 'none',
     },
     [theme.breakpoints.down('md')]: {

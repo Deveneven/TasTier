@@ -16,7 +16,6 @@ import {ShoppingListDTO} from '../../../Shared/DTOs/ShoppingListDTO';
 import {UserDTO} from '../../../Shared/DTOs/UserDTO';
 import {IconButton} from '@mui/material';
 import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
-
 type ListScreenProps = {
   listId: number;
   lists: Array<ShoppingListDTO>;
@@ -41,25 +40,26 @@ const ListScreen = ({listId, lists} : ListScreenProps) => {
     setOpen(false);
   };
   return (
-    <Container maxWidth="md" sx={{marginTop: '8rem'}}>
+    <Container maxWidth="md">
       <Box
         sx={{
           bgcolor: 'white',
-          display: 'flex',
-          flexDirection: 'column',
-          margin: 'auto',
           padding: '2rem',
-          justifyContent: 'space-around',
-          gap: '1rem',
         }}
       >
+        <IconButton
+          size="large"
+          sx={{marginRight: 0, float: 'right'}}
+          onClick={handleClickOpen}
+        >
+          <PersonPinIcon fontSize="large" />
+        </IconButton>
         <Box
           sx={{
             bgcolor: 'white',
             display: 'flex',
             flexDirection: 'row',
             margin: 'auto',
-            padding: '2rem',
             justifyContent: 'center',
             width: '100%',
           }}
@@ -71,16 +71,10 @@ const ListScreen = ({listId, lists} : ListScreenProps) => {
           >
             {list && list.Name}
           </Typography>
-          <IconButton
-            size="large"
-            sx={{marginRight: 0}}
-            onClick={handleClickOpen}
-          >
-            <PersonPinIcon fontSize="large" />
-          </IconButton>
         </Box>
         {list && (
           <IngredientTable
+            isEditable={true}
             data={list.IngredientsList}
           />
         )}

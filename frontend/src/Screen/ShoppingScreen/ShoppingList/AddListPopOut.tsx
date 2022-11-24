@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
@@ -76,80 +75,84 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : AddListPopOutProps) =>
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title" sx={textCenter}>
-          Create Shopping List
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{textAlign: ' center', margin: '2rem'}}
+          >
+                   Create Shopping List
+          </Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="shopping_list_name"
-              label="Shopping list name"
-              name="shopping_list_name"
-              autoComplete="Shopping list name"
-              autoFocus
-              onChange={(e) => {
-                setListName(e.target.value);
-              }}
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="User"
-              label="Share list with the user"
-              name="User"
-              autoComplete="User"
-              onChange={(e) => {
-                console.log(e.target.value);
-                setUser(e.target.value);
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    onClick={() => {
-                      addUserFromSharedList();
-                    }}
-                  >
-                    <Button variant="contained">Add</Button>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Stack
-              direction="row"
-              sx={{
-                flexWrap: 'wrap',
-                justifyContent: 'flex-start',
-                margin: 'center',
-                gap: '0.5rem',
-              }}
-            >
-              {usersSharedList.length < 1 && (
-                <Typography
-                  component="h1"
-                  variant="h4"
-                  sx={{textAlign: ' center', margin: '2rem'}}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="shopping_list_name"
+            label="Shopping list name"
+            name="shopping_list_name"
+            autoComplete="Shopping list name"
+            autoFocus
+            onChange={(e) => {
+              setListName(e.target.value);
+            }}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="User"
+            label="Share list with the user"
+            name="User"
+            autoComplete="User"
+            onChange={(e) => {
+              console.log(e.target.value);
+              setUser(e.target.value);
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  onClick={() => {
+                    addUserFromSharedList();
+                  }}
                 >
-                  There are no lists created yet !
-                </Typography>
-              )}
-              {usersSharedList.map((data) => {
-                return (
-                  <Chip
-                    key={data.Id}
-                    avatar={<Avatar>{data.Avatar}</Avatar>}
-                    label={data.Name}
-                    variant="outlined"
-                    onDelete={() => {
-                      deleteUserFromSharedList(data);
-                    }}
-                  />
-                );
-              })}
-            </Stack>
-          </DialogContentText>
+                  <Button variant="contained">Add</Button>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <Stack
+            direction="row"
+            sx={{
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+              margin: 'center',
+              gap: '0.5rem',
+            }}
+          >
+            {usersSharedList.length < 1 && (
+              <Typography
+                component="h1"
+                variant="h4"
+                sx={{textAlign: ' center', margin: '2rem'}}
+              >
+                  There are no users added to share the list yet !
+              </Typography>
+            )}
+            {usersSharedList.map((data) => {
+              return (
+                <Chip
+                  key={data.Id}
+                  avatar={<Avatar>{data.Avatar}</Avatar>}
+                  label={data.Name}
+                  variant="outlined"
+                  onDelete={() => {
+                    deleteUserFromSharedList(data);
+                  }}
+                />
+              );
+            })}
+          </Stack>
           <Button
             variant="contained"
             sx={textCenter}
@@ -158,6 +161,14 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : AddListPopOutProps) =>
           >
             {' '}
             Add{' '}
+          </Button>
+          <Button
+            variant="contained"
+            sx={[textCenter, {float: 'right', display: {xs: 'block', md: 'none'}}]}
+            onClick={handleClose}
+          >
+            {' '}
+            Close
           </Button>
         </DialogContent>
       </Dialog>

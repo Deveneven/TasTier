@@ -12,7 +12,9 @@ span{
 	font-family : var(--main-font) !important;
 	color: #4b4f56 !important;
 }
-
+a{
+	text-decoration: none;
+}
 // --logo-font: 'Courgette', cursive;
 // --main-font: 'Roboto', sans-serif;
 // --secondary-font: 'Montserrat', sans-serif;
