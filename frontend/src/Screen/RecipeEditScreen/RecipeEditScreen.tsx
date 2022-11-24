@@ -9,7 +9,7 @@ import AddPhoto from './Steps/AddPhoto';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [isValid] = useState(false);
+  const [isValid] = useState(true);
 
   const results: Array<{name: string, isValid: boolean}> = [];
 
@@ -32,8 +32,6 @@ const RecipeEditScreen = () => {
     // console.log(`${type} ${value} ${name}`);
   };
   const checkIsValid = (name: string, isValid: boolean) => {
-    // console.log('Check is valid');
-    // console.log(`${name} ${isValid}`);
     const index = results.findIndex((elem) => elem.name == name);
     if (index !== -1) {
       results[index] = {name: name, isValid: isValid};
