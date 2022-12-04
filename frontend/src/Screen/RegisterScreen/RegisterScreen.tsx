@@ -1,19 +1,77 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 // import './RegisterScreen.scss';
 import Grid from '@mui/material/Grid';
-import {Avatar, Box, Button, TextField, Card} from '@mui/material';
+import {Avatar, Box, Button, Card, CircularProgress} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import {LockOutlined} from '@material-ui/icons';
 import Divider from '@mui/material/Divider';
 import {useNavigate} from 'react-router-dom';
-
+import TextForm from '../../Shared/Components/TextForm/TextForm';
+import {Api} from '../../Utils/Api';
 const RegisterScreen = () => {
+  useEffect( () => {
+    return () => setLoading(false);
+  }, []);
+
   const navigate = useNavigate();
 
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+  const [nameIsValid, setNameIsValid] = useState({name: 'name', isValid: false});
+  const [lastNameIsValid, setLastNameIsValid] = useState({name: 'lastName', isValid: false});
+  const [emailIsValid, setEmailIsValid] = useState({name: 'email', isValid: false});
+  const [passwordIsValid, setPasswordIsValid] = useState({name: 'password', isValid: false});
+  const [confirmPasswordIsValid, setConfirmPasswordIsValid] = useState({name: 'confirmPassword', isValid: false});
+  // console.log(process.env.REACT_APP_DB_API);
+  //   console.log(nameIsValid);
+
+  //   console.log(lastNameIsValid);
+
+  //   console.log(emailIsValid);
+
+  //   console.log(passwordIsValid);
+
+  //   console.log(confirmPasswordIsValid);
+
   const register = () => {
+    if (
+      nameIsValid.isValid &&
+      lastNameIsValid.isValid &&
+      emailIsValid.isValid &&
+      passwordIsValid.isValid &&
+      confirmPasswordIsValid &&
+      password === confirmPassword
+    ) {
+      setLoading(true);
+
+      Api.post(
+          `${process.env.REACT_APP_DB_API}/accounts/register`,
+          {
+            Name: name,
+            LastName: lastName,
+            Password: password,
+            Email: email,
+          },
+      ).then( (response) => {
+        console.log(response);
+        if (response.ok) {
+          console.log('pomyslnie zarejestrowano');
+        }
+      })
+          .finally( () => {
+            setLoading(false);
+          });
+    }
     console.log('Rejestracja');
-    navigate('../signin');
+    // navigate('../signin');
   };
+
   return (
     <div>
       <Grid container className='signin-container'>
@@ -28,12 +86,44 @@ const RegisterScreen = () => {
               TasTier
             </Typography>
             <Typography component="h1" variant="h6">
-              Sign in
+              Register
             </Typography>
             <Box
               sx={{mb: 2}}
             >
-              <TextField
+              <TextForm
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="Name"
+                minLength={3}
+                maxLength={20}
+                regex={/^((?![0-9.,!?:;_|+\-*\\/=%°@&#§$"'`¨^ˇ()\[\]<>{}])[\S])+$/gm}
+                checkIsValid={setNameIsValid}
+                onChange={ (e) => {
+                  setName(e.target.value);
+                }}
+              />
+              <TextForm
+                margin="normal"
+                required
+                fullWidth
+                id="lastname"
+                label="Last Name"
+                name="lastname"
+                autoComplete="Last Name"
+                minLength={3}
+                maxLength={20}
+                regex={/^((?![0-9.,!?:;_|+\-*\\/=%°@&#§$"'`¨^ˇ()\[\]<>{}])[\S])+$/gm}
+                checkIsValid={setLastNameIsValid}
+                onChange={ (e) => {
+                  setLastName(e.target.value);
+                }}
+              />
+              <TextForm
                 margin="normal"
                 required
                 fullWidth
@@ -42,17 +132,15 @@ const RegisterScreen = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                minLength={3}
+                maxLength={20}
+                regex={/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g} // do podwojnego przejrzenia regex
+                checkIsValid={setEmailIsValid}
+                onChange={ (e) => {
+                  setEmail(e.target.value);
+                }}
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="username"
-                name="username"
-                autoComplete="username"
-              />
-              <TextField
+              <TextForm
                 margin="normal"
                 required
                 fullWidth
@@ -61,8 +149,15 @@ const RegisterScreen = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                minLength={8}
+                maxLength={20}
+                regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/}
+                checkIsValid={setPasswordIsValid}
+                onChange={ (e) => {
+                  setPassword(e.target.value);
+                }}
               />
-              <TextField
+              <TextForm
                 margin="normal"
                 required
                 fullWidth
@@ -71,14 +166,35 @@ const RegisterScreen = () => {
                 type="password"
                 id="passwordRepeat"
                 autoComplete="current-password"
+                minLength={8}
+                maxLength={20}
+                regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/}
+                checkIsValid={setConfirmPasswordIsValid}
+                onChange={ (e) => {
+                  setConfirmPassword(e.target.value);
+                }}
               />
               <Button
                 fullWidth
                 variant="contained"
                 onClick={register}
-                sx={{mt: 3}}
+                sx={{mt: 3, position: 'relative'}}
+                disabled={loading}
               >
                 Register
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      color: '#black',
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      marginTop: '-12px',
+                      marginLeft: '-12px',
+                    }}
+                  />
+                )}
               </Button>
             </Box>
             <Typography component="h1" variant="h6">
