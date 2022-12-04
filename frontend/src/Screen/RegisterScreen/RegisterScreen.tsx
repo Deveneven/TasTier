@@ -7,6 +7,7 @@ import {LockOutlined} from '@material-ui/icons';
 import Divider from '@mui/material/Divider';
 import {useNavigate} from 'react-router-dom';
 import TextForm from '../../Shared/Components/TextForm/TextForm';
+import CustomizableAlert from '../../Shared/Components/Alert/CustomizableAlert';
 import {Api} from '../../Utils/Api';
 const RegisterScreen = () => {
   useEffect( () => {
@@ -20,6 +21,8 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState(false);
+  const [registered, setRegistered] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -61,7 +64,10 @@ const RegisterScreen = () => {
       ).then( (response) => {
         console.log(response);
         if (response.ok) {
-          console.log('pomyslnie zarejestrowano');
+          setRegistered(true);
+        }
+        if (!response.ok) {
+          setError(true);
         }
       })
           .finally( () => {
@@ -174,6 +180,12 @@ const RegisterScreen = () => {
                   setConfirmPassword(e.target.value);
                 }}
               />
+              {registered && (
+                <CustomizableAlert setOpen={setRegistered} message={'sucessfuly Registered ! '} type={'success'}/>
+              )}
+              {error && (
+                <CustomizableAlert setOpen={setError} message={'An Error has occured, try again later ! '} type={'error'}/>
+              )}
               <Button
                 fullWidth
                 variant="contained"
