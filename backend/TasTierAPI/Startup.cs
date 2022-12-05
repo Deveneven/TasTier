@@ -26,9 +26,12 @@ namespace TasTierAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers();
             services.AddScoped<IDatabaseService, DatabaseService>();
             services.AddSwaggerGen();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +43,7 @@ namespace TasTierAPI
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
             app.UseRouting();
 
             app.UseAuthorization();

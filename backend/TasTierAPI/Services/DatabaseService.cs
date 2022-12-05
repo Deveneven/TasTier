@@ -143,12 +143,12 @@ namespace TasTierAPI.Services
             return images;
         }
 
-        public bool CheckCredidentials(string login, string password)
+        public int CheckCredidentials(string login, string password)
         {
 
             //TODO Change login to to email for better login experience
-            bool exist = false;
-            MakeConnection("SELECT Name From [dbo].[User] WHERE Email=@login AND Password = @password");
+            int exist;
+            MakeConnection("SELECT Id_User, Email From [dbo].[User] WHERE Email=@login AND Password = @password");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@login", login);
             commandsToDatabase.Parameters.AddWithValue("@password", password);
@@ -156,14 +156,15 @@ namespace TasTierAPI.Services
 
             while (sqlDataReader.Read())
             {
-                if(login == sqlDataReader["Name"].ToString())
+                if (login == sqlDataReader["Email"].ToString())
                 {
+                    exist = int.Parse(sqlDataReader["Id_User"].ToString());
                     connectionToDatabase.Close();
-                    return true;
+                    return exist;
                 }
             }
             connectionToDatabase.Close();
-            return false;
+            return 0;
 
         }
             
@@ -182,7 +183,32 @@ namespace TasTierAPI.Services
             {
                 result = bool.Parse(sqlDataReader["result"].ToString());
             }
+            connectionToDatabase.Close();
             return result;
+        }
+        public UserDTO GetUserDTO (int id)
+        {
+            UserDTO user = new UserDTO();
+            MakeConnection("SELECT Name,LastName,Avatar,Email,Admin,Diet_Id_Diet FROM [dbo].[User] WHERE Id_User =@id");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id", id);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                user = new UserDTO()
+                {
+                    name = (sqlDataReader["Name"] != null ? sqlDataReader["Name"].ToString() : null),
+                    lastname = (sqlDataReader["LastName"] != null ? sqlDataReader["LastName"].ToString() : null),
+                    avatar = (sqlDataReader["Avatar"] != null ? sqlDataReader["Avatar"].ToString() : null),
+                    email = (sqlDataReader["Email"] != null ? sqlDataReader["Email"].ToString() : null),
+                    admin = (sqlDataReader["Admin"] != null ? bool.Parse(sqlDataReader["Admin"].ToString()) : false),
+                    // diet_id = int.Parse(sqlDataReader["Diet_Id_Diet"].ToString())
+                };
+                
+               
+            }
+            connectionToDatabase.Close();
+            return user;
         }
         public List<IngredientInShoppingList> GetIngredientsInShoppingList(int Id_ShoppingList)
         {
@@ -206,6 +232,7 @@ namespace TasTierAPI.Services
                 };
                 ingredients.Add(ing);
             }
+            connectionToDatabase.Close();
             return ingredients;
         }
         public List<string> GetShoppingListUsers(int Id_ShoppingList)
@@ -222,6 +249,7 @@ namespace TasTierAPI.Services
             {
                 users.Add(sqlDataReader["Nickname"].ToString());
             }
+            connectionToDatabase.Close();
             return users;
         }
         public IEnumerable<ShoppingList> GetShoppingLists(int Id_User)
@@ -243,6 +271,7 @@ namespace TasTierAPI.Services
                 };
                 lists.Add(list);
             }
+            connectionToDatabase.Close();
             return lists;
         }
         public ShoppingListExtendDTO GetSingleShoppingList(int Id_ShoppingList)
@@ -263,7 +292,7 @@ namespace TasTierAPI.Services
             }
             shoppingListExtendDTO.Friends = GetShoppingListUsers(Id_ShoppingList);
             shoppingListExtendDTO.IngredientList = GetIngredientsInShoppingList(Id_ShoppingList);
-
+            connectionToDatabase.Close();
             return shoppingListExtendDTO;
 
         }

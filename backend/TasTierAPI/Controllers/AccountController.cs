@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using TasTierAPI.Models;
 using TasTierAPI.Services;
 
 namespace TasTierAPI.Controllers
@@ -17,19 +18,33 @@ namespace TasTierAPI.Controllers
 
         //MOCK LOGIN B4 GOOGLE/FB
         [Route("login")]
-        [HttpGet]
-        public IActionResult Login(string login, string password)
+        [HttpPost]
+        public IActionResult Login([FromBody]LoginDTO loginDTO)
         {
-            bool result = _dbService.CheckCredidentials(login, password);
+            string fakeToken = "verysecretoken5912359213";
+            
+            int result = _dbService.CheckCredidentials(loginDTO.login, loginDTO.password);
 
-            if (result) { return Ok(result + "\tSuccessfully logged in"); }
-            else { return Ok(result + "\tWrong login or password"); }
+            if (result!=0) { return Ok(
+                new LoginResponeModel()
+                {
+                    Id_User = result,
+                    SecurityToken = fakeToken
+                }
+                ); }
+            else { return Ok("\tWrong login or password"); }
         }
         [Route("register")]
         [HttpPost]
-        public IActionResult Register(string Name, string LastName,string Password,string Email)
+        public IActionResult Register([FromBody]RegisterDTO registerDTO)
         {
-            return Ok(_dbService.Register(Name,LastName,Password,Email));
+            return Ok(_dbService.Register(registerDTO.Name, registerDTO.LastName, registerDTO.Password, registerDTO.Email));
+        }
+        [Route("user")]
+        [HttpGet]
+        public IActionResult GetUser (int Id_User)
+        {
+            return Ok(_dbService.GetUserDTO(Id_User));
         }
     }
 }

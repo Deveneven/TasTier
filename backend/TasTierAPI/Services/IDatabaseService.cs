@@ -11,8 +11,9 @@ namespace TasTierAPI.Services
         public List<Recipe> GetRecipes();
         public List<IngriedientInRecipe> GetIngriedientList(int Id_Recipe);
        // public IEnumerable<Step> GetSteps(int Id_Recipe);
-        public bool CheckCredidentials(string login,string password);
+        public int CheckCredidentials(string login,string password);
         public bool Register(string name, string lastname, string password, string email);
+        public UserDTO GetUserDTO(int id);
         public IEnumerable<Recipe> GetRecipesDTO();
         public List<String> GetRecipeImages(int Id_Recipe);
         public IEnumerable<ShoppingList> GetShoppingLists(int Id_User);
