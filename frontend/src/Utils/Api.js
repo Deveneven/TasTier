@@ -10,15 +10,21 @@ async function get(url) {
 }
 
 async function post(url, payload) {
-  await fetch(url, {
+  const response = await fetch(url, {
+    crossDomain: true,
     method: 'POST',
+    credentials: 'same-origin',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
     },
+    referrerPolicy: 'no-referrer',
     body: JSON.stringify(payload),
   }).then((response) => {
-    return JSON.parse(response);
+    console.log(JSON.stringify(payload));
+    return response;
   });
+  return response;
 }
 
 export const Api = {

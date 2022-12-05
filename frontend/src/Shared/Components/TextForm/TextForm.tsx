@@ -7,7 +7,7 @@ const TextForm = (props: any) => {
   const [validResults, setValidResults] = useState<Array<string>>([]);
   useEffect(() => {
     if (!!props.checkIsValid) {
-      props.checkIsValid(props.name, !isInvalid);
+      props.checkIsValid({name: props.name, isValid: !isInvalid});
     }
   }, [isInvalid]);
   const onBlur = (event: any) => {
@@ -37,7 +37,7 @@ const TextForm = (props: any) => {
   };
 
   const onFocus = () => {
-    setIsInvalid(false);
+    setIsInvalid(false); // moze powodowac buga, gdy ktos zostawi input pusty, ale da na niego focus is probuje wyslac zapytanie
     setValidResults([]);
   };
 
