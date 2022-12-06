@@ -32,13 +32,15 @@ namespace TasTierAPI.Controllers
                     SecurityToken = fakeToken
                 }
                 ); }
-            else { return Ok("\tWrong login or password"); }
+            else { return BadRequest("\tWrong login or password"); }
         }
         [Route("register")]
         [HttpPost]
         public IActionResult Register([FromBody]RegisterDTO registerDTO)
         {
-            return Ok(_dbService.Register(registerDTO.Name, registerDTO.LastName, registerDTO.Password, registerDTO.Email));
+            bool success = _dbService.Register(registerDTO.Name, registerDTO.LastName, registerDTO.Password, registerDTO.Email);
+            if (success) { return Ok(success); }
+            else return BadRequest("Something went wrong");
         }
         [Route("user")]
         [HttpGet]
