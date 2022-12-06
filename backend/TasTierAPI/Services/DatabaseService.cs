@@ -167,16 +167,35 @@ namespace TasTierAPI.Services
             return 0;
 
         }
+        public LoginAuthDTO GetUserByLogin(string login)
+        {
+            LoginAuthDTO loginAuth = new LoginAuthDTO();
+            MakeConnection("SELECT Id_User, Password, salt FROM [dbo].[User] WHERE Email=@login");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("login", login);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                loginAuth = new LoginAuthDTO()
+                {
+                    id = int.Parse(sqlDataReader["Id_User"].ToString()),
+                    password = sqlDataReader["Password"].ToString(),
+                    salt = sqlDataReader["salt"].ToString()
+                };
+            }
+            return loginAuth;
+        }
             
-        public bool Register (string name, string lastname, string password, string email)
+        public bool Register (string name, string lastname, string password, string email,string salt)
         {
             bool result = false;
-            MakeConnection("exec [dbo].Register  @Name = @imie, @LastName = @nazwisko, @Password = @haslo, @Email = @mail;");
+            MakeConnection("exec [dbo].Register  @Name = @imie, @LastName = @nazwisko, @Password = @haslo, @Email = @mail,@Salt=@sol;");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@imie", name);
             commandsToDatabase.Parameters.AddWithValue("@nazwisko", lastname);
             commandsToDatabase.Parameters.AddWithValue("@haslo", password);
             commandsToDatabase.Parameters.AddWithValue("@mail", email);
+            commandsToDatabase.Parameters.AddWithValue("@sol", salt);
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
 
             while (sqlDataReader.Read())
