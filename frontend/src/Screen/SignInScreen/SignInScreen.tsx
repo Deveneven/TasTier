@@ -27,18 +27,17 @@ const SignInScreen = () => {
   const [passwordIsValid, setPasswordIsValid] = useState({name: 'password', isValid: false});
   const [error, setError] = useState(false);
 
-  const signIn = () => {
+  const signIn = async () => {
     console.log('Logowanie');
     // localStorage.setItem('loggedState', 'loggedIn');
     // navigate('/');
     if (emailIsValid && passwordIsValid) {
       setLoading(true);
-      Api.post(`${process.env.REACT_APP_DB_API}/accounts/login`, {
+      await Api.post(`${process.env.REACT_APP_DB_API}/accounts/login`, {
         login: email,
         password: password,
       }).then( (response) => {
-        console.log(response);
-        if (response.ok) {
+        if (!!response) {
           setLoading(false);
           localStorage.addItem('TastierId', 'tutaj bedzie id usera');
           localStorage.addItem('TastierId', 'tutaj bedzie reset key');
