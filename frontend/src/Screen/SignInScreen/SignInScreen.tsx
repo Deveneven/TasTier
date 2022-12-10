@@ -25,7 +25,7 @@ const SignInScreen = () => {
 
   const [emailIsValid, setEmailIsValid] = useState({name: 'email', isValid: false});
   const [passwordIsValid, setPasswordIsValid] = useState({name: 'password', isValid: false});
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({display: false, text: ''});
 
   const signIn = async () => {
     console.log('Logowanie');
@@ -37,13 +37,13 @@ const SignInScreen = () => {
         login: email,
         password: password,
       }).then( (response) => {
-        if (!!response) {
+        if (response.success) {
           setLoading(false);
-          localStorage.addItem('TastierId', 'tutaj bedzie id usera');
-          localStorage.addItem('TastierId', 'tutaj bedzie reset key');
+          localStorage.setItem('TastierId', 'tutaj bedzie id usera');
+          localStorage.setItem('TastierId', 'tutaj bedzie reset key');
           navigate('/');
         } else {
-          setError(true);
+          setError({display: true, text: response.text});
           setLoading(false);
         }
       });
@@ -97,8 +97,8 @@ const SignInScreen = () => {
                   setPassword(e.target.value);
                 }}
               />
-              {error && (
-                <CustomizableAlert setOpen={setError} message={'An Error has occured, try again later ! '} type={'error'}/>
+              {error.display && (
+                <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
               )}
               <ResetPasswordButton />
               <Button
