@@ -117,11 +117,13 @@ const IngredientTable = (props: IngredientTableProps) => {
           </Table>
           <div className='table-panel'>
             <span className='calories-Sum'>Total calories: {caloriesSum} kcal</span>
-            <IconButton
-              className='add-button'
-              onClick={showAddPanel}>
-              <AddIcon/>
-            </IconButton>
+            {props.isEditable && (
+              <IconButton
+                className='add-button'
+                onClick={showAddPanel}>
+                <AddIcon/>
+              </IconButton>
+            )}
           </div>
         </TableContainer>
       </Grid>
