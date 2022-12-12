@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using TasTierAPI.Models;
 using TasTierAPI.Services;
 
@@ -34,14 +38,22 @@ namespace TasTierAPI.Controllers
                 10000,
                 256 / 8
               ));
+            List<Claim> userClaim = new List<Claim>
+            {
+            new Claim(ClaimTypes.Name, loginAuth.id.ToString())
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(fakeToken));
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token = new JwtSecurityToken(
+                claims: userClaim,
+                expires: DateTime.UtcNow.AddDays(3),
+                signingCredentials: cred
+                ) ;
 
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             if (userPassword == loginDTO.password) { return Ok(
-                new LoginResponeModel()
-                {
-                    Id_User = loginAuth.id,
-                    SecurityToken = fakeToken
-                }
+                    jwt
                 ); }
             else { return BadRequest("\tWrong login or password"); }
         }
