@@ -1,5 +1,4 @@
 import React from 'react';
-import {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -15,19 +14,11 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 
-const UserMenu = () => {
+const UserMenu = ({user}:any) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [userLoggedState, setUserLoggedState] = React.useState(false);
   const open = Boolean(anchorEl);
 
-  useEffect(() => {
-    if (localStorage.getItem('loggedState') === 'loggedIn') {
-      setUserLoggedState(true);
-    } else {
-      setUserLoggedState(false);
-    }
-  }, []);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -52,14 +43,18 @@ const UserMenu = () => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+            {!user && (<Avatar sx={{width: 32, height: 32}}> U </Avatar>)}
+            {user && user.avatar && (<Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />)}
+            {user && !user.avatar && (<Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>)}
           </IconButton>
         </Tooltip>
       </Box>
       <IconButton size="small" sx={{ml: 2, display: {sm: 'none', xs: 'block'}}}>
-        <Avatar sx={{width: 32, height: 32}}>M</Avatar>
+        {!user && (<Avatar sx={{width: 32, height: 32}}> U </Avatar>)}
+        {user && user.avatar && (<Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />)}
+        {user && !user.avatar && (<Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>)}
       </IconButton>
-      {userLoggedState && (
+      {user && (
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
@@ -97,7 +92,10 @@ const UserMenu = () => {
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
         >
           <MenuItem>
-            <Avatar /> User123
+            {!user && (<Avatar sx={{width: 32, height: 32}}> U </Avatar>)}
+            {user && user.avatar && (<Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />)}
+            {user && !user.avatar && (<Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>)}
+            {user.name}
           </MenuItem>
           <Divider />
           <MenuItem sx={{display: 'flex', gap: '1rem'}}
@@ -131,14 +129,15 @@ const UserMenu = () => {
           </MenuItem>
           <Divider />
           <MenuItem
-            onClick={() => localStorage.setItem('loggedState', 'loggedOut')}
-          >  <Link to="../signin">
-                Log Out
-            </Link>
+            onClick={() => {
+              localStorage.removeItem('TastierToken');
+              navigate('../signin');
+            }}
+          > Log Out
           </MenuItem>
         </Menu>
       )}
-      {!userLoggedState && (
+      {!user && (
         <>
           <Menu
             anchorEl={anchorEl}

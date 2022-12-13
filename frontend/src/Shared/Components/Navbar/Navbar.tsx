@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import {
   Box,
@@ -18,7 +18,20 @@ import RestaurantMenuOutlinedIcon from '@material-ui/icons/RestaurantMenuOutline
 import BottomNavigate from './BottomNavigate';
 import UserMenu from './UserMenu';
 import NavbarMobile from './NavbarMobile';
+import {Api} from '../../../Utils/Api';
 function Navbar() {
+  const [user, setUser] = useState();
+  useEffect(() => {
+    Api.get(`${process.env.REACT_APP_DB_API}/accounts/user?token=${localStorage.getItem('TastierToken')}`
+        , localStorage.getItem('TastierToken'))
+        .then((response) => {
+          console.log(response);
+          if (response.success) {
+            setUser(response.text);
+          }
+        });
+  }, []);
+
   const navigate = useNavigate();
   const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',
@@ -122,12 +135,12 @@ function Navbar() {
             >
               <RestaurantMenuOutlinedIcon fontSize="large" />
             </IconButton>
-            <UserMenu />
+            <UserMenu user={user}/>
           </IconContainer>
         </StyledToolbar>
         <NavbarMobile />
       </AppBar>
-      <BottomNavigate />
+      <BottomNavigate user={user}/>
     </>
   );
 }

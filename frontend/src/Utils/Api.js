@@ -1,11 +1,26 @@
-async function get(url) {
-  await fetch(url, {
+async function get(url, jwtToken) {
+  return await fetch(url, {
     method: 'GET',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + jwtToken,
     },
-  }).then((response) => {
-    return JSON.parse(response);
+  }).then( async (response) => {
+    const resp = {success: true, text: JSON.parse( await response.text())};
+    if (response.status === 200) {
+      return resp;
+    }
+    throw new Error(resp.text);
+  }).then( (response) => {
+    return response;
+  }).catch( (error) => {
+    console.log('jest to error');
+    console.log(error.message);
+    if (error.message) {
+      return {success: false, text: error.message};
+    }
+    return {success: false, text: 'There is a problem with server connection'};
   });
 }
 
