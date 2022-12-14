@@ -107,9 +107,7 @@ namespace TasTierAPI.Controllers
             var securityToken = handler.ReadJwtToken(jwt);
             System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
-            if (int.Parse(id.ToString())<=0)
-                { return BadRequest("No user with that id"); }
-                return Ok(_dbService.GetUserDTO(int.Parse(id.ToString())));
+            return Ok(_dbService.GetUserDTO(int.Parse(id.ToString())));
         }
     }
 }
