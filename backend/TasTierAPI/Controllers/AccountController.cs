@@ -96,18 +96,20 @@ namespace TasTierAPI.Controllers
             string convertedSalt = Convert.ToBase64String(salt);
             bool success = _dbService.Register(registerDTO.Name, registerDTO.LastName, hashedPassword, registerDTO.Email,convertedSalt);
             if (success) { return Ok("You've successfuly registered"); }
-            else return BadRequest("Something went wrong");
+            else return Unauthorized("Something went wrong");
         }
         [Route("user")]
         [HttpGet]
-        public IActionResult GetUser ()
+        public IActionResult GetUser()
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
             var securityToken = handler.ReadJwtToken(jwt);
             System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
-            return Ok(_dbService.GetUserDTO(int.Parse(id.ToString())));
+            if (int.Parse(id.ToString())<=0)
+                { return BadRequest("No user with that id"); }
+                return Ok(_dbService.GetUserDTO(int.Parse(id.ToString())));
         }
     }
 }
