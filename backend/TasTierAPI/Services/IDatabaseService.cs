@@ -25,5 +25,7 @@ namespace TasTierAPI.Services
         //AccountsSettings
         public bool ChangeUsername(string username, int id);
         public bool ChangeEmail(string email, int id);
+        public IEnumerable<DietDTO> GetAllDiets();
+        public bool SetDiet(int id_diet, int id_user);
     }
 }

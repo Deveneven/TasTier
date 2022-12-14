@@ -31,7 +31,7 @@ namespace TasTierAPI.Controllers
         [AllowAnonymous]
         [Route("login")]
         [HttpPost]
-        public IActionResult Login([FromBody]LoginDTO loginDTO)
+        public IActionResult Login([FromBody] LoginDTO loginDTO)
         {
             string fakeToken = "verysecretoken5912359213";
             LoginAuthDTO loginAuth = _dbService.GetUserByLogin(loginDTO.login);
@@ -77,7 +77,7 @@ namespace TasTierAPI.Controllers
         [AllowAnonymous]
         [Route("register")]
         [HttpPost]
-        public IActionResult Register([FromBody]RegisterDTO registerDTO)
+        public IActionResult Register([FromBody] RegisterDTO registerDTO)
         {
             byte[] salt = new byte[128 / 8];
             using (var random = RandomNumberGenerator.Create())
@@ -94,7 +94,7 @@ namespace TasTierAPI.Controllers
             ));
 
             string convertedSalt = Convert.ToBase64String(salt);
-            bool success = _dbService.Register(registerDTO.Name, registerDTO.LastName, hashedPassword, registerDTO.Email,convertedSalt);
+            bool success = _dbService.Register(registerDTO.Name, registerDTO.LastName, hashedPassword, registerDTO.Email, convertedSalt);
             if (success) { return Ok("You've successfuly registered"); }
             else return Unauthorized("Something went wrong");
         }
@@ -109,5 +109,7 @@ namespace TasTierAPI.Controllers
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
             return Ok(_dbService.GetUserDTO(int.Parse(id.ToString())));
         }
+
+
     }
 }
