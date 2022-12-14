@@ -28,5 +28,6 @@ namespace TasTierAPI.Services
         public IEnumerable<DietDTO> GetAllDiets();
         public bool SetDiet(int id_diet, int id_user);
         public string ChangePassword(string password, int id_user);
+        public LoginAuthDTO GetUserById(int id);
     }
 }

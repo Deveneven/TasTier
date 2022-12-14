@@ -61,22 +61,19 @@ namespace TasTierAPI.Controllers
             var securityToken = handler.ReadJwtToken(jwt);
             System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
-            salt = _dbService.ChangePassword(password, int.Parse(id.ToString()));
-            if(!salt.IsNullOrEmpty()){
+            LoginAuthDTO loginAuthDTO = _dbService.GetUserById(int.Parse(id.ToString()));
+            salt = loginAuthDTO.salt;
                 string userPassword = password;
                 byte[] saltBytes = Convert.FromBase64String(salt);
-                using (var random = RandomNumberGenerator.Create())
-                {
-                    random.GetBytes(saltBytes);
-                    Convert.ToBase64String(saltBytes);
-                }
-                string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: saltBytes,
-                prf: KeyDerivationPrf.HMACSHA1,
-                iterationCount: 10000,
-                numBytesRequested: 256 / 8
-                ));
+                string passedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    userPassword,
+                    saltBytes,
+                    KeyDerivationPrf.HMACSHA1,
+                    10000,
+                    256 / 8
+                  ));
+            string salt2 = _dbService.ChangePassword(passedPassword, int.Parse(id));
+            if (!salt2.IsNullOrEmpty()) { 
                 return Ok("Successfuly changed password"); }
             return BadRequest("Could not change the password");
         }

@@ -332,6 +332,7 @@ namespace TasTierAPI.Services
                 int tmp = int.Parse(sqlDataReader["Id_User"].ToString());
                 if (tmp > 0) success = true;
             }
+            connectionToDatabase.Close();
             return success;
 
         }
@@ -352,6 +353,7 @@ namespace TasTierAPI.Services
                 int tmp = int.Parse(sqlDataReader["Id_User"].ToString());
                 if (tmp > 0) success = true;
             }
+            connectionToDatabase.Close();
             return success;
         }
         public IEnumerable<DietDTO> GetAllDiets()
@@ -367,6 +369,7 @@ namespace TasTierAPI.Services
                     name = sqlDataReader["Name"].ToString(),
                 });
             }
+            connectionToDatabase.Close();
             return diets;
         }
         public bool SetDiet(int id_diet, int id_user)
@@ -381,6 +384,7 @@ namespace TasTierAPI.Services
             {
                 if (int.Parse(sqlDataReader["Id_User"].ToString()) > 0) success = true;
             }
+            connectionToDatabase.Close();
             return success;
         }
         public string ChangePassword(string password, int id_user)
@@ -395,8 +399,28 @@ namespace TasTierAPI.Services
             {
                  success = sqlDataReader["salt"].ToString();
             }
+            connectionToDatabase.Close();
             return success;
         }
+        public LoginAuthDTO GetUserById(int id)
+        {
+            LoginAuthDTO loginAuthDTO = new LoginAuthDTO();
+            MakeConnection("SELECT Id_User,Password,salt FROM [dbo].[User] WHERE Id_User = @id");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id", id);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                loginAuthDTO = new LoginAuthDTO()
+                {
+                    id = int.Parse(sqlDataReader["Id_User"].ToString()),
+                    password = sqlDataReader["Password"].ToString(),
+                    salt = sqlDataReader["salt"].ToString()
+                };
+            }
+            connectionToDatabase.Close();
+            return loginAuthDTO;
+    }
 
         //TODO GET SINGLE RECIPE INFO
         //TODO REGISTER - After adding identities to db

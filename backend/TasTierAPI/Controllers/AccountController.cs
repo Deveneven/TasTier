@@ -65,13 +65,13 @@ namespace TasTierAPI.Controllers
 
                 var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
-                if (userPassword == loginDTO.password)
+                if (passedPassword.Equals(loginAuth.password))
                 {
                     return Ok(
                         jwt
                     );
                 }
-                else { return BadRequest("\tWrong login or password"); }
+                else { return Unauthorized("\tWrong login or password"); }
             }
         }
         [AllowAnonymous]
