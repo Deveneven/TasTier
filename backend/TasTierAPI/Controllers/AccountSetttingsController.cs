@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Cryptography;
+using TasTierAPI.Models;
 using TasTierAPI.Services;
 
 namespace TasTierAPI.Controllers
@@ -20,7 +25,7 @@ namespace TasTierAPI.Controllers
 
         [HttpPost]
         [Route("username/change")]
-        public IActionResult changeUsername([FromBody] string username)
+        public IActionResult ChangeUsername([FromBody] string username)
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
@@ -34,7 +39,7 @@ namespace TasTierAPI.Controllers
         }
         [HttpPost]
         [Route("email/change")]
-        public IActionResult changeEmail([FromBody] string email)
+        public IActionResult ChangeEmail([FromBody] string email)
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
@@ -46,17 +51,46 @@ namespace TasTierAPI.Controllers
             if (success) return Ok("Successfuly changed the email");
             return BadRequest("Could not change the email");
         }
-        [AllowAnonymous]
+        [HttpPost]
+        [Route("password/change")]
+        public IActionResult ChangePassword([FromBody] string password)
+        {
+            String salt ;
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
+            var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            salt = _dbService.ChangePassword(password, int.Parse(id.ToString()));
+            if(!salt.IsNullOrEmpty()){
+                string userPassword = password;
+                byte[] saltBytes = Convert.FromBase64String(salt);
+                using (var random = RandomNumberGenerator.Create())
+                {
+                    random.GetBytes(saltBytes);
+                    Convert.ToBase64String(saltBytes);
+                }
+                string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: saltBytes,
+                prf: KeyDerivationPrf.HMACSHA1,
+                iterationCount: 10000,
+                numBytesRequested: 256 / 8
+                ));
+                return Ok("Successfuly changed password"); }
+            return BadRequest("Could not change the password");
+        }
+
         [HttpGet]
         [Route("diet/get")]
         //selects all diets
-        public IActionResult getDiets()
+        public IActionResult GetDiets()
         {
             return Ok(_dbService.GetAllDiets());
         }
         [HttpPost]
         [Route("diet/set")]
-        public IActionResult setDiet([FromBody]int diet_id)
+        public IActionResult SetDiet([FromBody]int diet_id)
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();

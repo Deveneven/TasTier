@@ -185,8 +185,8 @@ namespace TasTierAPI.Services
             }
             return loginAuth;
         }
-            
-        public bool Register (string name, string lastname, string password, string email,string salt)
+
+        public bool Register(string name, string lastname, string password, string email, string salt)
         {
             bool result = false;
             MakeConnection("exec [dbo].Register  @Name = @imie, @LastName = @nazwisko, @Password = @haslo, @Email = @mail,@Salt=@sol;");
@@ -205,7 +205,7 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return result;
         }
-        public UserDTO GetUserDTO (int id)
+        public UserDTO GetUserDTO(int id)
         {
             UserDTO user = new UserDTO();
             MakeConnection("SELECT Name,LastName,Avatar,Email,Admin,Diet_Id_Diet FROM [dbo].[User] WHERE Id_User =@id");
@@ -223,8 +223,8 @@ namespace TasTierAPI.Services
                     admin = (sqlDataReader["Admin"] != null ? bool.Parse(sqlDataReader["Admin"].ToString()) : false),
                     // diet_id = int.Parse(sqlDataReader["Diet_Id_Diet"].ToString())
                 };
-                
-               
+
+
             }
             connectionToDatabase.Close();
             return user;
@@ -258,7 +258,7 @@ namespace TasTierAPI.Services
         {
             List<string> users = new List<string>();
             MakeConnection("SELECT Nickname from [dbo].[ShoppingList_User] as s" +
-            " inner join[dbo].[User] as u on s.Id_User = u.Id_User" + 
+            " inner join[dbo].[User] as u on s.Id_User = u.Id_User" +
             " WHERE s.Id_ShoppingList = @id");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@id", Id_ShoppingList);
@@ -303,7 +303,7 @@ namespace TasTierAPI.Services
 
             while (sqlDataReader.Read())
             {
-                
+
                 {
                     shoppingListExtendDTO.Id = int.Parse(sqlDataReader["Id_ShoppingList"].ToString());
                     shoppingListExtendDTO.Name = sqlDataReader["Name"].ToString();
@@ -315,7 +315,7 @@ namespace TasTierAPI.Services
             return shoppingListExtendDTO;
 
         }
-        public bool ChangeUsername (string username, int id)
+        public bool ChangeUsername(string username, int id)
         {
             bool success = false;
             MakeConnection("UPDATE[dbo].[User] " +
@@ -333,7 +333,7 @@ namespace TasTierAPI.Services
                 if (tmp > 0) success = true;
             }
             return success;
-            
+
         }
         public bool ChangeEmail(string email, int id)
         {
@@ -357,12 +357,12 @@ namespace TasTierAPI.Services
         public IEnumerable<DietDTO> GetAllDiets()
         {
             List<DietDTO> diets = new List<DietDTO>();
-            MakeConnection("SELECT Id_Diet,Name FROM [dbo].[Diet]") ;
+            MakeConnection("SELECT Id_Diet,Name FROM [dbo].[Diet]");
             connectionToDatabase.Open();
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
             while (sqlDataReader.Read())
             {
-                diets.Add(new DietDTO(){
+                diets.Add(new DietDTO() {
                     id = int.Parse(sqlDataReader["Id_Diet"].ToString()),
                     name = sqlDataReader["Name"].ToString(),
                 });
@@ -380,6 +380,20 @@ namespace TasTierAPI.Services
             while (sqlDataReader.Read())
             {
                 if (int.Parse(sqlDataReader["Id_User"].ToString()) > 0) success = true;
+            }
+            return success;
+        }
+        public string ChangePassword(string password, int id_user)
+        {
+            string success = "";
+            MakeConnection("UPDATE [dbo].[User] SET Password = @password OUTPUT inserted.salt WHERE Id_User = @id_user");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@password", password);
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                 success = sqlDataReader["salt"].ToString();
             }
             return success;
         }
