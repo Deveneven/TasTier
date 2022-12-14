@@ -1,10 +1,10 @@
-async function get(url, jwtToken) {
+async function get(url) {
   return await fetch(url, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + jwtToken,
+      'Authorization': 'Bearer ' + localStorage.getItem('TastierToken'),
     },
   }).then( async (response) => {
     const resp = {success: true, text: JSON.parse( await response.text())};

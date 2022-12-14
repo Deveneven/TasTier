@@ -22,8 +22,7 @@ import {Api} from '../../../Utils/Api';
 function Navbar() {
   const [user, setUser] = useState();
   useEffect(() => {
-    Api.get(`${process.env.REACT_APP_DB_API}/accounts/user?token=${localStorage.getItem('TastierToken')}`
-        , localStorage.getItem('TastierToken'))
+    Api.get(`${process.env.REACT_APP_DB_API}/accounts/user`)
         .then((response) => {
           console.log(response);
           if (response.success) {
