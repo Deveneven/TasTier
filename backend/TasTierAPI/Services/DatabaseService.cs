@@ -315,7 +315,45 @@ namespace TasTierAPI.Services
             return shoppingListExtendDTO;
 
         }
+        public bool ChangeUsername (string username, int id)
+        {
+            bool success = false;
+            MakeConnection("UPDATE[dbo].[User] " +
+             "SET Nickname = @username " +
+            "OUTPUT inserted.Id_User " +
+            "WHERE Id_User = @id");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@username", username);
+            commandsToDatabase.Parameters.AddWithValue("@id", id);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
 
+            while (sqlDataReader.Read())
+            {
+                int tmp = int.Parse(sqlDataReader["Id_User"].ToString());
+                if (tmp > 0) success = true;
+            }
+            return success;
+            
+        }
+        public bool ChangeEmail(string email, int id)
+        {
+            bool success = false;
+            MakeConnection("UPDATE[dbo].[User] " +
+             "SET Email = @email " +
+            "OUTPUT inserted.Id_User " +
+            "WHERE Id_User = @id");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@email", email);
+            commandsToDatabase.Parameters.AddWithValue("@id", id);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                int tmp = int.Parse(sqlDataReader["Id_User"].ToString());
+                if (tmp > 0) success = true;
+            }
+            return success;
+        }
 
         //TODO GET SINGLE RECIPE INFO
         //TODO REGISTER - After adding identities to db

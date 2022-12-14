@@ -22,5 +22,8 @@ namespace TasTierAPI.Services
         public List<IngredientInShoppingList> GetIngredientsInShoppingList(int Id_ShoppingList);
         public ShoppingListExtendDTO GetSingleShoppingList(int Id_ShoppingList);
         public IEnumerable<Step> GetSteps(int Id_Recipe);
+        //AccountsSettings
+        public bool ChangeUsername(string username, int id);
+        public bool ChangeEmail(string email, int id);
     }
 }
