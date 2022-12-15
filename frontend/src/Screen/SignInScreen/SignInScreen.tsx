@@ -1,21 +1,50 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './SignInScreen.scss';
 import Grid from '@mui/material/Grid';
-import {Avatar, Box, Button, TextField, Card} from '@mui/material';
+import {Avatar, Box, Button, Card, CircularProgress} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import {Facebook, LockOutlined} from '@material-ui/icons';
 import GoogleIcon from '@mui/icons-material/Google';
 import Divider from '@mui/material/Divider';
-// import RegisterPopOut from '../../Shared/Components/RegisterPopOut/RegisterPopOut'; Chyba pop-ouut do rejestracji jest zbedny
 import {useNavigate} from 'react-router-dom';
 import ResetPasswordButton from '../../Shared/Components/ResetPasswordButton/ResetPasswordButton';
+import TextForm from '../../Shared/Components/TextForm/TextForm';
+import {Api} from '../../Utils/Api';
+import CustomizableAlert from '../../Shared/Components/Alert/CustomizableAlert';
+
 const SignInScreen = () => {
+  useEffect( () => {
+    return () => setLoading(false);
+  }, []);
+
   const navigate = useNavigate();
 
-  const signIn = () => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [emailIsValid, setEmailIsValid] = useState({name: 'email', isValid: false});
+  const [passwordIsValid, setPasswordIsValid] = useState({name: 'password', isValid: false});
+  const [error, setError] = useState({display: false, text: ''});
+
+  const signIn = async () => {
     console.log('Logowanie');
-    localStorage.setItem('loggedState', 'loggedIn');
-    navigate('/');
+    if (emailIsValid && passwordIsValid) {
+      setLoading(true);
+      await Api.post(`${process.env.REACT_APP_DB_API}/accounts/login`, {
+        login: email,
+        password: password,
+      }).then( (response) => {
+        if (response.success) {
+          setLoading(false);
+          localStorage.setItem('TastierToken', response.text); // potem przerobic na cookie
+          navigate('/');
+        } else {
+          setError({display: true, text: response.text});
+          setLoading(false);
+        }
+      });
+    }
   };
   return (
     <div>
@@ -36,7 +65,7 @@ const SignInScreen = () => {
             <Box
               sx={{mb: 2}}
             >
-              <TextField
+              <TextForm
                 margin="normal"
                 required
                 fullWidth
@@ -45,8 +74,13 @@ const SignInScreen = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                regex={/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g}
+                checkIsValid={setEmailIsValid}
+                onChange={ (e) => {
+                  setEmail(e.target.value);
+                }}
               />
-              <TextField
+              <TextForm
                 margin="normal"
                 required
                 fullWidth
@@ -55,15 +89,35 @@ const SignInScreen = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                checkIsValid={setPasswordIsValid}
+                onChange={ (e) => {
+                  setPassword(e.target.value);
+                }}
               />
+              {error.display && (
+                <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
+              )}
               <ResetPasswordButton />
               <Button
                 fullWidth
                 variant="contained"
                 onClick={signIn}
-                sx={{mt: 3}}
+                sx={{mt: 3, position: 'relative'}}
               >
                 Sign In
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      color: '#black',
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      marginTop: '-12px',
+                      marginLeft: '-12px',
+                    }}
+                  />
+                )}
               </Button>
             </Box>
             <Typography component="h1" variant="h6">

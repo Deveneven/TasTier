@@ -21,8 +21,8 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState(false);
-  const [registered, setRegistered] = useState(false);
+  const [error, setError] = useState({display: false, text: ''});
+  const [registered, setRegistered] = useState({display: false, text: ''});
 
   const [loading, setLoading] = useState(false);
 
@@ -62,12 +62,12 @@ const RegisterScreen = () => {
             Email: email,
           },
       ).then( (response) => {
+        console.log('response from register screen');
         console.log(response);
-        if (response.ok) {
-          setRegistered(true);
-        }
-        if (!response.ok) {
-          setError(true);
+        if (response.success) {
+          setRegistered({display: true, text: response.text});
+        } else {
+          setError({display: true, text: response.text});
         }
       })
           .finally( () => {
@@ -180,11 +180,11 @@ const RegisterScreen = () => {
                   setConfirmPassword(e.target.value);
                 }}
               />
-              {registered && (
-                <CustomizableAlert setOpen={setRegistered} message={'sucessfuly Registered ! '} type={'success'}/>
+              {registered.display && (
+                <CustomizableAlert setOpen={setRegistered} message={registered.text} type={'success'}/>
               )}
-              {error && (
-                <CustomizableAlert setOpen={setError} message={'An Error has occured, try again later ! '} type={'error'}/>
+              {error.display && (
+                <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
               )}
               <Button
                 fullWidth
