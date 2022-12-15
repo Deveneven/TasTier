@@ -5,11 +5,18 @@ namespace TasTierAPI.Models
 {
     public class Recipe
     {
-        public List<IngriedientInRecipe> ingriedientList { get; set; }
-        public List<string> stepList { get; set; }
-        public List<string> hashtagsList { get; set; }
-        public string imageUrl { get; set; }
-        public string recipeTitle { get; set; }
-        public string recipeDescription { get; set; }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Difficulty { get; set; }
+        public string Time { get; set; }
+        public List<String> Images { get; set; }
+        public string Description { get; set; }
+        public string Username { get; set; }
+        public string Cousine { get; set; }
+        public DateTime Date { get; set; }  
+        public int Rating { get; set; }
+        public bool Priv { get; set; }
+        public List<IngriedientInRecipe> Ingredients { get; set; }
     }
 }
