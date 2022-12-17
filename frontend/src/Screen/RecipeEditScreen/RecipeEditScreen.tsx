@@ -1,4 +1,4 @@
-import {Button, Step, StepLabel, Stepper} from '@mui/material';
+import {Button, Card, Step, StepLabel, Stepper} from '@mui/material';
 import React, {useState} from 'react';
 import './RecipeEditScreen.scss';
 import AddBasicInformation from './Steps/AddBasicInformation';
@@ -49,24 +49,26 @@ const RecipeEditScreen = () => {
 
   return (
     <BaseLayout>
-      <Stepper
-        activeStep={activeStep}>
-        {stepList?.map((step) => {
-          return (
-            <Step key={step.id}>
-              <StepLabel>{step.name}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      <div className='create-recipe-step-content'>
-        {setStep(activeStep)}
-      </div>
-      <Button
-        disabled={!isValid}
-        onClick={setNextStep}>
-        {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
-      </Button>
+      <Card className='create-recipe-card'>
+        <Stepper
+          activeStep={activeStep}>
+          {stepList?.map((step) => {
+            return (
+              <Step key={step.id}>
+                <StepLabel>{step.name}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+        <div className='create-recipe-step-content'>
+          {setStep(activeStep)}
+        </div>
+        <Button
+          disabled={!isValid}
+          onClick={setNextStep}>
+          {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
+        </Button>
+      </Card>
     </BaseLayout>
   );
 };
