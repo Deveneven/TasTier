@@ -29,8 +29,6 @@ const SignInScreen = () => {
 
   const signIn = async () => {
     console.log('Logowanie');
-    // localStorage.setItem('loggedState', 'loggedIn');
-    // navigate('/');
     if (emailIsValid && passwordIsValid) {
       setLoading(true);
       await Api.post(`${process.env.REACT_APP_DB_API}/accounts/login`, {
@@ -39,8 +37,7 @@ const SignInScreen = () => {
       }).then( (response) => {
         if (response.success) {
           setLoading(false);
-          localStorage.setItem('TastierId', 'tutaj bedzie id usera');
-          localStorage.setItem('TastierId', 'tutaj bedzie reset key');
+          localStorage.setItem('TastierToken', response.text); // potem przerobic na cookie
           navigate('/');
         } else {
           setError({display: true, text: response.text});

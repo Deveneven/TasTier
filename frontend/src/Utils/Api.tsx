@@ -1,20 +1,20 @@
 async function get(url) {
-  await fetch(url, {
+  return await fetch(url, {
     method: 'GET',
     headers: {
-      Accept: 'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('TastierToken'),
     },
-  }).then(async (response) => {
-    console.log(response);
+  }).then( async (response) => {
     const resp = {success: true, text: JSON.parse( await response.text())};
     if (response.status === 200) {
       return resp;
     }
     throw new Error(resp.text);
   }).then( (response) => {
-    console.log(response);
     return response;
-  }).catch((error) => {
+  }).catch( (error) => {
     console.log('jest to error');
     console.log(error.message);
     if (error.message) {
