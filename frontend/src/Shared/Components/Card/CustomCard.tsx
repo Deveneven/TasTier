@@ -31,9 +31,9 @@ const CustomCard = ({data}: CustomCardProps) => {
     <Card className="card">
       <CardHeader
         avatar={<Avatar src="/broken-image.jpg" />}
-        title={data.User.Nickname}
+        title={data.Username}
       />
-      <CardMedia component="img" height="200" image={data.Image} />
+      {/* <CardMedia component="img" height="200" image={data.Images} /> */}
       <CardActions>
         <IconButton onClick={addNewComment}>
           <Chat />
