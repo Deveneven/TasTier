@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+// import CardMedia from '@mui/material/CardMedia';
 import './CustomCard.scss';
 import {RecipeDTO} from '../../DTOs/RecipeDTO';
 import {
@@ -31,7 +31,7 @@ const CustomCard = ({data}: CustomCardProps) => {
     <Card className="card">
       <CardHeader
         avatar={<Avatar src="/broken-image.jpg" />}
-        title={data.Username}
+        title={data.username}
       />
       {/* <CardMedia component="img" height="200" image={data.Images} /> */}
       <CardActions>
@@ -42,7 +42,7 @@ const CustomCard = ({data}: CustomCardProps) => {
           <ThumbUpAltOutlined />
         </IconButton>
       </CardActions>
-      <CardContent>{data.Description}</CardContent>
+      <CardContent>{data.description}</CardContent>
       <Button
         fullWidth={true}
         onClick={() => {
@@ -54,7 +54,7 @@ const CustomCard = ({data}: CustomCardProps) => {
       <Collapse in={expanded}>
         <IngredientTable
           isEditable={false}
-          data={data.Ingredients}/>
+          data={data.ingredients}/>
       </Collapse>
       {!!commentIsVisible ?
       <Comment /> :

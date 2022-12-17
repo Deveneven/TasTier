@@ -31,37 +31,37 @@ const IngredientTable = (props: IngredientTableProps) => {
 
   useEffect(() => {
     if (!!testData) {
-      const sum = testData.reduce((partSum, ingredient) => partSum + ingredient.Calories, 0);
+      const sum = testData.reduce((partSum, ingredient) => partSum + ingredient.calories, 0);
       setCaloriesSum(sum);
     }
   }, [testData]);
 
   const deleteIngredient = (id: number) => {
     if (!!testData) {
-      setTestData(testData.filter((item) => item.Id !== id));
+      setTestData(testData.filter((item) => item.id !== id));
     }
   };
   const editIngredient = (ingredient: IngredientDTO) => {
     if (!isEdit) {
-      setIngredientName(ingredient.Name);
-      setAmount(ingredient.Amount);
+      setIngredientName(ingredient.name);
+      setAmount(ingredient.amount);
     }
     setIsEdit(!isEdit);
   };
 
   const AddIngredientToList = () => {
     let i = testData.length;
-    const existedIndex = testData.findIndex((elem) => elem.Name == ingredientName);
+    const existedIndex = testData.findIndex((elem) => elem.name == ingredientName);
     if (existedIndex !== -1) {
-      testData[existedIndex].Amount = amount;
+      testData[existedIndex].amount = amount;
     } else if (!!ingredientName) {
       const ingrid: IngredientDTO = {
-        Id: i++,
-        Amount: amount,
-        Unit: 'g',
-        Name: ingredientName,
-        Calories: 210,
-        Allergen: false,
+        id: i++,
+        amount: amount,
+        unit: 'g',
+        name: ingredientName,
+        calories: 210,
+        allergen: false,
       };
       setTestData([...testData, ingrid]);
     }
@@ -96,14 +96,14 @@ const IngredientTable = (props: IngredientTableProps) => {
             </TableHead>
             <TableBody>
               {testData?.map((ingredient: IngredientDTO) => (
-                <TableRow key={ingredient.Id}>
-                  <TableCell>{ingredient.Name}</TableCell>
-                  <TableCell>{ingredient.Amount}</TableCell>
-                  <TableCell>{ingredient.Unit}</TableCell>
-                  <TableCell>{ingredient.Calories}</TableCell>
+                <TableRow key={ingredient.id}>
+                  <TableCell>{ingredient.name}</TableCell>
+                  <TableCell>{ingredient.amount}</TableCell>
+                  <TableCell>{ingredient.unit}</TableCell>
+                  <TableCell>{ingredient.calories}</TableCell>
                   {props.isEditable && (
                     <TableCell align='center'>
-                      <IconButton onClick={() => deleteIngredient(ingredient.Id)}>
+                      <IconButton onClick={() => deleteIngredient(ingredient.id)}>
                         <DeleteIcon/>
                       </IconButton>
                       <IconButton onClick={() => editIngredient(ingredient)}>
