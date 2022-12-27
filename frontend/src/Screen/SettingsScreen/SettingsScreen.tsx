@@ -32,7 +32,7 @@ const SettingsScreen = () => {
   const changeUserData = async () => {
     console.log(user);
     if (user.name !== userComparator.name) {
-      await Api.post(`${process.env.REACT_APP_DB_API}/settings/name/change`, {name: user.name}).then( (response) => {
+      await Api.post(`${process.env.REACT_APP_DB_API}/settings/name/change`, user.name).then( (response) => {
         console.log('ChangeDataResponse:');
         console.log(response);
         if (response.success) setMessageData({display: true, text: response.text});
@@ -41,7 +41,7 @@ const SettingsScreen = () => {
     };
 
     if (user.lastname !== userComparator.lastname) {
-      await Api.post(`${process.env.REACT_APP_DB_API}/settings/lastname/change`, {lastname: user.lastname}).then( (response) => {
+      await Api.post(`${process.env.REACT_APP_DB_API}/settings/lastname/change`, user.lastname).then( (response) => {
         console.log('ChangeDataResponse:');
         console.log(response);
         if (response.success) setMessageData({display: true, text: response.text});
@@ -50,7 +50,7 @@ const SettingsScreen = () => {
     };
 
     if (user.nickname !== userComparator.nickname) {
-      await Api.post(`${process.env.REACT_APP_DB_API}/settings/username/change`, {username: user.nickname}).then( (response) => {
+      await Api.post(`${process.env.REACT_APP_DB_API}/settings/username/change`, user.nickname).then( (response) => {
         console.log('ChangeDataResponse:');
         console.log(response);
         if (response.success) setMessageData({display: true, text: response.text});
@@ -66,7 +66,7 @@ const SettingsScreen = () => {
     console.log('to jest change email');
     if ( user.email !== userComparator.email) {
       console.log('maile nie jest taki sam');
-      await Api.post(`${process.env.REACT_APP_DB_API}/settings/email/change`, {email: user.email}).then( (response) => {
+      await Api.post(`${process.env.REACT_APP_DB_API}/settings/email/change`, user.email).then( (response) => {
         console.log('ChangeDataResponse:');
         console.log(response);
         if (response.success) setMessageMail({display: true, text: response.text});
@@ -79,7 +79,7 @@ const SettingsScreen = () => {
 
   const changeUserPass = async () => {
     if ( userNewPass === userNewPassConf) {
-      await Api.post(`${process.env.REACT_APP_DB_API}/settings/password/change`, {password: userNewPass}).then( (response) => {
+      await Api.post(`${process.env.REACT_APP_DB_API}/settings/password/change`, userNewPass).then( (response) => {
         console.log('ChangeDataResponse:');
         console.log(response);
         if (response.success) setMessagePass({display: true, text: response.text});
