@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 using Microsoft.Extensions.Configuration;
 using TasTierAPI.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TasTierAPI.Services
 {
@@ -142,6 +144,52 @@ namespace TasTierAPI.Services
                 images.Add(sqlDataReader["url_image"].ToString());
             }
             return images;
+        }
+        public IEnumerable<CommentDTO> GetComments(int Id_Recipe)
+        {
+            List<CommentDTO> comments = new List<CommentDTO>();
+            MakeConnection("SELECT u.Id_User, u.Email, u.Avatar, c.Id_Comment, c.Rating, c.Image, c.Text FROM [dbo].[Recipe] as r " +
+                "INNER JOIN [dbo].[Comment] as c on r.Id_Recipe = c.Recipe_Id_Recipe " +
+                "INNER JOIN [dbo].[User] as u on c.Id_User = u.Id_User WHERE Id_Recipe = @id_recipe");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", Id_Recipe);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                comments.Add(new CommentDTO()
+                {
+                    id_user = int.Parse(sqlDataReader["Id_User"].ToString()),
+                    username = sqlDataReader["Email"].ToString(),
+                    avatar = sqlDataReader["Avatar"].ToString(),
+                    id_comment = int.Parse(sqlDataReader["Id_Comment"].ToString()),
+                    rating = int.Parse(sqlDataReader["Rating"].ToString()),
+                    image = sqlDataReader["Image"].ToString(),
+                    text = sqlDataReader["Text"].ToString()
+
+                });
+            }
+            connectionToDatabase.Close();
+            return comments;
+        }
+        public bool AddComment(Comment comment, int id_user)
+        {
+            bool success = false;
+            MakeConnection("INSERT INTO [dbo].[Comment] OUTPUT inserted.Id_Comment VALUES (@recipe_id,@rating,@image,@text,@id_user)");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@recipe_id", comment.id_recipe);
+            commandsToDatabase.Parameters.AddWithValue("@rating", comment.rating);
+            commandsToDatabase.Parameters.AddWithValue("@image", comment.image);
+            commandsToDatabase.Parameters.AddWithValue("@text", comment.text);
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                if (int.Parse(sqlDataReader["Id_Comment"].ToString()) > 0) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
         }
     }
 }

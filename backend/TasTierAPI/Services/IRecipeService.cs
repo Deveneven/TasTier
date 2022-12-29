@@ -12,7 +12,8 @@ namespace TasTierAPI.Services
         public List<Recipe> GetRecipes();
         public List<IngriedientInRecipe> GetIngriedientList(int Id_Recipe);
         public IEnumerable<Step> GetSteps(int Id_Recipe);
-       // public IEnumerable<Comment> GetComments(int Id_Recipe);
+        public IEnumerable<CommentDTO> GetComments(int Id_Recipe);
+        public bool AddComment(Comment comment, int id_user);
     }
 }
 
