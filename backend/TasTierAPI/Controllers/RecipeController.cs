@@ -33,6 +33,12 @@ namespace TasTierAPI.Controllers
         {
             return Ok(_dbService.GetSteps(Id_Recipe));
         }
+        [Route("get/comments")]
+        [HttpGet]
+        public IActionResult GetComments(int Id_Recipe)
+        {
+            return Ok();
+        }
 
     }
 }

@@ -60,6 +60,53 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return success;
         }
+        public IEnumerable<CousineDTO> GetAllCousines()
+        {
+            List<CousineDTO> cousines = new List<CousineDTO>();
+            MakeConnection("SELECT Id_Cousine,Name,Country FROM [dbo].[Cousine]");
+            connectionToDatabase.Open();
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                cousines.Add(new CousineDTO()
+                {
+                    Id = int.Parse(sqlDataReader["Id_Cousine"].ToString()),
+                    Name = sqlDataReader["Name"].ToString(),
+                    Country = sqlDataReader["Country"].ToString()
+                });
+            }
+            connectionToDatabase.Close();
+            return cousines;
+        }
+        public bool SetCousine(int id_cousine, int id_user)
+        {
+            bool success = false;
+            MakeConnection("INSERT INTO [dbo].[Favorite_cousines] OUTPUT inserted.User_Id_User VALUES (@id_cousine,@id_user);");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_cousine", id_cousine);
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                if (int.Parse(sqlDataReader["User_Id_User"].ToString()) > 0) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
+        }
+        public bool ClearCousines(int id_user)
+        {
+            bool success = false;
+            MakeConnection("DELETE FROM [dbo].[Favorite_cousines] OUTPUT deleted.User_Id_User WHERE User_Id_User = @id");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id", id_user);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                if (int.Parse(sqlDataReader["User_Id_User"].ToString()) > 0) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
+        }
     }
 }
 
