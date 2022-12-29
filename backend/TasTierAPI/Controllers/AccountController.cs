@@ -20,9 +20,9 @@ namespace TasTierAPI.Controllers
     [Route("api/accounts")]
     public class AccountController : ControllerBase
     {
-        private IDatabaseService _dbService;
+        private IAccountService _dbService;
 
-        public AccountController(IDatabaseService dbService)
+        public AccountController(IAccountService dbService)
         {
             _dbService = dbService;
         }
@@ -94,8 +94,9 @@ namespace TasTierAPI.Controllers
             ));
 
             string convertedSalt = Convert.ToBase64String(salt);
-            bool success = _dbService.Register(registerDTO.Name, registerDTO.LastName, hashedPassword, registerDTO.Email, convertedSalt);
-            if (success) { return Ok("You've successfuly registered"); }
+            int success = _dbService.Register(registerDTO.Name, registerDTO.LastName, hashedPassword, registerDTO.Email, convertedSalt);
+            if (success == 2) { return Ok("You've successfuly registered"); }
+            else if (success == 1) return Unauthorized("Account with that email already exists");
             else return Unauthorized("Something went wrong");
         }
         [Route("user")]
