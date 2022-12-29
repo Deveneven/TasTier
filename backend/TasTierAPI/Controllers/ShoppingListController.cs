@@ -8,9 +8,9 @@ namespace TasTierAPI.Controllers
     [Route("api/shoppinglist")]
     public class ShoppingListController : ControllerBase
     {
-        private IDatabaseService _dbService;
+        private IShoppingListService _dbService;
 
-        public ShoppingListController(IDatabaseService dbService)
+        public ShoppingListController(ShoppingListService dbService)
         {
             _dbService = dbService;
         }
