@@ -103,6 +103,7 @@ const SignInScreen = () => {
                 variant="contained"
                 onClick={signIn}
                 sx={{mt: 3, position: 'relative'}}
+                disabled={loading}
               >
                 Sign In
                 {loading && (

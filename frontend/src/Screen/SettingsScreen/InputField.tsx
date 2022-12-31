@@ -8,12 +8,13 @@ value:string | undefined;
 label : string;
 id:string;
 description:string | null;
-setUser: any;
+setParam: Function; // setUser
 };
 
-const InputField = ({value, label, id, description, setUser}: InputFieldProps) => {
+const InputField = ({value, label, id, description, setParam}: InputFieldProps) => { // setUser
   const changeInput = (e) => {
-    setUser( (prvsUser) => ({...prvsUser, [id]: e.target.value}));
+    // setUser( (prvsUser) => ({...prvsUser, [id]: e.target.value}));
+    setParam(e.target.value);
   };
   return (
     <Grid
@@ -34,8 +35,8 @@ const InputField = ({value, label, id, description, setUser}: InputFieldProps) =
           label={label}
           name={id}
           size="small"
-          defaultValue={value}
-          onChange={changeInput}/>
+          onChange={changeInput}
+          defaultValue={value}/>
         <Typography component="h6" variant="caption"
           sx={{marginTop: '0', padding: '0', fontFamily: ' var(--secondary-font) !important',
             color: 'var(--fnt-primary-color)',
