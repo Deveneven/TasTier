@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using TasTierAPI.Models;
 using TasTierAPI.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace TasTierAPI.Controllers
 {
@@ -110,6 +115,30 @@ namespace TasTierAPI.Controllers
                 return Ok("Successfuly changed password"); }
             return BadRequest("Could not change the password");
         }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        [Route("avatar/change")]
+        public IActionResult ChangeAvatar()
+        {
+            if (Request.HasFormContentType)
+            {
+                var id = getIDFromToken(Request.Headers[HeaderNames.Authorization].ToString());
+                if (Request.Form.Files.Count > 0)
+                {
+                    IFormFile file = Request.Form.Files.FirstOrDefault();
+                    bool success = _dbService.SetAvatar(file, int.Parse(id));
+                    if (success)
+                    {
+                        return Ok("Successfuly changed avatar");
+                    }
+                    return BadRequest("Something went wrong");
+                }
+                return BadRequest("File was not passed");
+            }
+            return BadRequest("Request did not contain form content");
+
+        }
+
 
         [HttpGet]
         [Route("diet/get")]

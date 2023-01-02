@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using TasTierAPI.Models;
 
 namespace TasTierAPI.Services
@@ -15,6 +16,8 @@ namespace TasTierAPI.Services
         public bool SetDiet(int id_diet, int id_user);
         public string ChangePassword(string password, int id_user);
         public LoginAuthDTO GetUserById(int id);
+        public bool SetAvatar(IFormFile file, int user_id);
+        public string UploadBinary(IFormFile file);
     }
 }
 
