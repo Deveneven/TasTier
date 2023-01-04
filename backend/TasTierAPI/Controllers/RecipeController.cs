@@ -8,9 +8,9 @@ namespace TasTierAPI.Controllers
     [Route("api/recipes")]
     public class RecipeController:ControllerBase
     {
-        private IDatabaseService _dbService;
+        private IRecipeService _dbService;
 
-        public RecipeController (IDatabaseService dbService)
+        public RecipeController (IRecipeService dbService)
         {
             _dbService = dbService;
         }

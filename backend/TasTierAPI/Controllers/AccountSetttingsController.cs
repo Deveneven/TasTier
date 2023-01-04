@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using TasTierAPI.Models;
 using TasTierAPI.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace TasTierAPI.Controllers
 {
@@ -17,25 +22,58 @@ namespace TasTierAPI.Controllers
     [Route("api/settings")]
     public class AccountSetttingsController : ControllerBase
     {
-        private IDatabaseService _dbService;
-        public AccountSetttingsController(IDatabaseService dbService)
+        private IAccountSettingService _dbService;
+        public AccountSetttingsController(IAccountSettingService dbService)
         {
             _dbService = dbService;
+        }
+        private string getIDFromToken(string jwtt)
+        {
+            var jwt = jwtt.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
+            var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            return id;
         }
 
         [HttpPost]
         [Route("username/change")]
         public IActionResult ChangeUsername([FromBody] string username)
         {
+            var id = getIDFromToken(Request.Headers[HeaderNames.Authorization].ToString());
+            bool success = _dbService.ChangeUsername(username, int.Parse(id.ToString()));
+
+            if (success) return Ok("Succesfully changed the username");
+            return BadRequest("Could not change the username");
+        }
+        [HttpPost]
+        [Route("name/change")]
+        public IActionResult ChangeName([FromBody] string name)
+        {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
             var securityToken = handler.ReadJwtToken(jwt);
             System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
-            bool success = _dbService.ChangeUsername(username, int.Parse(id.ToString()));
+            bool success = _dbService.ChangeName(name, int.Parse(id.ToString()));
 
-            if (success) return Ok("Succesfully changed the username");
-            return BadRequest("Could not change the username");
+            if (success) return Ok("Succesfully changed the user data");
+            return BadRequest("Could not change the user data");
+        }
+        [HttpPost]
+        [Route("lastname/change")]
+        public IActionResult ChangeLastName([FromBody] string lastname)
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
+            var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            bool success = _dbService.ChangeLastName(lastname, int.Parse(id.ToString()));
+
+            if (success) return Ok("Succesfully changed the user data");
+            return BadRequest("Could not change the user data");
         }
         [HttpPost]
         [Route("email/change")]
@@ -77,6 +115,30 @@ namespace TasTierAPI.Controllers
                 return Ok("Successfuly changed password"); }
             return BadRequest("Could not change the password");
         }
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        [Route("avatar/change")]
+        public IActionResult ChangeAvatar()
+        {
+            if (Request.HasFormContentType)
+            {
+                var id = getIDFromToken(Request.Headers[HeaderNames.Authorization].ToString());
+                if (Request.Form.Files.Count > 0)
+                {
+                    IFormFile file = Request.Form.Files.FirstOrDefault();
+                    bool success = _dbService.SetAvatar(file, int.Parse(id));
+                    if (success)
+                    {
+                        return Ok("Successfuly changed avatar");
+                    }
+                    return BadRequest("Something went wrong");
+                }
+                return BadRequest("File was not passed");
+            }
+            return BadRequest("Request did not contain form content");
+
+        }
+
 
         [HttpGet]
         [Route("diet/get")]
