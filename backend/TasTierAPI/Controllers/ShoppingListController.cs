@@ -8,24 +8,24 @@ namespace TasTierAPI.Controllers
     [Route("api/shoppinglist")]
     public class ShoppingListController : ControllerBase
     {
-        private IDatabaseService _dbService;
+        //private IDatabaseService _dbService;
 
-        public ShoppingListController(IDatabaseService dbService)
+        public ShoppingListController(/*IDatabaseService dbService*/)
         {
-            _dbService = dbService;
+           // _dbService = dbService;
         }
 
         [Route("get/userlists")]
         [HttpGet]
         public IActionResult Get(int Id_User)
         {
-            return Ok(_dbService.GetShoppingLists(Id_User));
+            return Ok();//_dbService.GetShoppingLists(Id_User));
         }
         [Route("get/shoppinglist")]
         [HttpGet]
         public IActionResult GetShoppingList(int Id_ShoppingList)
         {
-            return Ok(_dbService.GetSingleShoppingList(Id_ShoppingList));
+            return Ok();// _dbService.GetSingleShoppingList(Id_ShoppingList));
         }
 
     }
