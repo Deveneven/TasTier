@@ -21,6 +21,16 @@ namespace TasTierAPI.Controllers
             _dbService = dbService;
         }
 
+        private int getIDFromToken(string jwtt)
+        {
+            var jwt = jwtt.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
+            var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            return int.Parse(id);
+        }
+
 
         [HttpGet]
         [Route("diet/get")]
@@ -34,10 +44,7 @@ namespace TasTierAPI.Controllers
         public IActionResult SetDiet([FromBody] int diet_id)
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
-            var handler = new JwtSecurityTokenHandler();
-            var securityToken = handler.ReadJwtToken(jwt);
-            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
-            var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            var id = getIDFromToken(jwt);
             bool success = _dbService.SetDiet(diet_id, int.Parse(id.ToString()));
             if (success) return Ok("Successfuly set current diet");
             return BadRequest("Could not set diet");
@@ -55,11 +62,7 @@ namespace TasTierAPI.Controllers
         public IActionResult SetCousines([FromBody] List<int> cousines) 
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
-            var handler = new JwtSecurityTokenHandler();
-            var securityToken = handler.ReadJwtToken(jwt);
-            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
-            var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
-            int id = int.Parse(idd.ToString());
+            int id = getIDFromToken(jwt);
             _dbService.ClearCousines(id);
                 
                 if (cousines.Count() > 0)
