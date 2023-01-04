@@ -12,8 +12,6 @@ namespace TasTierAPI.Services
         public bool ChangeName(string name, int id);
         public bool ChangeLastName(string lastname, int id);
         public bool ChangeEmail(string email, int id);
-        public IEnumerable<DietDTO> GetAllDiets();
-        public bool SetDiet(int id_diet, int id_user);
         public string ChangePassword(string password, int id_user);
         public LoginAuthDTO GetUserById(int id);
         public bool SetAvatar(IFormFile file, int user_id);
