@@ -127,24 +127,5 @@ namespace TasTierAPI.Controllers
 
         }
 
-
-        [HttpGet]
-        [Route("diet/get")]
-        //selects all diets
-        public IActionResult GetDiets()
-        {
-            return Ok(_dbService.GetAllDiets());
-        }
-        [HttpPost]
-        [Route("diet/set")]
-        public IActionResult SetDiet([FromBody]int diet_id)
-        {
-            var jwt = Request.Headers[HeaderNames.Authorization].ToString();
-            var id = getIDFromToken(jwt);
-            bool success = _dbService.SetDiet(diet_id, int.Parse(id.ToString()));
-            if (success) return Ok("Successfuly set current diet");
-            return BadRequest("Could not set diet");
-        }
-
     }
 }
