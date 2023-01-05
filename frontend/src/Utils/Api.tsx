@@ -30,6 +30,7 @@ async function post(url, payload) {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('TastierToken'),
     },
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(payload),
