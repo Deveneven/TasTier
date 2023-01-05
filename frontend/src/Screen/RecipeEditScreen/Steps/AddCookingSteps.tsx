@@ -1,16 +1,15 @@
 import {Avatar, Button, Grid, TextField} from '@mui/material';
 import React, {useState} from 'react';
 import '../../../Shared/Components/Comment/Comment.scss';
-const AddCookingSteps = () => {
+const AddCookingSteps = (props: any) => {
   const [stepDescription, setStepDescription] = useState<string>();
   const [steps, setSteps] = useState<string[]>([]);
 
   const AddNextStep = () => {
     if (!!stepDescription) {
-      console.log(stepDescription);
       setSteps([...steps, stepDescription]);
-      console.log('Czyszczxenie textfielda');
       setStepDescription('');
+      props.onChange({name: 'steps', value: [...steps, stepDescription]});
     }
   };
 

@@ -1,13 +1,12 @@
 import {IngredientDTO} from '../DTOs/IngredientDTO';
+import {StepDTO} from './StepDTO';
 export interface CreateRecipeDTO {
   name: string,
   difficulty: number,
   time: string,
   description: string,
-  images: Array<string>,
   id_cousine: number,
-  date: Date,
-  rating: number,
+  priv: boolean,
   ingredients: Array<IngredientDTO>,
-  priv: boolean
+  steps: Array<StepDTO>,
 }

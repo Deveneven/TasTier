@@ -7,6 +7,7 @@ import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
 import AddCookingSteps from './Steps/AddCookingSteps';
 import AddPhoto from './Steps/AddPhoto';
 import {CreateRecipeDTO} from '../../Shared/DTOs/CreateRecipeDTO';
+// import {Api} from '../../Utils/Api';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -16,12 +17,10 @@ const RecipeEditScreen = () => {
     difficulty: 1,
     time: '',
     description: '',
-    images: [],
     id_cousine: 0,
-    date: new Date(),
-    rating: 0,
+    priv: true,
     ingredients: [],
-    priv: false,
+    steps: [],
   });
   const results: Array<{name: string, isValid: boolean}> = [];
 
@@ -40,8 +39,8 @@ const RecipeEditScreen = () => {
   };
   const onValueChange = (event: any) => {
     const {name, value} = !!event.target ? event.target : event;
-    // console.log('On Walue Change');
-    // console.log(`${value} ${name}`);
+    console.log('On Walue Change');
+    console.log(`${value} ${name}`);
     // console.log(newRecipe);
     newRecipe[name] = value;
     // console.log(newRecipe[name]);
@@ -53,18 +52,38 @@ const RecipeEditScreen = () => {
     } else {
       results.push(elem);
     }
-    console.log(results);
   };
-  const submitSteps = () => {
+  const submitSteps = async () => {
     console.log('Submit steps');
-    console.log(newRecipe);
+    const payload = {recipe: {
+      name: newRecipe.name,
+      difficulty: newRecipe.difficulty,
+      time: newRecipe.time,
+      description: newRecipe.description,
+      id_Cousine: newRecipe.id_cousine,
+      priv: newRecipe.priv,
+    },
+    ingrs: newRecipe.ingredients.map((elem) => {
+      console.log(elem);
+      return {id_ingredient: elem.id++, amount: elem.amount, id_metric: elem.id_metric};
+    }),
+    steps: newRecipe.steps.map((elem, index)=> {
+      return {step_number: index, stepdesc: elem};
+    })};
+    console.log(payload);
+    // await Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe`, payload).then( (response) => {
+    //   console.log('AddRecipeResponse:');
+    //   console.log(response);
+    //   // if (response.success) setAlert({display: true, text: response.text, type: 'success'});
+    //   // else setAlert({display: true, text: response.text, type: 'error'});
+    // });
   };
   const stepList = [{id: 0, name: 'Complete the basic information',
     content: <AddBasicInformation onChange={onValueChange} checkIsValid={checkIsValid}/>},
   {id: 1, name: 'Add a list of ingredients',
     content: <AddIngridiensList onChange={onValueChange} checkIsValid={checkIsValid}/>},
-  {id: 2, name: 'Add steps', content: <AddCookingSteps/>},
-  {id: 3, name: 'Add photo', content: <AddPhoto/>}];
+  {id: 2, name: 'Add steps', content: <AddCookingSteps onChange={onValueChange}/>},
+  {id: 3, name: 'Add photo', content: <AddPhoto onChange={onValueChange}/>}];
 
   return (
     <BaseLayout>
