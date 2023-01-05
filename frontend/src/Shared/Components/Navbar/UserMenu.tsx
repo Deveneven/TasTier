@@ -1,6 +1,5 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
@@ -13,7 +12,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
-
+import UserAvatar from '../UserAvatar/UserAvatar';
 const UserMenu = ({user}:any) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -43,16 +42,12 @@ const UserMenu = ({user}:any) => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            {!user && (<Avatar sx={{width: 32, height: 32}}> U </Avatar>)}
-            {user && user.avatar && (<Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />)}
-            {user && !user.avatar && (<Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>)}
+            <UserAvatar user={user}/>
           </IconButton>
         </Tooltip>
       </Box>
       <IconButton size="small" sx={{ml: 2, display: {sm: 'none', xs: 'block'}}}>
-        {!user && (<Avatar sx={{width: 32, height: 32}}> U </Avatar>)}
-        {user && user.avatar && (<Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />)}
-        {user && !user.avatar && (<Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>)}
+        <UserAvatar user={user}/>
       </IconButton>
       {user && (
         <Menu
@@ -92,9 +87,7 @@ const UserMenu = ({user}:any) => {
           anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
         >
           <MenuItem>
-            {!user && (<Avatar sx={{width: 32, height: 32}}> U </Avatar>)}
-            {user && user.avatar && (<Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />)}
-            {user && !user.avatar && (<Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>)}
+            <UserAvatar user={user}/>
             {user.name}
           </MenuItem>
           <Divider />

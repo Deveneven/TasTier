@@ -1,11 +1,11 @@
 import React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Avatar from '@mui/material/Avatar';
 import HomeIcon from '@material-ui/icons/Home';
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
 import {useNavigate} from 'react-router-dom';
 import MobileDrawer from './MobileDrawer';
+import UserAvatar from '../UserAvatar/UserAvatar';
 function BottomNavigate({user}:any) {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
@@ -42,39 +42,15 @@ function BottomNavigate({user}:any) {
           label="Favorites"
           icon={<BookmarkBorderOutlinedIcon fontSize="large" />}
         />
-        { !user && (
-          <BottomNavigationAction
-            onClick={() => {
-              setIsDrawerOpen(true);
-            }}
-            label="Menu"
-            icon={
-              <Avatar sx={{width: 32, height: 32}}> U </Avatar>
-            }
-          />
-        )}
-        { user && user.avatar && (
-          <BottomNavigationAction
-            onClick={() => {
-              setIsDrawerOpen(true);
-            }}
-            label="Menu"
-            icon={
-              <Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />
-            }
-          />
-        )}
-        { user && !user.avatar && (
-          <BottomNavigationAction
-            onClick={() => {
-              setIsDrawerOpen(true);
-            }}
-            label="Menu"
-            icon={
-              <Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>
-            }
-          />
-        )}
+        <BottomNavigationAction
+          onClick={() => {
+            setIsDrawerOpen(true);
+          }}
+          label="Menu"
+          icon={
+            <UserAvatar user={user}/>
+          }
+        />
       </BottomNavigation>
     </>
   );
