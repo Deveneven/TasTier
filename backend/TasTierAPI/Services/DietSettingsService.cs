@@ -107,6 +107,47 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return success;
         }
+        public IEnumerable<CousineDTO> GetUserCousines(int id_user)
+        {
+            List<CousineDTO> cousines = new List<CousineDTO>();
+            MakeConnection("SELECT c.Id_Cousine, c.Name, c.Country From [dbo].[Favorite_cousines] as fc " +
+            "inner join[dbo].[Cousine] as c on fc.Cousine_Id_Cousine = c.Id_Cousine " + 
+            "WHERE fc.User_Id_User = @id_user");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                cousines.Add(new CousineDTO()
+                {
+                    Id = int.Parse(sqlDataReader["Id_Cousine"].ToString()),
+                    Name = sqlDataReader["Name"].ToString(),
+                    Country = sqlDataReader["Country"].ToString()
+                });
+            }
+            connectionToDatabase.Close();
+            return cousines;
+        }
+        public DietDTO GetUserDiet(int id_user)
+        {
+            DietDTO diet = new DietDTO();
+            MakeConnection("SELECT d.Id_Diet, d.Name FROM [dbo].[User] as u " +
+            "inner join[dbo].[Diet] as d on u.Diet_Id_Diet = d.Id_Diet " +
+            "WHERE u.Id_User = @id_user");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                diet = new DietDTO()
+                {
+                    id = int.Parse(sqlDataReader["Id_Cousine"].ToString()),
+                    name = sqlDataReader["Name"].ToString()
+                };
+            }
+            connectionToDatabase.Close();
+            return diet;
+        }
     }
 }
 

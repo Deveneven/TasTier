@@ -12,6 +12,8 @@ namespace TasTierAPI.Services
         public IEnumerable<CousineDTO> GetAllCousines();
         public bool SetCousine(int id_cousine, int id_user);
         public bool ClearCousines(int id_user);
+        public IEnumerable<CousineDTO> GetUserCousines(int id_user);
+        public DietDTO GetUserDiet(int id_user);
     }
 }
 

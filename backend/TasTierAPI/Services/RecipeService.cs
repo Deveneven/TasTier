@@ -1,20 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using Azure.Storage.Blobs;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using TasTierAPI.Models;
+using static System.Net.Mime.MediaTypeNames;
+using System.Security.Policy;
 
 namespace TasTierAPI.Services
 {
 	public class RecipeService : IRecipeService
 	{
         private string conURL;
+        private string blobURL;
+        private string containerName;
         private SqlConnection connectionToDatabase;
         private SqlCommand commandsToDatabase;
 
         public RecipeService(IConfiguration configuration)
         {
             conURL = configuration.GetConnectionString("TastierDB");
+            blobURL = configuration.GetConnectionString("BlobConnectionString"); ;
+            containerName = configuration.GetConnectionString("ContainerName"); ;
         }
 
         public void MakeConnection(string methodQuery)
@@ -142,6 +151,187 @@ namespace TasTierAPI.Services
                 images.Add(sqlDataReader["url_image"].ToString());
             }
             return images;
+        }
+        public List<string> UploadRecipeImages(IFormFileCollection images)
+        {
+            List<string> urls = new List<string>();
+            string uri = null;
+            foreach(IFormFile file in images)
+            if (!file.Equals(null))
+            {
+                BlobContainerClient blobContainerClient = new BlobContainerClient(blobURL, containerName);
+                string fileName = "";
+                fileName = !file.FileName.Equals(null) ? file.FileName : "unknown";
+                BlobClient blobClient = blobContainerClient.GetBlobClient(fileName);
+
+                var ms = new MemoryStream();
+                file.CopyTo(ms);
+                var bytes = ms.ToArray();
+
+                BinaryData binaryData = new BinaryData(bytes);
+
+                blobClient.Upload(binaryData, true);
+
+                uri = blobClient.Uri.AbsoluteUri;
+                urls.Add(uri);
+
+                ms.Close();
+            }
+            return urls;
+        }
+        public bool AddRecipeImage(string url, int id_recipe)
+        {
+            bool success = false;
+            MakeConnection("INSERT INTO [dbo].[Image] OUTPUT inserted.Recipe_Id_Recipe VALUES (@id_recipe,@url);");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
+            commandsToDatabase.Parameters.AddWithValue("@url", url);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                if (int.Parse(sqlDataReader["Recipe_Id_Recipe"].ToString()) > 0) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
+
+        }
+        public bool AddRecipeImages(List<string> urls, int id_recipe)
+        {
+            if (urls.Count > 0)
+             {
+               foreach (string url in urls)
+                {
+                 bool tmp_success = false;
+                 tmp_success = AddRecipeImage(url, id_recipe);
+                 if (!tmp_success) return false;
+                 }
+                return true;
+                }
+            return false;
+        }
+        public bool AddRecipeIngredient(IngredientInRecipeInsertDTO ingr, int id_recipe)
+        {
+            bool success = false;
+            MakeConnection("INSERT INTO [dbo].[Recipe_Ingredient] OUTPUT inserted.Recipe_Id_Recipe VALUES (@id_recipe,@id_ingredient,@amount,@id_metrics);");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
+            commandsToDatabase.Parameters.AddWithValue("@id_ingredient", ingr.id_ingredient);
+            commandsToDatabase.Parameters.AddWithValue("@amount", (ingr.amount.ToString()));
+            commandsToDatabase.Parameters.AddWithValue("id_metrics", ingr.id_metric);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                if (int.Parse(sqlDataReader["Recipe_Id_Recipe"].ToString()) > 0) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
+        }
+        public bool AddRecipeIngredients(List<IngredientInRecipeInsertDTO> ingrs,int id_recipe)
+        {
+            if (ingrs.Count > 0)
+            {
+                foreach (IngredientInRecipeInsertDTO ingr in ingrs)
+                {
+                    bool tmp_success = false;
+                    tmp_success = AddRecipeIngredient(ingr,id_recipe);
+                    if (!tmp_success) return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        public bool AddRecipeStep(Step step, int id_recipe)
+        {
+            bool success = false;
+            MakeConnection("INSERT INTO [dbo].[Step] OUTPUT inserted.Recipe_Id_Recipe VALUES (@step_number,@step,@id_recipe);");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@step_number", step.Step_Number);
+            commandsToDatabase.Parameters.AddWithValue("@step", step.StepDesc);
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                if (int.Parse(sqlDataReader["Recipe_Id_Recipe"].ToString()).Equals(id_recipe)) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
+
+        }
+        public bool AddRecipeSteps(List<Step> steps, int id_recipe)
+        {
+            bool success = false;
+            foreach(Step step in steps)
+            {
+                success = AddRecipeStep(step, id_recipe);
+                if (!success) return false;
+            }
+            return true;
+        }
+        public int AddRecipeDefinition(RecipeInsertDTO recipe, int id_user)
+        {
+            int id_recipe = 0;
+            MakeConnection("INSERT INTO [dbo].[Recipe] OUTPUT inserted.Id_Recipe VALUES (@name,@diff,@time,@desc,@id_user,@id_cousine,GETDATE(),0,@private);");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@name", recipe.Name);
+            commandsToDatabase.Parameters.AddWithValue("@diff", int.Parse(recipe.Difficulty));
+            commandsToDatabase.Parameters.AddWithValue("@time", recipe.Time);
+            commandsToDatabase.Parameters.AddWithValue("desc", recipe.Description);
+            commandsToDatabase.Parameters.AddWithValue("id_user", id_user);
+            commandsToDatabase.Parameters.AddWithValue("id_cousine", recipe.Id_Cousine);
+            commandsToDatabase.Parameters.AddWithValue("private", recipe.Priv);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                id_recipe = int.Parse(sqlDataReader["Id_Recipe"].ToString());
+            }
+            connectionToDatabase.Close();
+            return id_recipe;
+        }
+
+        //public bool AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, IFormFileCollection images, int id_user)
+        public int AddRecipe(RecipeInsertDTO recipe,List<IngredientInRecipeInsertDTO> ingrs,List<Step> steps, int id_user)
+        {
+            int id_recipe = AddRecipeDefinition(recipe,id_user);
+            if (id_recipe > 0)
+            {
+                bool ingredient_success = AddRecipeIngredients(ingrs,id_recipe);
+                if (ingredient_success)
+                {
+                    bool steps_success = AddRecipeSteps(steps, id_recipe);
+                    if (steps_success) return id_recipe;
+
+                }
+                    /*
+                {
+                    List<string> urls = UploadRecipeImages(images);
+                    bool images_success = AddRecipeImages(urls,id_recipe);
+                    if (images_success) return true;
+                    return false;
+                }
+                return false;*/
+
+            }
+            return 0;
+        }
+        public List<MetricDefinition> GetMetricDefinitions()
+        {
+            List<MetricDefinition> metricDefinitions = new List<MetricDefinition>();
+            MakeConnection("SELECT Id_Metric_Definiton,Name,WeightPerUnit FROM [dbo].[Metric_Definiton];");
+            connectionToDatabase.Open();
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                MetricDefinition definition = new MetricDefinition()
+                {
+                    id = int.Parse(sqlDataReader["Id_Metric_Definiton"].ToString()),
+                    name = sqlDataReader["Name"].ToString(),
+                    weightPerUnit = int.Parse(sqlDataReader["WeightPerUnit"].ToString())
+                };
+                metricDefinitions.Add(definition);
+            }
+            connectionToDatabase.Close();
+            return metricDefinitions;
         }
     }
 }

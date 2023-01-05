@@ -76,6 +76,24 @@ namespace TasTierAPI.Controllers
                 }
                 else return Ok("All cousines have been cleared");
         }
+        [HttpGet]
+        [Route("cousine/user")]
+        public IActionResult GetUserCousines()
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            return Ok(_dbService.GetUserCousines(id));
+        }
+        [HttpGet]
+        [Route("diet/user")]
+        public IActionResult GetUserDiet()
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            return Ok(_dbService.GetUserDiet(id));
+        }
     }
 }
 
