@@ -18,6 +18,7 @@ import CustomAutocomplete from '../../Components/Autocomplete/CustomAutocomplete
 type IngredientTableProps = {
   data: Array<IngredientDTO>;
   isEditable: boolean;
+  onChange?: any;
 };
 
 const IngredientTable = (props: IngredientTableProps) => {
@@ -33,6 +34,9 @@ const IngredientTable = (props: IngredientTableProps) => {
     if (!!testData) {
       const sum = testData.reduce((partSum, ingredient) => partSum + ingredient.calories, 0);
       setCaloriesSum(sum);
+    }
+    if (!!props.onChange) {
+      props.onChange({name: 'ingredients', value: testData});
     }
   }, [testData]);
 
