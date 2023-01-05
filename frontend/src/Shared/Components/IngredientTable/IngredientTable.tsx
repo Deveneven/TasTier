@@ -5,6 +5,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import {
   IconButton,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +17,9 @@ import {
 import {IngredientDTO} from '../../DTOs/IngredientDTO';
 import {Button, Grid, TextField} from '@mui/material';
 import CustomAutocomplete from '../../Components/Autocomplete/CustomAutocomplete';
+import {MetricsDTO} from '../../DTOs/MetricsDTO';
+import {Api} from '../../../Utils/Api';
+
 type IngredientTableProps = {
   data: Array<IngredientDTO>;
   isEditable: boolean;
@@ -26,9 +31,10 @@ const IngredientTable = (props: IngredientTableProps) => {
   const [testData, setTestData] = useState<Array<IngredientDTO>>(props.data);
   const [ingredientName, setIngredientName] = useState<string>('');
   const [brandName, setBrandName] = useState<string>('');
-  // const [unit, setUnit] = useState<string>('g');
-  const [amount, setAmount] = useState<number>(0);
+  const [unit, setUnit] = useState<number>(0);
+  const [amount, setAmount] = useState(0);
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [units, setUnits] = useState<MetricsDTO[]>([]);
 
   useEffect(() => {
     if (!!testData) {
@@ -62,7 +68,7 @@ const IngredientTable = (props: IngredientTableProps) => {
       const ingrid: IngredientDTO = {
         id: i++,
         amount: amount,
-        unit: 'g',
+        id_metric: unit,
         name: ingredientName,
         calories: 210,
         allergen: false,
@@ -81,6 +87,21 @@ const IngredientTable = (props: IngredientTableProps) => {
     setBrandName('');
     setAmount(0);
     setIsEdit(!isEdit);
+  };
+
+  const fetchData = async () => {
+    const data = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/metrics`);
+    if (data.success) {
+      setUnits(data.text);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const selectUnit = (e) => {
+    setUnit(e.target.value);
   };
   return (
     <Grid
@@ -103,7 +124,7 @@ const IngredientTable = (props: IngredientTableProps) => {
                 <TableRow key={ingredient.id}>
                   <TableCell>{ingredient.name}</TableCell>
                   <TableCell>{ingredient.amount}</TableCell>
-                  <TableCell>{ingredient.unit}</TableCell>
+                  <TableCell>{!!units[ingredient.id_metric] ? units[ingredient.id_metric].name : 'blank'}</TableCell>
                   <TableCell>{ingredient.calories}</TableCell>
                   {props.isEditable && (
                     <TableCell align='center'>
@@ -168,7 +189,19 @@ const IngredientTable = (props: IngredientTableProps) => {
             />
           </Grid>
           <Grid item xs={2} md={1}>
-            <span>Unit</span>
+            <Select
+              defaultValue={1}
+              onChange={selectUnit}>
+              {units?.map((unit: MetricsDTO) => {
+                return (
+                  <MenuItem
+                    key={unit.id}
+                    value={unit.id}>
+                    {unit.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
           </Grid>
           <Grid item xs={12} md={2}>
             <Button

@@ -4,5 +4,5 @@ export interface IngredientDTO {
   calories: number,
   allergen: boolean,
   amount: number,
-  unit: string
+  id_metric: number
 }

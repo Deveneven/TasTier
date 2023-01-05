@@ -47,7 +47,7 @@ function App() {
           calories: 150,
           allergen: false,
           amount: 1,
-          unit: 'piece',
+          id_metric: 2,
         },
         {
           id: 1,
@@ -55,7 +55,7 @@ function App() {
           calories: 150,
           allergen: false,
           amount: 1,
-          unit: 'piece',
+          id_metric: 2,
         },
         {
           id: 2,
@@ -63,7 +63,7 @@ function App() {
           calories: 0,
           allergen: false,
           amount: 100,
-          unit: 'ml',
+          id_metric: 2,
         },
         {
           id: 3,
@@ -71,7 +71,7 @@ function App() {
           calories: 250,
           allergen: true,
           amount: 20,
-          unit: 'grams',
+          id_metric: 1,
         },
       ],
     },
