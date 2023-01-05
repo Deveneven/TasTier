@@ -6,11 +6,23 @@ import AddIngridiensList from './Steps/AddIngredientsList';
 import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
 import AddCookingSteps from './Steps/AddCookingSteps';
 import AddPhoto from './Steps/AddPhoto';
+import {CreateRecipeDTO} from '../../Shared/DTOs/CreateRecipeDTO';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isValid] = useState(true);
-
+  const [newRecipe] = useState<CreateRecipeDTO>({
+    name: '',
+    difficulty: 1,
+    time: '',
+    description: '',
+    images: [],
+    id_cousine: 0,
+    date: new Date(),
+    rating: 0,
+    ingredients: [],
+    priv: false,
+  });
   const results: Array<{name: string, isValid: boolean}> = [];
 
   const setNextStep = () => {
@@ -27,18 +39,25 @@ const RecipeEditScreen = () => {
     }
   };
   const onValueChange = (event: any) => {
-    // const {type, name, value} = !!event.target ? event.target : event;
+    const {name, value} = !!event.target ? event.target : event;
     // console.log('On Walue Change');
     // console.log(`${type} ${value} ${name}`);
+    // console.log(newRecipe);
+    newRecipe[name] = value;
+    // console.log(newRecipe[name]);
   };
-  const checkIsValid = (name: string, isValid: boolean) => {
-    const index = results.findIndex((elem) => elem.name == name);
+  const checkIsValid = (elem: ({name: string, isValid: boolean})) => {
+    const index = results.findIndex((x) => x.name == elem.name);
     if (index !== -1) {
-      results[index] = {name: name, isValid: isValid};
+      results[index] = elem;
     } else {
-      results.push({name: name, isValid: isValid});
+      results.push(elem);
     }
     console.log(results);
+  };
+  const submitSteps = () => {
+    console.log('Submit steps');
+    console.log(newRecipe);
   };
   const stepList = [{id: 0, name: 'Complete the basic information',
     content: <AddBasicInformation onChange={onValueChange} checkIsValid={checkIsValid}/>},
@@ -65,7 +84,7 @@ const RecipeEditScreen = () => {
         </div>
         <Button
           disabled={!isValid}
-          onClick={setNextStep}>
+          onClick={activeStep < stepList.length-1 ? setNextStep : submitSteps}>
           {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
         </Button>
       </Card>
