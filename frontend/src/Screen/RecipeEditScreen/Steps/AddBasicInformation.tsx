@@ -1,4 +1,6 @@
-import {Grid} from '@mui/material';
+import SquareIcon from '@mui/icons-material/Square';
+import SquareOutlinedIcon from '@mui/icons-material/SquareOutlined';
+import {Grid, Rating, Typography} from '@mui/material';
 import React, {useState} from 'react';
 import CustomAutocomplete from '../../../Shared/Components/Autocomplete/CustomAutocomplete';
 import TextForm from '../../../Shared/Components/TextForm/TextForm';
@@ -35,6 +37,15 @@ const AddBasicInformation = (props: any) => {
           name="description"
           {...props}
         />
+      </Grid>
+      <Grid item xs={12} md={12}>
+        <Typography component="legend">Difficulty:</Typography>
+        <Rating
+          name="difficulty"
+          defaultValue={1}
+          icon={<SquareIcon/>}
+          emptyIcon={<SquareOutlinedIcon/>}
+          {...props}/>
       </Grid>
       <Grid item xs={12} md={12}>
         <CustomAutocomplete
