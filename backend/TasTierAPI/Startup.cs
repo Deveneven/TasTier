@@ -50,7 +50,10 @@ namespace TasTierAPI
                 };
             });
             services.AddControllers();
-            services.AddScoped<IDatabaseService, DatabaseService>();
+            services.AddScoped<IAccountSettingService, AccountSettingService>();
+            services.AddScoped<IDietSettingsService, DietSettingsService>();
+            services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddSwaggerGen();
 
             
