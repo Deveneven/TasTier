@@ -6,7 +6,7 @@ import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutline
 import {useNavigate} from 'react-router-dom';
 import MobileDrawer from './MobileDrawer';
 import UserAvatar from '../UserAvatar/UserAvatar';
-function BottomNavigate({user}:any) {
+function BottomNavigate() {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
@@ -48,7 +48,7 @@ function BottomNavigate({user}:any) {
           }}
           label="Menu"
           icon={
-            <UserAvatar user={user}/>
+            <UserAvatar />
           }
         />
       </BottomNavigation>
@@ -58,6 +58,3 @@ function BottomNavigate({user}:any) {
 
 export default BottomNavigate;
 
-//            {!user && (<Avatar sx={{width: 32, height: 32}}> U </Avatar>)}
-// {user && user.avatar && (<Avatar sx={{width: 32, height: 32}} src={user.avatar} alt={`${user.name} ${user.lastname}`} />)}
-// {user && !user.avatar && (<Avatar sx={{width: 32, height: 32}}> {user?.name.substring(0, 1).toUpperCase()}</Avatar>)}

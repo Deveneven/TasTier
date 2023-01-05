@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,11 +13,12 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import {Link} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import UserAvatar from '../UserAvatar/UserAvatar';
-const UserMenu = ({user}:any) => {
+import UserContext from '../../../Contexts/UserContext';
+const UserMenu = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
+  const {user} = useContext(UserContext);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -42,12 +43,12 @@ const UserMenu = ({user}:any) => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <UserAvatar user={user}/>
+            <UserAvatar />
           </IconButton>
         </Tooltip>
       </Box>
       <IconButton size="small" sx={{ml: 2, display: {sm: 'none', xs: 'block'}}}>
-        <UserAvatar user={user}/>
+        <UserAvatar />
       </IconButton>
       {user && (
         <Menu

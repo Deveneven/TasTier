@@ -15,6 +15,7 @@ import {ShoppingListDTO} from './Shared/DTOs/ShoppingListDTO';
 import RecipeEditScreen from './Screen/RecipeEditScreen/RecipeEditScreen';
 import SettingsScreen from './Screen/SettingsScreen/SettingsScreen';
 import DietSettingsScreen from './Screen/DietSettingsScreen/DietSettingsScreen';
+import {UserProvider} from './Contexts/UserContext';
 function App() {
   // chwilowy useState, przy po��czeniu api zast�pi si�, a edycja listy b�dzie po id listy
   const [lists, setLists] = useState<ShoppingListDTO[]>([
@@ -79,26 +80,28 @@ function App() {
     {Id: 4, Name: 'List title number 4', Friends: [], IngredientsList: []},
   ]);
   return (
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainScreen />} />
-          <Route path="/signin" element={<SignInScreen />} />
-          <Route path="/register" element={<RegisterScreen />} />
-          <Route
-            path="/shoppinglist"
-            element={<ShoppingScreen lists={lists} setLists={setLists} />}
-          />
-          <Route
-            path="/shoppinglist/edit/:id"
-            element={<ListScreen lists={lists} />}
-          />
-          <Route path="/recipe/0" element={<RecipeEditScreen/>} />
-          <Route path="/account/settings" element={<SettingsScreen/>} />
-          <Route path="/diets" element={<DietSettingsScreen/>} />
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainScreen />} />
+            <Route path="/signin" element={<SignInScreen />} />
+            <Route path="/register" element={<RegisterScreen />} />
+            <Route
+              path="/shoppinglist"
+              element={<ShoppingScreen lists={lists} setLists={setLists} />}
+            />
+            <Route
+              path="/shoppinglist/edit/:id"
+              element={<ListScreen lists={lists} />}
+            />
+            <Route path="/recipe/0" element={<RecipeEditScreen/>} />
+            <Route path="/account/settings" element={<SettingsScreen/>} />
+            <Route path="/diets" element={<DietSettingsScreen/>} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </UserProvider>
   );
 }
 
