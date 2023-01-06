@@ -18,7 +18,6 @@ import {IngredientDTO} from '../../DTOs/IngredientDTO';
 import {Button, Grid, TextField} from '@mui/material';
 import CustomAutocomplete from '../../Components/Autocomplete/CustomAutocomplete';
 import {MetricsDTO} from '../../DTOs/MetricsDTO';
-import {Api} from '../../../Utils/Api';
 
 type IngredientTableProps = {
   data: Array<IngredientDTO>;
@@ -90,15 +89,11 @@ const IngredientTable = (props: IngredientTableProps) => {
     setIsEdit(!isEdit);
   };
 
-  const fetchData = async () => {
-    const data = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/metrics`);
-    if (data.success) {
-      setUnits(data.text);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    const metrics = localStorage.getItem('metrics');
+    if (!!metrics) {
+      setUnits(JSON.parse(metrics));
+    }
   }, []);
 
   const selectUnit = (e) => {

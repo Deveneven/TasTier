@@ -14,6 +14,11 @@ const MainScreen = () => {
     if (data.success) {
       setDataAll(data.text);
     }
+
+    const metrics = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/metrics`);
+    if (metrics.success) {
+      localStorage.setItem('metrics', metrics.text);
+    }
   };
 
   useEffect(() => {
