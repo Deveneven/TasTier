@@ -8,7 +8,9 @@ export interface RecipeDTO {
   description: string,
   username: string,
   cousine: string,
-  date: Date,
+  date: string,
   rating: number,
+  priv: boolean,
   ingredients: Array<IngredientDTO>,
+  avatar: string,
 }

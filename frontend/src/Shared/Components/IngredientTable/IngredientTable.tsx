@@ -63,12 +63,12 @@ const IngredientTable = (props: IngredientTableProps) => {
     const existedIndex = testData.findIndex((elem) => elem.name == ingredientName);
     if (existedIndex !== -1) {
       testData[existedIndex].amount = amount;
-      testData[existedIndex].id_metric = unit;
+      testData[existedIndex].unit = unit;
     } else if (!!ingredientName) {
       const ingrid: IngredientDTO = {
         id: i++,
         amount: amount,
-        id_metric: unit,
+        unit: unit,
         name: ingredientName,
         calories: 210,
         allergen: false,
@@ -101,8 +101,8 @@ const IngredientTable = (props: IngredientTableProps) => {
   };
 
   const getUnitName = (ingredient) => {
-    const unitName = units.find((x) => x.id == ingredient.id_metric)?.name;
-    return unitName ?? 'no data';
+    const unitName = units.find((x) => x.id == ingredient.unit)?.name;
+    return unitName ?? ingredient.unit;
   };
   return (
     <Grid

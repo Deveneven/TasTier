@@ -40,8 +40,8 @@ const RecipeEditScreen = () => {
   };
   const onValueChange = (event: any) => {
     const {name, value} = !!event.target ? event.target : event;
-    console.log('On Walue Change');
-    console.log(`${value} ${name}`);
+    // console.log('On Walue Change');
+    // console.log(`${value} ${name}`);
     newRecipe[name] = value;
   };
   const checkIsValid = (elem: ({name: string, isValid: boolean})) => {
@@ -63,7 +63,7 @@ const RecipeEditScreen = () => {
       priv: newRecipe.priv,
     },
     ingrs: newRecipe.ingredients.map((elem) => {
-      return {id_ingredient: 1, amount: elem.amount, id_metric: elem.id_metric};
+      return {id_ingredient: 1, amount: elem.amount, id_metric: elem.unit};
     }),
     steps: newRecipe.steps.map((elem, index)=> {
       return {step_number: index, stepdesc: elem};
