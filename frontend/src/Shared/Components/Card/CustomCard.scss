@@ -1,5 +1,8 @@
 .card {
   width: 100vh;
+  .recipe-rating {
+    float: right;
+  }
   .expanded-content {
     line-height: 20px;
     margin-left: 2vh;

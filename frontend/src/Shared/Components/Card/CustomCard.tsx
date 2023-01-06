@@ -57,6 +57,15 @@ const CustomCard = ({data}: CustomCardProps) => {
       </CardActions>
       <CardContent>
         {data.name}
+        <div className='recipe-rating'>
+          <Rating
+            max={10}
+            color='primary'
+            disabled={true}
+            size='small'
+            name="difficulty"
+            defaultValue={data.rating}/>
+        </div>
       </CardContent>
       <Button
         fullWidth={true}
