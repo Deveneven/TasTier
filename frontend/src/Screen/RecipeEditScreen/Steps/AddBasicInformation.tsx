@@ -7,8 +7,26 @@ import TextForm from '../../../Shared/Components/TextForm/TextForm';
 import './AddBasicInformation.scss';
 import {Api} from '../../../Utils/Api';
 import {CousineDTO} from '../../../Shared/DTOs/CousineDTO';
-import {FormControlLabel} from '@material-ui/core';
+import {FormControlLabel, InputAdornment} from '@material-ui/core';
 import Checkbox from '@mui/material/Checkbox';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import MaskedInput from 'react-text-mask';
+
+type MaskProps = {
+  inputRef: any,
+};
+const TextMaskCustom = (props: MaskProps) => {
+  const {inputRef, ...other} = props;
+  return (
+    <MaskedInput
+      {...other}
+      ref={inputRef}
+      mask={[/[1-9]/, /[1-9]/, ':', /[1-9]/, /[1-9]/]}
+      placeholderChar={'\u2000'}
+      showMask
+    />
+  );
+};
 
 const AddBasicInformation = (props: any) => {
   const [value, setValue] = useState<string[]>([]);
@@ -66,12 +84,20 @@ const AddBasicInformation = (props: any) => {
       <Grid item xs={12} md={6}>
         <TextForm
           required
-          maxLenght={3}
+          regex={/[0-9]{2}:[0-9]{2}/g}
           multiline
           variant='outlined'
           label="Cooking time"
           name="time"
           fullWidth
+          InputProps={{
+            inputComponent: TextMaskCustom,
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccessTimeIcon />
+              </InputAdornment>
+            ),
+          }}
           {...props}
         />
       </Grid>
