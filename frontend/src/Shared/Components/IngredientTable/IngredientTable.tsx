@@ -145,6 +145,7 @@ const IngredientTable = (props: IngredientTableProps) => {
             <span className='calories-Sum'>Total calories: {caloriesSum} kcal</span>
             {props.isEditable && (
               <IconButton
+                color='primary'
                 className='add-button'
                 onClick={showAddPanel}>
                 <AddIcon/>

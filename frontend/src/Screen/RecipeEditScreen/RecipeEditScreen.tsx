@@ -11,7 +11,7 @@ import {Api} from '../../Utils/Api';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [isValid] = useState(true);
+  const [isValid, setIsValid] = useState(true);
   const [newRecipe] = useState<CreateRecipeDTO>({
     name: '',
     difficulty: '1',
@@ -51,6 +51,8 @@ const RecipeEditScreen = () => {
     } else {
       results.push(elem);
     }
+    const isAnyInValid = results.some((x) => x.isValid == false);
+    setIsValid(isAnyInValid);
   };
   const submitSteps = async () => {
     console.log('Submit steps');
@@ -111,7 +113,7 @@ const RecipeEditScreen = () => {
           {setStep(activeStep)}
         </div>
         <Button
-          disabled={!isValid}
+          disabled={isValid}
           onClick={activeStep < stepList.length-1 ? setNextStep : submitSteps}>
           {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
         </Button>
