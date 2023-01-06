@@ -26,6 +26,7 @@ async function get(url) {
 
 async function post(url, payload) {
   return await fetch(url, {
+    crossDomain: true,
     method: 'POST',
     headers: {
       'Accept': 'application/json',

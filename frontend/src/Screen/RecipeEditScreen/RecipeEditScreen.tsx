@@ -7,20 +7,21 @@ import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
 import AddCookingSteps from './Steps/AddCookingSteps';
 import AddPhoto from './Steps/AddPhoto';
 import {CreateRecipeDTO} from '../../Shared/DTOs/CreateRecipeDTO';
-// import {Api} from '../../Utils/Api';
+import {Api} from '../../Utils/Api';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [isValid] = useState(true);
   const [newRecipe] = useState<CreateRecipeDTO>({
     name: '',
-    difficulty: 1,
+    difficulty: '1',
     time: '',
     description: '',
     id_cousine: 0,
     priv: true,
     ingredients: [],
     steps: [],
+    images: [],
   });
   const results: Array<{name: string, isValid: boolean}> = [];
 
@@ -41,9 +42,7 @@ const RecipeEditScreen = () => {
     const {name, value} = !!event.target ? event.target : event;
     console.log('On Walue Change');
     console.log(`${value} ${name}`);
-    // console.log(newRecipe);
     newRecipe[name] = value;
-    // console.log(newRecipe[name]);
   };
   const checkIsValid = (elem: ({name: string, isValid: boolean})) => {
     const index = results.findIndex((x) => x.name == elem.name);
@@ -64,20 +63,30 @@ const RecipeEditScreen = () => {
       priv: newRecipe.priv,
     },
     ingrs: newRecipe.ingredients.map((elem) => {
-      console.log(elem);
-      return {id_ingredient: elem.id++, amount: elem.amount, id_metric: elem.id_metric};
+      return {id_ingredient: 1, amount: elem.amount, id_metric: elem.id_metric};
     }),
     steps: newRecipe.steps.map((elem, index)=> {
       return {step_number: index, stepdesc: elem};
     })};
-    console.log(payload);
-    // await Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe`, payload).then( (response) => {
-    //   console.log('AddRecipeResponse:');
-    //   console.log(response);
-    //   // if (response.success) setAlert({display: true, text: response.text, type: 'success'});
-    //   // else setAlert({display: true, text: response.text, type: 'error'});
-    // });
+    await Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe`, payload).then( (response) => {
+      console.log('AddRecipeResponse:');
+      console.log(response);
+      if (response.success) {
+        console.log(response.text);
+        fileUpload(newRecipe.images, response.text);
+      }
+    });
   };
+
+  const fileUpload = (images, id) => {
+    const formData = new FormData();
+    formData.append('file', images[0]);
+    formData.append('id_recipe', id);
+    Api.postImage(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/images`, formData).then((response) => {
+      console.log(response);
+    });
+  };
+
   const stepList = [{id: 0, name: 'Complete the basic information',
     content: <AddBasicInformation onChange={onValueChange} checkIsValid={checkIsValid}/>},
   {id: 1, name: 'Add a list of ingredients',
