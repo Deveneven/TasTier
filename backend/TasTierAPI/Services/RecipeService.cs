@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using TasTierAPI.Models;
 using static System.Net.Mime.MediaTypeNames;
 using System.Security.Policy;
+using System.Linq;
 
 namespace TasTierAPI.Services
 {
@@ -45,6 +46,23 @@ namespace TasTierAPI.Services
             {
                 recipe.Ingredients = GetIngriedientList(recipe.Id);
                 recipe.Images = GetRecipeImages(recipe.Id);
+                recipe.Steps = GetSteps(recipe.Id);
+                recipe.Tags = GetTags(recipe.Id);
+            }
+            return recipes;
+        }
+        public IEnumerable<Recipe> GetUserRecipesDTO(int id_user)
+        {
+            List<Recipe> recipes = new List<Recipe>();
+
+            recipes = GetUserRecipes(id_user);
+
+            foreach (Recipe recipe in recipes)
+            {
+                recipe.Ingredients = GetIngriedientList(recipe.Id);
+                recipe.Images = GetRecipeImages(recipe.Id);
+                recipe.Steps = GetSteps(recipe.Id);
+                recipe.Tags = GetTags(recipe.Id);
             }
             return recipes;
         }
@@ -72,7 +90,46 @@ namespace TasTierAPI.Services
                     Name = sqlDataReader["Name"].ToString(),
                     Difficulty = int.Parse(sqlDataReader["Difficulty"].ToString()),
                     Description = sqlDataReader["Description"].ToString(),
-                    Time = sqlDataReader["Time"].ToString(),
+                    Time = sqlDataReader["Time"].ToString()[0..^3],
+                    Username = sqlDataReader["Username"].ToString(),
+                    Cousine = sqlDataReader["Cousine"].ToString(),
+                    Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
+                    Rating = int.Parse(sqlDataReader["Rating"].ToString()),
+                    Priv = bool.Parse(sqlDataReader["Private"].ToString()),
+                    Avatar = sqlDataReader["Avatar"].ToString()
+                };
+                recipes.Add(tmpRecipe);
+
+            }
+            //Closing the opened connection after reading the result contents and returning the list
+            connectionToDatabase.Close();
+            return recipes;
+        }
+        public List<Recipe> GetUserRecipes(int id_user)
+        {
+
+            List<Recipe> recipes = new List<Recipe>();
+            //Defining method query
+            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private " +
+                "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
+                " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine WHERE rec.User_Id_User = @id_user");
+
+            //Opening the connection to database
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            //Executing query and assining the results to sql reader
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            //Reading content of the results and assigning values to temporary variable which then is added to result list
+            while (sqlDataReader.Read())
+            {
+                Recipe tmpRecipe = new Recipe()
+                {
+                    Id = int.Parse(sqlDataReader["Id_Recipe"].ToString()),
+                    Name = sqlDataReader["Name"].ToString(),
+                    Difficulty = int.Parse(sqlDataReader["Difficulty"].ToString()),
+                    Description = sqlDataReader["Description"].ToString(),
+                    Time = sqlDataReader["Time"].ToString()[0..^3],
                     Username = sqlDataReader["Username"].ToString(),
                     Cousine = sqlDataReader["Cousine"].ToString(),
                     Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
@@ -118,7 +175,7 @@ namespace TasTierAPI.Services
 
         }
 
-        public IEnumerable<Step> GetSteps(int Id_Recipe)
+        public List<Step> GetSteps(int Id_Recipe)
         {
             List<Step> steps = new List<Step>();
             MakeConnection("SELECT Step_number, Step FROM [dbo].[Step] WHERE Recipe_Id_Recipe =@id;");
@@ -151,6 +208,43 @@ namespace TasTierAPI.Services
                 images.Add(sqlDataReader["url_image"].ToString());
             }
             return images;
+        }
+        public List<Tag> GetTags (int Id_Recipe)
+        {
+            List<Tag> tags = new List<Tag>();
+            MakeConnection("Select rc.Id_RecipeCategory, rc.Name FROM [dbo].[Recipe_RecipeCategory] as rr " +
+                "inner join [dbo].[RecipeCategory] as rc on rc.Id_RecipeCategory = rr.RecipeCategory_Id_RecipeCategory " +
+                "WHERE rr.Recipe_Id_Recipe = @id_recipe;");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", Id_Recipe);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                tags.Add(new Tag()
+                {
+                    id_tag = int.Parse(sqlDataReader["Id_RecipeCategory"].ToString()),
+                    TagName = sqlDataReader["Name"].ToString()
+                });
+            }
+            return tags;
+        }
+        public IEnumerable<Tag> GetAllTags()
+        {
+            List<Tag> tags = new List<Tag>();
+            MakeConnection("SELECT * FROM [dbo].[RecipeCategory]");
+            connectionToDatabase.Open();
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                tags.Add(new Tag()
+                {
+                    id_tag = int.Parse(sqlDataReader["Id_RecipeCategory"].ToString()),
+                    TagName = sqlDataReader["Name"].ToString()
+                });
+            }
+            return tags;
         }
         public List<string> UploadRecipeImages(IFormFileCollection images)
         {
@@ -260,13 +354,56 @@ namespace TasTierAPI.Services
         public bool AddRecipeSteps(List<Step> steps, int id_recipe)
         {
             bool success = false;
-            foreach(Step step in steps)
+            foreach (Step step in steps)
             {
                 success = AddRecipeStep(step, id_recipe);
                 if (!success) return false;
             }
             return true;
+
         }
+        public int AddTag(string tag)
+        {
+            int id_tag = 0;
+            MakeConnection("exec [dbo].AddTag @name = @name");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@name", tag.ToLower());
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                id_tag = int.Parse(sqlDataReader["Id_RecipeCategory"].ToString());
+            }
+            connectionToDatabase.Close();
+            return id_tag;
+        }
+        public bool AddRecipeTag(string tag, int id_recipe)
+        {
+            int id_tag = AddTag(tag);
+            if(id_tag > 0)
+            {
+                MakeConnection("INSERT INTO [dbo].[Recipe_RecipeCategory] output inserted.Recipe_Id_Recipe VALUES (@id_tag, @id_recipe)");
+                connectionToDatabase.Open();
+                commandsToDatabase.Parameters.AddWithValue("@id_tag", id_tag);
+                commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
+                SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    if (int.Parse(sqlDataReader["Recipe_Id_Recipe"].ToString()).Equals(id_recipe)) return true;
+                }
+            }
+            return false;
+        }
+        public bool AddRecipeTags(List<string> tags, int id_recipe)
+        {
+            bool success = false;
+            foreach (string tag in tags)
+            {
+                success = AddRecipeTag(tag, id_recipe);
+                if (!success) return false;
+            }
+            return true;
+        }
+
         public int AddRecipeDefinition(RecipeInsertDTO recipe, int id_user)
         {
             int id_recipe = 0;
@@ -289,7 +426,7 @@ namespace TasTierAPI.Services
         }
 
         //public bool AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, IFormFileCollection images, int id_user)
-        public int AddRecipe(RecipeInsertDTO recipe,List<IngredientInRecipeInsertDTO> ingrs,List<Step> steps, int id_user)
+        public int AddRecipe(RecipeInsertDTO recipe,List<IngredientInRecipeInsertDTO> ingrs,List<Step> steps,List<string> tags, int id_user)
         {
             int id_recipe = AddRecipeDefinition(recipe,id_user);
             if (id_recipe > 0)
@@ -298,7 +435,11 @@ namespace TasTierAPI.Services
                 if (ingredient_success)
                 {
                     bool steps_success = AddRecipeSteps(steps, id_recipe);
-                    if (steps_success) return id_recipe;
+                    if (steps_success)
+                    {
+                        bool tags_success = AddRecipeTags(tags, id_recipe);
+                        if (tags_success) return id_recipe;
+                    }
 
                 }
                     /*
@@ -312,6 +453,20 @@ namespace TasTierAPI.Services
 
             }
             return 0;
+        }
+        public bool AddNewTag(string tag)
+        {
+            bool success = false;
+            MakeConnection("INSERT INTO [dbo].[RecipeCategory] OUTPUT inserted.Id_RecipeCategory VALUES (@tag);");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@tag", tag);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                if (sqlDataReader["Id_RecipeCategory"].ToString().Length > 0) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
         }
         public List<MetricDefinition> GetMetricDefinitions()
         {

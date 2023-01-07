@@ -5,7 +5,7 @@ using TasTierAPI.Services;
 namespace TasTierAPI.Controllers
 {
     [ApiController]
-    [Route("api/shoppinglist")]
+    [Route("apii/shoppinglist")]
     public class ShoppingListController : ControllerBase
     {
         //private IDatabaseService _dbService;

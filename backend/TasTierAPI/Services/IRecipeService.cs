@@ -12,7 +12,7 @@ namespace TasTierAPI.Services
         public List<String> GetRecipeImages(int Id_Recipe);
         public List<Recipe> GetRecipes();
         public List<IngriedientInRecipe> GetIngriedientList(int Id_Recipe);
-        public IEnumerable<Step> GetSteps(int Id_Recipe);
+        public List<Step> GetSteps(int Id_Recipe);
        // public bool AddRecipe();
         public List<string> UploadRecipeImages(IFormFileCollection images);
         public bool AddRecipeImage(string url, int id_recipe);
@@ -22,9 +22,18 @@ namespace TasTierAPI.Services
         public List<MetricDefinition> GetMetricDefinitions();
         public int AddRecipeDefinition(RecipeInsertDTO recipe, int id_user);
         //public bool AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, IFormFileCollection images, int id_user);
-        public int AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, List<Step> steps, int id_user);
+        public int AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, List<Step> steps,List<string>tags, int id_user);
         public bool AddRecipeSteps(List<Step> steps, int id_recipe);
         public bool AddRecipeStep(Step step, int id_recipe);
+        public bool AddRecipeTag(string tag, int id_recipe);
+        public bool AddRecipeTags(List<string> tags, int id_recipe);
+        public IEnumerable<Recipe> GetUserRecipesDTO(int id_user);
+        public List<Recipe> GetUserRecipes(int id_user);
+        public List<Tag> GetTags(int Id_Recipe);
+        public IEnumerable<Tag> GetAllTags();
+        public bool AddNewTag(string tag);
+        public int AddTag(string tag);
+
     }
 }
 

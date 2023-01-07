@@ -11,7 +11,7 @@ namespace TasTierAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/diet")]
+    [Route("apii/diet")]
     public class DietSettingsController : ControllerBase
 	{
         private IDietSettingsService _dbService;

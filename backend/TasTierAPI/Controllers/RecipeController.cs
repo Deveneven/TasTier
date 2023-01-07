@@ -11,7 +11,7 @@ using TasTierAPI.Services;
 namespace TasTierAPI.Controllers
 {
     [ApiController]
-    [Route("api/recipes")]
+    [Route("apii/recipes")]
     public class RecipeController:ControllerBase
     {
         private IRecipeService _dbService;
@@ -25,7 +25,25 @@ namespace TasTierAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_dbService.GetRecipesDTO());
+            IEnumerable<Recipe> result = _dbService.GetRecipesDTO();
+            if (result.Count() > 0)
+            {
+                return Ok(_dbService.GetRecipesDTO());
+            }
+            return BadRequest("Something went wrong");
+        }
+        [Route("get/user/recipes")]
+        [HttpGet]
+        public IActionResult GetUserRecipes()
+        {
+            var jwtt = Request.Headers[HeaderNames.Authorization].ToString();
+            var jwt = jwtt.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            int id = int.Parse(idd);
+
+            return Ok(_dbService.GetUserRecipesDTO(id));
         }
         [Route("get/ingredients")]
         [HttpGet]
@@ -45,6 +63,12 @@ namespace TasTierAPI.Controllers
         {
             return Ok(_dbService.GetMetricDefinitions());
         }
+        [Route("get/tags")]
+        [HttpGet]
+        public IActionResult GetTags()
+        {
+            return Ok(_dbService.GetAllTags());
+        }
         [Authorize]
         [Route("add/recipe")]
         [HttpPost]
@@ -55,12 +79,11 @@ namespace TasTierAPI.Controllers
             var jwt = jwtt.Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
             var securityToken = handler.ReadJwtToken(jwt);
-            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
             int id = int.Parse(idd);
           //  if (Request.HasFormContentType)
           //  {
-                id_recipe = _dbService.AddRecipe(recipeInsert.recipe, recipeInsert.ingrs, recipeInsert.steps,id);
+                id_recipe = _dbService.AddRecipe(recipeInsert.recipe, recipeInsert.ingrs, recipeInsert.steps,recipeInsert.tags,id);
                 if (id_recipe>0)
                 {
                     return Ok(id_recipe);
@@ -71,6 +94,15 @@ namespace TasTierAPI.Controllers
         //    }
 
        //     return BadRequest("Missing from content");
+        }
+        [Authorize]
+        [Route("add/tag")]
+        [HttpPost]
+        public IActionResult AddTag([FromBody] string tag)
+        {
+            bool success = _dbService.AddNewTag(tag);
+            if (success) { return Ok("Successfuly added new tag"); }
+            return BadRequest("Something went wrong");
         }
 
         [HttpPost]

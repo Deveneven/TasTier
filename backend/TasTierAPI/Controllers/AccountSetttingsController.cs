@@ -19,7 +19,7 @@ namespace TasTierAPI.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/settings")]
+    [Route("apii/settings")]
     public class AccountSetttingsController : ControllerBase
     {
         private IAccountSettingService _dbService;
