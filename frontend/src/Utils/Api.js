@@ -67,7 +67,7 @@ async function postImage(url, payload) {
     body: payload,
   }).then(async (response) => {
     console.log(response);
-    const resp = {success: true, text: await response.text()};
+    const resp = {success: true, text: await response.text()}; // zamienic na response.json()
     if (response.status === 200) {
       return resp;
     }
