@@ -2,16 +2,15 @@ import React, {useContext} from 'react';
 import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import IngredientTableDiets from './IngredientTableDiets';
 import FavCousinesMenu from './FavCousinesMenu';
 import DietsMenu from './DietsMenu';
 import UserContext from '../../Contexts/UserContext';
 import UserAvatar from '../../Shared/Components/UserAvatar/UserAvatar';
 import UserName from '../../Shared/Components/UserName/UserName';
+import UserAllergensTable from './IngridientTableApiComponents/UserAllergensTable';
 
 const DietSettingsScreen = () => {
   const {user} = useContext(UserContext);
-
   return (
     <BaseLayout>
       <Box
@@ -48,7 +47,7 @@ const DietSettingsScreen = () => {
           <Grid item md={5}
             sx={{width: 'min(600px, 100%)', margin: 'auto'}}
           >
-            < IngredientTableDiets buttonName={'allergen'} tableName={'Your allergens'}/>
+            <UserAllergensTable />
           </Grid>
           <Grid item md={5}
             sx={{width: 'min(600px, 100%)', margin: {sm: 'auto', md: '0 auto'}}}
@@ -67,11 +66,11 @@ const DietSettingsScreen = () => {
           <Grid item md={5}
             sx={{width: 'min(600px, 100%)', margin: 'auto'}}
           >
-            < IngredientTableDiets buttonName={'ingredient'} tableName={'Your favorite Ingredients'}/>
+            {/* < IngredientTableDiets buttonName={'ingredient'} tableName={'Your favorite Ingredients'}/> */}
           </Grid>
           <Grid item md={5}
             sx={{width: 'min(600px, 100%)', margin: 'auto'}}>
-            < IngredientTableDiets buttonName={'ingredient'} tableName={'Your least favorite Ingredients'}/>
+            {/* < IngredientTableDiets buttonName={'ingredient'} tableName={'Your least favorite Ingredients'}/> */}
           </Grid>
         </Grid>
       </Box>

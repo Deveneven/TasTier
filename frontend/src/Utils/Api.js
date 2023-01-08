@@ -24,6 +24,34 @@ async function get(url) {
   });
 }
 
+async function remove(url, payload) {
+  return await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('TastierToken'),
+    },
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(payload),
+  }).then( async (response) => {
+    const resp = {success: true, text: JSON.parse( await response.text())};
+    if (response.status === 200) {
+      return resp;
+    }
+    throw new Error(resp.text);
+  }).then( (response) => {
+    return response;
+  }).catch( (error) => {
+    console.log('jest to error');
+    console.log(error.message);
+    if (error.message) {
+      return {success: false, text: error.message};
+    }
+    return {success: false, text: 'There is a problem with server connection'};
+  });
+}
+
 async function post(url, payload) {
   return await fetch(url, {
     crossDomain: true,
@@ -88,4 +116,5 @@ export const Api = {
   get,
   post,
   postImage,
+  remove,
 };
