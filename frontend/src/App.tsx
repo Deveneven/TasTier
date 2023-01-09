@@ -17,6 +17,7 @@ import SettingsScreen from './Screen/SettingsScreen/SettingsScreen';
 import DietSettingsScreen from './Screen/DietSettingsScreen/DietSettingsScreen';
 import {UserProvider} from './Contexts/UserContext';
 import PrivateRoute from './Utils/PrivateRoute';
+import MyRecipesScreen from './Screen/MyRecipesScreen/MyRecipesScreen';
 function App() {
   // chwilowy useState, przy po��czeniu api zast�pi si�, a edycja listy b�dzie po id listy
   const [lists, setLists] = useState<ShoppingListDTO[]>([
@@ -100,6 +101,7 @@ function App() {
             <Route path="/recipe/:id" element={<PrivateRoute outlet={<RecipeEditScreen />} />} />
             <Route path="/account/settings" element={<SettingsScreen/>} />
             <Route path="/diets" element={<DietSettingsScreen/>} />
+            <Route path="/myrecipes" element={<MyRecipesScreen/>} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

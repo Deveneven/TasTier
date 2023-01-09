@@ -5,7 +5,7 @@ const AddPhoto = (props: any) => {
   const [image, setImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<string[]>([]);
   const [filesToUpload, setFilesToUpload] = useState([]);
-
+  // TO DO: Usuwanie zdjęcia
   const handleSetImage = (event) => {
     const files = event.target.files;
     setFilesToUpload(event.target.files);

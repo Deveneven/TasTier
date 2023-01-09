@@ -4,7 +4,10 @@ import '../../../Shared/Components/Comment/Comment.scss';
 const AddCookingSteps = (props: any) => {
   const [stepDescription, setStepDescription] = useState<string>();
   const [steps, setSteps] = useState<string[]>([]);
-
+  // TO DO: Usuwanie kroku
+  // TO DO: Edytowanie kroku
+  // TO DO: Czyczczenie po wpisaniu
+  // TO DO: Enter zatwierdza krok
   const AddNextStep = () => {
     if (!!stepDescription) {
       setSteps([...steps, stepDescription]);

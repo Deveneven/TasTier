@@ -98,7 +98,10 @@ const UserMenu = () => {
             }}>
             <AddIcon fontSize="medium" /> Add recipe
           </MenuItem>
-          <MenuItem sx={{display: 'flex', gap: '1rem'}}>
+          <MenuItem sx={{display: 'flex', gap: '1rem'}}
+            onClick={() => {
+              navigate('../myrecipes');
+            }}>
             <MenuBookIcon fontSize="medium" /> Your recipes
           </MenuItem>
           <MenuItem sx={{display: 'flex', gap: '1rem'}}

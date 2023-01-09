@@ -1,4 +1,3 @@
-/* eslint-disable */ 
 import {Button, Card, Step, StepLabel, Stepper} from '@mui/material';
 import React, {useState} from 'react';
 import './RecipeEditScreen.scss';
@@ -9,6 +8,8 @@ import AddCookingSteps from './Steps/AddCookingSteps';
 import AddPhoto from './Steps/AddPhoto';
 import {CreateRecipeDTO} from '../../Shared/DTOs/CreateRecipeDTO';
 import {Api} from '../../Utils/Api';
+import CustomizableAlert from '../../Shared/Components/Alert/CustomizableAlert';
+import {useNavigate} from 'react-router-dom';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -26,6 +27,8 @@ const RecipeEditScreen = () => {
     tags: [],
   });
   const results: Array<{name: string, isValid: boolean}> = [];
+  const [error, setError] = useState({display: false, text: ''});
+  const navigate = useNavigate();
 
   const setNextStep = () => {
     if (activeStep < stepList.length) {
@@ -55,7 +58,6 @@ const RecipeEditScreen = () => {
     setIsValid(isAnyInValid);
   };
   const submitSteps = async () => {
-    console.log('Submit steps');
     const payload = {recipe: {
       name: newRecipe.name,
       difficulty: newRecipe.difficulty,
@@ -65,28 +67,33 @@ const RecipeEditScreen = () => {
       priv: newRecipe.priv,
     },
     ingrs: newRecipe.ingredients.map((elem) => {
-      return {id_ingredient: 1, amount: elem.amount, id_metric: elem.unit};
+      return {id_ingredient: elem.id, amount: elem.amount, id_metric: elem.unit};
     }),
     steps: newRecipe.steps.map((elem, index)=> {
       return {step_number: index, stepdesc: elem};
-    })};
-    console.log(payload)
-    // await Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe`, payload).then( (response) => {
-    //   console.log('AddRecipeResponse:');
-    //   console.log(response);
-    //   if (response.success) {
-    //     console.log(response.text);
-    //     fileUpload(newRecipe.images, response.text);
-    //   }
-    // });
+    }),
+    tags: newRecipe.tags};
+
+    await Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe`, payload).then( (response) => {
+      if (response.success) {
+        fileUpload(newRecipe.images, response.text);
+      } else {
+        setError({display: true, text: 'Error Adding Recipe'});
+      }
+    });
   };
 
   const fileUpload = (images, id) => {
+    // TO DO: dodawanie wszystkich zdjęc
     const formData = new FormData();
     formData.append('file', images[0]);
     formData.append('id_recipe', id);
     Api.postImage(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/images`, formData).then((response) => {
-      console.log(response);
+      if (response.success) {
+        navigate('/myrecipes');
+      } else {
+        setError({display: true, text: 'Uploading photo error'});
+      }
     });
   };
 
@@ -99,6 +106,9 @@ const RecipeEditScreen = () => {
 
   return (
     <BaseLayout>
+      {error.display && (
+        <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
+      )}
       <Card className='create-recipe-card'>
         <Stepper
           activeStep={activeStep}>

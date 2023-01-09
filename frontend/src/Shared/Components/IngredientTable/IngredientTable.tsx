@@ -18,6 +18,8 @@ import {IngredientDTO} from '../../DTOs/IngredientDTO';
 import {Button, Grid, TextField} from '@mui/material';
 import CustomAutocomplete from '../../Components/Autocomplete/CustomAutocomplete';
 import {MetricsDTO} from '../../DTOs/MetricsDTO';
+import {Api} from '../../../Utils/Api';
+import {TableIngredientDTO} from '../../DTOs/TableIngredientDTO';
 
 type IngredientTableProps = {
   data: Array<IngredientDTO>;
@@ -34,6 +36,7 @@ const IngredientTable = (props: IngredientTableProps) => {
   const [amount, setAmount] = useState(0);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [units, setUnits] = useState<MetricsDTO[]>([]);
+  const [allIngredients, setAllIngredients] = useState<TableIngredientDTO[]>([]);
 
   useEffect(() => {
     if (!!testData) {
@@ -59,21 +62,25 @@ const IngredientTable = (props: IngredientTableProps) => {
   };
 
   const AddIngredientToList = () => {
-    let i = testData.length;
     const existedIndex = testData.findIndex((elem) => elem.name == ingredientName);
     if (existedIndex !== -1) {
       testData[existedIndex].amount = amount;
       testData[existedIndex].unit = unit;
     } else if (!!ingredientName) {
-      const ingrid: IngredientDTO = {
-        id: i++,
-        amount: amount,
-        unit: unit,
-        name: ingredientName,
-        calories: 210,
-        allergen: false,
-      };
-      setTestData([...testData, ingrid]);
+      const ingredient = allIngredients.find((elem) => elem.name ==ingredientName);
+      // TO DO: Liczenie kalorii
+      // TO DO: Określenie czy jest to składnik alergiczny
+      if (!!ingredient) {
+        const ingrid: IngredientDTO = {
+          id: ingredient.id_ingredient,
+          amount: amount,
+          unit: unit,
+          name: ingredient.name,
+          calories: 210,
+          allergen: false,
+        };
+        setTestData([...testData, ingrid]);
+      }
     }
 
     setIngredientName('');
@@ -89,10 +96,21 @@ const IngredientTable = (props: IngredientTableProps) => {
     setIsEdit(!isEdit);
   };
 
+  const fetchData = async () => {
+    const data = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/ingredients/all`);
+    if (data.success) {
+      setAllIngredients(data.text);
+    }
+  };
+
   useEffect(() => {
     const metrics = localStorage.getItem('metrics');
     if (!!metrics) {
       setUnits(JSON.parse(metrics));
+    }
+    if (props.isEditable) {
+      console.log(`IS EDITABLE: ${props.isEditable}`);
+      fetchData();
     }
   }, []);
 
@@ -104,6 +122,7 @@ const IngredientTable = (props: IngredientTableProps) => {
     const unitName = units.find((x) => x.id == ingredient.unit)?.name;
     return unitName ?? ingredient.unit;
   };
+  // TO DO: Zabezpieczenie przed dodaniem pustego
   return (
     <Grid
       container
@@ -158,8 +177,10 @@ const IngredientTable = (props: IngredientTableProps) => {
         <>
           <Grid item xs={12} md={4}>
             <CustomAutocomplete
-              freeSolo
-              options={['banan', 'jogurt', 'chleb']}
+              disablePortal
+              options={allIngredients.map((x) => {
+                return x.name;
+              })}
               value={ingredientName}
               onChange={(event, newValue) => setIngredientName(newValue)}
               filterSelectedOptions
