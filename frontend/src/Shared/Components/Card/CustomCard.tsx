@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 import React, {useState} from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -33,11 +34,6 @@ const CustomCard = ({data}: CustomCardProps) => {
   const addNewComment = () => {
     setCommentIsVisible(!commentIsVisible);
   };
-
-  const steps = [{step_number: 1, stepdesc: 'Umyj warzywka'},
-    {step_number: 2, stepdesc: 'Umyj warzywka'},
-    {step_number: 3, stepdesc: 'Umyj warzywka'}];
-  const tags = ['vege', 'zielone', 'bio'];
   return (
     <Card className="card">
       <CardHeader
@@ -93,7 +89,7 @@ const CustomCard = ({data}: CustomCardProps) => {
           <br/>
           {data.description}
           <br/>
-          {steps?.map((step) => {
+          {data.steps?.map((step) => {
             return (<div key={step.step_number}>
               {step.step_number}. {step.stepdesc}
             </div>);
@@ -107,9 +103,9 @@ const CustomCard = ({data}: CustomCardProps) => {
             direction='row'
             alignItems='center'
             spacing={2}>
-            {tags?.map((tag, index) => {
+            {data.tags?.map((tag) => {
               return (
-                <Chip key={index} label={tag} color='primary' />
+                <Chip key={tag.id_tag} label={tag.tagName} color='primary' />
               );
             })}
           </Stack>

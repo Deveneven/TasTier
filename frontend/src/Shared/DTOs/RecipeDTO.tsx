@@ -1,4 +1,6 @@
 import {IngredientDTO} from '../DTOs/IngredientDTO';
+import { StepDTO } from './StepDTO';
+import { TagDTO } from './TagDTO';
 export interface RecipeDTO {
   id: number,
   name: string,
@@ -13,4 +15,6 @@ export interface RecipeDTO {
   priv: boolean,
   ingredients: Array<IngredientDTO>,
   avatar: string,
+  tags: Array<TagDTO>,
+  steps: Array<StepDTO>
 }

@@ -21,7 +21,7 @@ const TextMaskCustom = (props: MaskProps) => {
     <MaskedInput
       {...other}
       ref={inputRef}
-      mask={[/[1-9]/, /[1-9]/, ':', /[1-9]/, /[1-9]/]}
+      mask={[/[0-9]/, /[0-9]/, ':', /[0-9]/, /[0-9]/]}
       placeholderChar={'\u2000'}
       showMask
     />
@@ -32,16 +32,24 @@ const AddBasicInformation = (props: any) => {
   const [value, setValue] = useState<string[]>([]);
   const [cuisineType, setCuisineType] = useState<CousineDTO[]>([]);
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [defaultTags, setDefautTags] = useState<string[]>([]);
 
   const setTags = (event, newValue) => {
     setValue(newValue);
-    // props.onChange({type: 'text', name: 'tags', value: newValue});
+    props.onChange({name: 'tags', value: newValue});
   };
 
   const fetchData = async () => {
     const data = await Api.get(`${process.env.REACT_APP_DB_API}/diet/cousine/get`);
     if (data.success) {
       setCuisineType(data.text);
+    }
+    const tags = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/tags`);
+    if (tags.success) {
+      const defTags = tags.text.map((x) => {
+        return x.tagName;
+      });
+      setDefautTags(defTags);
     }
   };
 
@@ -132,7 +140,7 @@ const AddBasicInformation = (props: any) => {
           required
           multiple
           freeSolo
-          options={['miesne', 'wege', 'gluten']}
+          options={defaultTags}
           value={value}
           onChange={setTags}
           filterSelectedOptions

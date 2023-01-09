@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 import {Button, Card, Step, StepLabel, Stepper} from '@mui/material';
 import React, {useState} from 'react';
 import './RecipeEditScreen.scss';
@@ -22,6 +23,7 @@ const RecipeEditScreen = () => {
     ingredients: [],
     steps: [],
     images: [],
+    tags: [],
   });
   const results: Array<{name: string, isValid: boolean}> = [];
 
@@ -40,8 +42,6 @@ const RecipeEditScreen = () => {
   };
   const onValueChange = (event: any) => {
     const {name, value} = !!event.target ? event.target : event;
-    // console.log('On Walue Change');
-    // console.log(`${value} ${name}`);
     newRecipe[name] = value;
   };
   const checkIsValid = (elem: ({name: string, isValid: boolean})) => {
@@ -70,14 +70,15 @@ const RecipeEditScreen = () => {
     steps: newRecipe.steps.map((elem, index)=> {
       return {step_number: index, stepdesc: elem};
     })};
-    await Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe`, payload).then( (response) => {
-      console.log('AddRecipeResponse:');
-      console.log(response);
-      if (response.success) {
-        console.log(response.text);
-        fileUpload(newRecipe.images, response.text);
-      }
-    });
+    console.log(payload)
+    // await Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe`, payload).then( (response) => {
+    //   console.log('AddRecipeResponse:');
+    //   console.log(response);
+    //   if (response.success) {
+    //     console.log(response.text);
+    //     fileUpload(newRecipe.images, response.text);
+    //   }
+    // });
   };
 
   const fileUpload = (images, id) => {

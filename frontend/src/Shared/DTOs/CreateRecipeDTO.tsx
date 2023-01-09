@@ -10,4 +10,5 @@ export interface CreateRecipeDTO {
   ingredients: Array<IngredientDTO>,
   steps: Array<StepDTO>,
   images: Array<any>,
+  tags: Array<string>
 }
