@@ -1,6 +1,20 @@
-.MuiSvgIcon-root{
-  color: var(--card-icon-color)
-}
- .MuiGrid-item {
-	max-width: 100% !important;
+.card {
+  width: 100vh;
+  .recipe-rating {
+    float: right;
   }
+  .expanded-content {
+    line-height: 20px;
+    margin-left: 2vh;
+    margin-right: 2vh;
+    margin-bottom: 2vh;
+    .cooking-time {
+      display: flex;
+      float: right;
+      align-items: center;
+    }
+  }
+  .MuiRating-root {
+    background-color: red($color: #000000);
+  }
+}
