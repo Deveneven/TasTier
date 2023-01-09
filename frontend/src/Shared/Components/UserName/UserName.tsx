@@ -1,4 +1,4 @@
-import {Avatar, Typography} from '@mui/material';
+import {Typography} from '@mui/material';
 import React, {useContext} from 'react';
 import UserContext from '../../../Contexts/UserContext';
 
@@ -19,7 +19,9 @@ const UserName = (props:any) => {
       </Typography>)
     ;
   }
-  return (<Avatar sx={{width: 32, height: 32}}> U </Avatar>);
+  return ( <Typography component="h4" variant="h6" sx={{wordWrap: ' break-word', textAlign: 'left'}} {...props} >
+  ...loading
+  </Typography>);
 };
 
 export default UserName;
