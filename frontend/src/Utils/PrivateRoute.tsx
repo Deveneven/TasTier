@@ -5,7 +5,8 @@ interface Props {
   outlet: JSX.Element;
 };
 const PrivateRoute = (props: Props) => {
-  const isAuthenticated = false;
+  // tu sparwdzenie czy jestesmy zalogowani
+  const isAuthenticated = true;
   if (isAuthenticated) {
     return props.outlet;
   } else {

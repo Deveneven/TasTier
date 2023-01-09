@@ -1,12 +1,14 @@
 import {Grid, ImageList, ImageListItem} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 
-const AddPhoto = () => {
+const AddPhoto = (props: any) => {
   const [image, setImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<string[]>([]);
+  const [filesToUpload, setFilesToUpload] = useState([]);
 
   const handleSetImage = (event) => {
     const files = event.target.files;
+    setFilesToUpload(event.target.files);
     [...files].forEach((item) => {
       const reader = new FileReader();
       reader.readAsDataURL(item);
@@ -20,9 +22,8 @@ const AddPhoto = () => {
   };
   useEffect(() => {
     if (!!image) {
-      console.log('Dodano fote');
-      console.log(selectedFile);
       setSelectedFile([...selectedFile, image]);
+      props.onChange({name: 'images', value: filesToUpload});
     };
   }, [image]);
   return (

@@ -18,5 +18,6 @@ namespace TasTierAPI.Models
         public int Rating { get; set; }
         public bool Priv { get; set; }
         public List<IngriedientInRecipe> Ingredients { get; set; }
+        public string Avatar { get; set; }
     }
 }
