@@ -90,8 +90,8 @@ const CustomCard = ({data}: CustomCardProps) => {
           {data.description}
           <br/>
           {data.steps?.map((step) => {
-            return (<div key={step.step_number}>
-              {step.step_number}. {step.stepdesc}
+            return (<div key={step.step_Number}>
+              {step.step_Number}. {step.stepDesc}
             </div>);
           })}
           <br/>

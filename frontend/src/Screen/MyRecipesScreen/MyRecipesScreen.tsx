@@ -9,6 +9,7 @@ const MyRecipesScreen = () => {
   const fetchData = async () => {
     const data = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/user/recipes`);
     if (data.success) {
+      // TO DO: Sortowanie po dacie
       setDataAll(data.text);
     }
   };

@@ -1,4 +1,4 @@
 export interface StepDTO {
-  step_number: number,
-  stepdesc: string,
+  step_Number: number,
+  stepDesc: string,
 }
