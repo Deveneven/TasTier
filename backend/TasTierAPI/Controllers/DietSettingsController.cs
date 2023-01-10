@@ -11,7 +11,7 @@ namespace TasTierAPI.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("apii/diet")]
+    [Route("api/diet")]
     public class DietSettingsController : ControllerBase
 	{
         private IDietSettingsService _dbService;
@@ -41,11 +41,11 @@ namespace TasTierAPI.Controllers
         }
         [HttpPost]
         [Route("diet/set")]
-        public IActionResult SetDiet([FromBody] int diet_id)
+        public IActionResult SetDiet([FromBody] string diet)
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             var id = getIDFromToken(jwt);
-            bool success = _dbService.SetDiet(diet_id, int.Parse(id.ToString()));
+            bool success = _dbService.SetDiet(diet, int.Parse(id.ToString()));
             if (success) return Ok("Successfuly set current diet");
             return BadRequest("Could not set diet");
         }
@@ -59,7 +59,7 @@ namespace TasTierAPI.Controllers
 
         [HttpPost]
         [Route("cousine/set")]
-        public IActionResult SetCousines([FromBody] List<int> cousines) 
+        public IActionResult SetCousines([FromBody] List<string> cousines) 
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             int id = getIDFromToken(jwt);
@@ -67,7 +67,7 @@ namespace TasTierAPI.Controllers
                 
                 if (cousines.Count() > 0)
                 {
-                    foreach(int x in cousines){
+                    foreach(string x in cousines){
                         bool tmp_success = false;
                         tmp_success = _dbService.SetCousine(x, id);
                         if (!tmp_success) return BadRequest("Something went wrong <221L0>");
@@ -94,6 +94,107 @@ namespace TasTierAPI.Controllers
 
             return Ok(_dbService.GetUserDiet(id));
         }
+        [HttpGet]
+        [Route("allergens/get")]
+        public IActionResult GetAllAllergens()
+        {
+            return Ok(_dbService.GetAllAllergens());
+        }
+        [HttpGet]
+        [Route("allergens/user")]
+        public IActionResult GetUserAllergens()
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            return Ok(_dbService.GetUserAllergens(id));
+        }
+        [HttpDelete]
+        [Route("allergens/user/delete")]
+        public IActionResult DeleteUserAllergen([FromBody]string allergen)
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            bool success = _dbService.DeleteUserAllergen(allergen, id);
+            if (success) return Ok("Successfuly deleted allergen from user's list");
+            else return BadRequest("Something went wrong");
+        }
+        [HttpPost]
+        [Route("allergens/user/add")]
+        public IActionResult AddUserAllergen([FromBody] string allergen)
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            bool success = _dbService.AddUserAllergen(allergen, id);
+            if (success) return Ok("Successfuly added allergen to user's list");
+            else return BadRequest("Something went wrong");
+        }
+        [HttpGet]
+        [Route("ingredients/favorite")]
+        public IActionResult GetFavIngredients()
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            return Ok(_dbService.GetUserFavIngredients(id));
+        }
+        [HttpGet]
+        [Route("ingredients/disliked")]
+        public IActionResult GetDislikedIngredients()
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            return Ok(_dbService.GetUserDislikedIngredients(id));
+        }
+        [HttpDelete]
+        [Route("ingredients/favorite/delete")]
+        public IActionResult DeleteUserFavIngredients([FromBody]string ingredient)
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            bool success = _dbService.DeleteUserFavIngredient(ingredient, id);
+            if (success) return Ok("Successfuly deleted ingredient from user's list");
+            else return BadRequest("Something went wrong");
+        }
+        [HttpDelete]
+        [Route("ingredients/disliked/delete")]
+        public IActionResult DeleteUserDislikedIngredients([FromBody] string ingredient)
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            bool success = _dbService.DeleteUserDislikedIngredient(ingredient, id);
+            if (success) return Ok("Successfuly deleted ingredient from user's list");
+            else return BadRequest("Something went wrong");
+        }
+        [HttpPost]
+        [Route("ingredients/favorite/add")]
+        public IActionResult AddUserFavIngredients([FromBody] string ingredient)
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            bool success = _dbService.AddUserFavIngredient(ingredient, id);
+            if (success) return Ok("Successfuly added ingredient to user's list");
+            else return BadRequest("Something went wrong");
+        }
+        [HttpPost]
+        [Route("ingredients/disliked/add")]
+        public IActionResult AddUserDislikedIngredients([FromBody] string ingredient)
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            int id = getIDFromToken(jwt);
+
+            bool success = _dbService.AddUserDislikedIngredient(ingredient, id);
+            if (success) return Ok("Successfuly added ingredient to user's list");
+            else return BadRequest("Something went wrong");
+        }
+
+
     }
 }
 

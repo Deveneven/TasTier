@@ -178,7 +178,6 @@ namespace TasTierAPI.Services
 
                 ms.Close();
             }
-
             return uri;
         }
 

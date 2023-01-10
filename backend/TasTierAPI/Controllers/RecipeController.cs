@@ -11,7 +11,7 @@ using TasTierAPI.Services;
 namespace TasTierAPI.Controllers
 {
     [ApiController]
-    [Route("apii/recipes")]
+    [Route("api/recipes")]
     public class RecipeController:ControllerBase
     {
         private IRecipeService _dbService;
@@ -125,6 +125,12 @@ namespace TasTierAPI.Controllers
                 return BadRequest("No images were attached");
             }
             return BadRequest("Request doesnt have form content");
+        }
+        [HttpGet]
+        [Route("get/ingredients/all")]
+        public IActionResult GetAllIngredients()
+        {
+            return Ok(_dbService.GetAllIngredients());
         }
     }
 }

@@ -19,7 +19,7 @@ namespace TasTierAPI.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("apii/settings")]
+    [Route("api/settings")]
     public class AccountSetttingsController : ControllerBase
     {
         private IAccountSettingService _dbService;
@@ -120,7 +120,7 @@ namespace TasTierAPI.Controllers
                         AvatarChangeDTO avatarChangeDTO = new AvatarChangeDTO();
                         avatarChangeDTO.Message = "Successfuly changed avatar";
                         avatarChangeDTO.AvatarURL = url;
-                        return Ok(avatarChangeDTO.Message + " $ " + avatarChangeDTO.AvatarURL);
+                        return Ok(avatarChangeDTO);
                     }
                     return BadRequest("Something went wrong");
                 }

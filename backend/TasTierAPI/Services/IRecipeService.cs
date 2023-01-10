@@ -33,6 +33,7 @@ namespace TasTierAPI.Services
         public IEnumerable<Tag> GetAllTags();
         public bool AddNewTag(string tag);
         public int AddTag(string tag);
+        public List<IngredientDTO> GetAllIngredients();
 
     }
 }

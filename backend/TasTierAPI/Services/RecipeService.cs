@@ -49,6 +49,7 @@ namespace TasTierAPI.Services
                 recipe.Steps = GetSteps(recipe.Id);
                 recipe.Tags = GetTags(recipe.Id);
             }
+            connectionToDatabase.Close();
             return recipes;
         }
         public IEnumerable<Recipe> GetUserRecipesDTO(int id_user)
@@ -64,6 +65,7 @@ namespace TasTierAPI.Services
                 recipe.Steps = GetSteps(recipe.Id);
                 recipe.Tags = GetTags(recipe.Id);
             }
+            connectionToDatabase.Close();
             return recipes;
         }
 
@@ -171,6 +173,7 @@ namespace TasTierAPI.Services
                 };
                 ingredientList.Add(ingredient);
             }
+            connectionToDatabase.Close();
             return ingredientList;
 
         }
@@ -192,6 +195,7 @@ namespace TasTierAPI.Services
                 };
                 steps.Add(step);
             }
+            connectionToDatabase.Close();
             return steps;
         }
 
@@ -207,6 +211,7 @@ namespace TasTierAPI.Services
             {
                 images.Add(sqlDataReader["url_image"].ToString());
             }
+            connectionToDatabase.Close();
             return images;
         }
         public List<Tag> GetTags (int Id_Recipe)
@@ -227,6 +232,7 @@ namespace TasTierAPI.Services
                     TagName = sqlDataReader["Name"].ToString()
                 });
             }
+            connectionToDatabase.Close();
             return tags;
         }
         public IEnumerable<Tag> GetAllTags()
@@ -244,6 +250,7 @@ namespace TasTierAPI.Services
                     TagName = sqlDataReader["Name"].ToString()
                 });
             }
+            connectionToDatabase.Close();
             return tags;
         }
         public List<string> UploadRecipeImages(IFormFileCollection images)
@@ -388,9 +395,12 @@ namespace TasTierAPI.Services
                 SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
                 while (sqlDataReader.Read())
                 {
-                    if (int.Parse(sqlDataReader["Recipe_Id_Recipe"].ToString()).Equals(id_recipe)) return true;
+                    if (int.Parse(sqlDataReader["Recipe_Id_Recipe"].ToString()).Equals(id_recipe)) {
+                        connectionToDatabase.Close();
+                        return true; }
                 }
             }
+            connectionToDatabase.Close();
             return false;
         }
         public bool AddRecipeTags(List<string> tags, int id_recipe)
@@ -487,6 +497,26 @@ namespace TasTierAPI.Services
             }
             connectionToDatabase.Close();
             return metricDefinitions;
+        }
+        public List<IngredientDTO> GetAllIngredients()
+        {
+            List<IngredientDTO> ingredientDTOs = new List<IngredientDTO>();
+            MakeConnection("SELECT Id_Ingredient,Name FROM [dbo].[Ingredient];");
+            connectionToDatabase.Open();
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            while (sqlDataReader.Read())
+            {
+                IngredientDTO ingredient = new IngredientDTO()
+                {
+                    id_ingredient = int.Parse(sqlDataReader["Id_Ingredient"].ToString()),
+                    Name = sqlDataReader["Name"].ToString(),
+
+                };
+                ingredientDTOs.Add(ingredient);
+            }
+            connectionToDatabase.Close();
+            return ingredientDTOs;
         }
     }
 }
