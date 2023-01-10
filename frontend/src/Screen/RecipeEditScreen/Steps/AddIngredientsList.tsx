@@ -1,14 +1,10 @@
 import {Grid} from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import IngredientTable from '../../../Shared/Components/IngredientTable/IngredientTable';
 import {IngredientDTO} from '../../../Shared/DTOs/IngredientDTO';
 
 const AddIngredientsList = (props: any) => {
   const [ingredients] = useState<IngredientDTO[]>([]);
-
-  useEffect(()=>{
-    console.log('Use effect ingredient list');
-  }, []);
 
   return (
     <Grid
@@ -17,7 +13,8 @@ const AddIngredientsList = (props: any) => {
       <Grid item xs={12} md={12}>
         <IngredientTable
           isEditable={true}
-          data={ingredients}/>
+          data={ingredients}
+          onChange={props.onChange}/>
       </Grid>
     </Grid>
   );

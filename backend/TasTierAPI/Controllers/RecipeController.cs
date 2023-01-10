@@ -8,20 +8,31 @@ namespace TasTierAPI.Controllers
     [Route("api/recipes")]
     public class RecipeController:ControllerBase
     {
-        private IDatabaseService _dbService;
+        private IRecipeService _dbService;
 
-        public RecipeController (IDatabaseService dbService)
+        public RecipeController (IRecipeService dbService)
         {
             _dbService = dbService;
         }
 
-        [Route("get")]
+        [Route("get/recipes")]
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_dbService.GetRecipes());
+            return Ok(_dbService.GetRecipesDTO());
         }
-
+        [Route("get/ingredients")]
+        [HttpGet]
+        public IActionResult GetIngredientList(int Id_Recipe)
+        {
+            return Ok(_dbService.GetIngriedientList(Id_Recipe));
+        }
+        [Route("get/steps")]
+        [HttpGet]
+        public IActionResult GetSteps(int Id_Recipe)
+        {
+            return Ok(_dbService.GetSteps(Id_Recipe));
+        }
 
     }
 }

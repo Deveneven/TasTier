@@ -1,8 +1,8 @@
 export interface IngredientDTO {
-  Id: number,
-  Name: string,
-  Calories: number,
-  Allergen: boolean,
-  Amount: number,
-  Unit: string
+  id: number,
+  name: string,
+  calories: number,
+  allergen: boolean,
+  amount: number,
+  unit: string|number
 }

@@ -16,6 +16,8 @@ import RecipeEditScreen from './Screen/RecipeEditScreen/RecipeEditScreen';
 import SettingsScreen from './Screen/SettingsScreen/SettingsScreen';
 import DietSettingsScreen from './Screen/DietSettingsScreen/DietSettingsScreen';
 import {UserProvider} from './Contexts/UserContext';
+import PrivateRoute from './Utils/PrivateRoute';
+import MyRecipesScreen from './Screen/MyRecipesScreen/MyRecipesScreen';
 function App() {
   // chwilowy useState, przy po��czeniu api zast�pi si�, a edycja listy b�dzie po id listy
   const [lists, setLists] = useState<ShoppingListDTO[]>([
@@ -42,36 +44,36 @@ function App() {
       ],
       IngredientsList: [
         {
-          Id: 0,
-          Name: 'Avocado',
-          Calories: 150,
-          Allergen: false,
-          Amount: 1,
-          Unit: 'piece',
+          id: 0,
+          name: 'Avocado',
+          calories: 150,
+          allergen: false,
+          amount: 1,
+          unit: 2,
         },
         {
-          Id: 1,
-          Name: 'Apple',
-          Calories: 150,
-          Allergen: false,
-          Amount: 1,
-          Unit: 'piece',
+          id: 1,
+          name: 'Apple',
+          calories: 150,
+          allergen: false,
+          amount: 1,
+          unit: 2,
         },
         {
-          Id: 2,
-          Name: 'Water',
-          Calories: 0,
-          Allergen: false,
-          Amount: 100,
-          Unit: 'ml',
+          id: 2,
+          name: 'Water',
+          calories: 0,
+          allergen: false,
+          amount: 100,
+          unit: 2,
         },
         {
-          Id: 3,
-          Name: 'Peanut',
-          Calories: 250,
-          Allergen: true,
-          Amount: 20,
-          Unit: 'grams',
+          id: 3,
+          name: 'Peanut',
+          calories: 250,
+          allergen: true,
+          amount: 20,
+          unit: 1,
         },
       ],
     },
@@ -96,8 +98,10 @@ function App() {
               element={<ListScreen lists={lists} />}
             />
             <Route path="/recipe/0" element={<RecipeEditScreen/>} />
+            <Route path="/recipe/:id" element={<PrivateRoute outlet={<RecipeEditScreen />} />} />
             <Route path="/account/settings" element={<SettingsScreen/>} />
             <Route path="/diets" element={<DietSettingsScreen/>} />
+            <Route path="/myrecipes" element={<MyRecipesScreen/>} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
