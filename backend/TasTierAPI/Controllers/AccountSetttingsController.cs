@@ -114,10 +114,13 @@ namespace TasTierAPI.Controllers
                 if (Request.Form.Files.Count > 0)
                 {
                     IFormFile file = Request.Form.Files.FirstOrDefault();
-                    bool success = _dbService.SetAvatar(file, id);
-                    if (success)
+                    string url = _dbService.SetAvatar(file, id);
+                    if (!url.Equals("Error"))
                     {
-                        return Ok("Successfuly changed avatar");
+                        AvatarChangeDTO avatarChangeDTO = new AvatarChangeDTO();
+                        avatarChangeDTO.Message = "Successfuly changed avatar";
+                        avatarChangeDTO.AvatarURL = url;
+                        return Ok(avatarChangeDTO);
                     }
                     return BadRequest("Something went wrong");
                 }

@@ -14,7 +14,7 @@ namespace TasTierAPI.Services
         public bool ChangeEmail(string email, int id);
         public string ChangePassword(string password, int id_user);
         public LoginAuthDTO GetUserById(int id);
-        public bool SetAvatar(IFormFile file, int user_id);
+        public string SetAvatar(IFormFile file, int user_id);
         public string UploadBinary(IFormFile file);
     }
 }
