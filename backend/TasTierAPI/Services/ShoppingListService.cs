@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -126,6 +127,171 @@ namespace TasTierAPI.Services
             }
             connectionToDatabase.Close();
             return list;
+        }
+        public int CreateNewListDefinition(string name)
+        {
+            int id_list = 0;
+            MakeConnection("INSERT INTO [dbo].[ShoppingList] OUTPUT inserted.Id_ShoppingList VALUES (@name);");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@name", name);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                id_list = int.Parse(sqlDataReader["Id_ShoppingList"].ToString());
+            }
+            connectionToDatabase.Close();
+            return id_list;
+        }
+        public bool CreateNewShoppingList(string name, int id_user)
+        {
+            int id_shoppingList = CreateNewListDefinition(name);
+            if (id_shoppingList > 0)
+            {
+                MakeConnection("INSERT INTO [dbo].[ShoppingList_User] OUTPUT inserted.Id_User VALUES (@id_shopping,@id_user);");
+                connectionToDatabase.Open();
+                commandsToDatabase.Parameters.AddWithValue("@id_shopping", id_shoppingList);
+                commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+                SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                   if(int.Parse(sqlDataReader["Id_ShoppingList"].ToString()) == id_user) {
+                        connectionToDatabase.Close();
+                        return true; }
+                }
+            }
+            connectionToDatabase.Close();
+            return false;
+        }
+        public int GetIngredientId(string ingredient)
+        {
+            int id = 0;
+            MakeConnection("SELECT TOP 1 Id_Ingredient FROM [dbo].[Ingredient] WHERE Name = @name");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@name", ingredient);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                id = int.Parse(sqlDataReader["Id_Ingredient"].ToString());
+            }
+            connectionToDatabase.Close();
+            return id;
+        }
+
+        public bool AddIngredientToList(string ingredient, int id_list, int id_user,int amount)
+        {
+            int id_ingr = GetIngredientId(ingredient);
+            if (id_ingr > 0)
+            {
+                MakeConnection("exec [dbo].AddIngrToList @id_ingr = @ingr, @id_list = @list, @id_user = @user, @amount = @amount");
+                connectionToDatabase.Open();
+                commandsToDatabase.Parameters.AddWithValue("@ingr", id_ingr);
+                commandsToDatabase.Parameters.AddWithValue("@list", id_list);
+                commandsToDatabase.Parameters.AddWithValue("@user", id_user);
+                commandsToDatabase.Parameters.AddWithValue("@amount", amount);
+                SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    if (int.Parse(sqlDataReader["Ingredient_Id_Ingredient"].ToString()) > 0)
+                    {
+                        connectionToDatabase.Close();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public int AddFriendToList(string email, int id_list, int id_user)
+        {
+            int id_friend = GetIdFromEmail(email);
+            int result = 0;
+            if (id_friend > 0)
+            {
+                MakeConnection("exec AddFriendToList @id_friend = @friend, @id_list = @list, @id_creator = @user");
+                connectionToDatabase.Open();
+                commandsToDatabase.Parameters.AddWithValue("@friend", id_friend);
+                commandsToDatabase.Parameters.AddWithValue("@list", id_list);
+                commandsToDatabase.Parameters.AddWithValue("@user", id_user);
+                SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    result = int.Parse(sqlDataReader["Id_User"].ToString());
+                }
+            }
+            
+            connectionToDatabase.Close();
+            return result; //-1 -> exists, 0 -> error or no right to list, else -> success
+        }
+        public int GetIdFromEmail (string email)
+        {
+            int id = 0;
+            MakeConnection("SELECT Id_User FROM [dbo].[User] WHERE Email =@email");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@email", email);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                id = int.Parse(sqlDataReader["Id_User"].ToString());
+            }
+            connectionToDatabase.Close();
+            return id;
+        }
+        public bool ChangeAmountOfIngredient (string ingredient, int shoppingList, int user,int amount)
+        {
+            int id_ingredient = GetIngredientId(ingredient);
+            if (id_ingredient > 0)
+            {
+                MakeConnection("exec UpdateAmount @id_ingr = @ingr, @id_list = @list, @id_creator = @user,@amount = @amount");
+                connectionToDatabase.Open();
+                commandsToDatabase.Parameters.AddWithValue("@ingr", id_ingredient);
+                commandsToDatabase.Parameters.AddWithValue("@list", shoppingList);
+                commandsToDatabase.Parameters.AddWithValue("@user", user);
+                commandsToDatabase.Parameters.AddWithValue("@amount", amount);
+                SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    if (int.Parse(sqlDataReader["Ingredient_Id_Ingredient"].ToString()) > 0)
+                    {
+                        connectionToDatabase.Close();
+                        return true;
+                    }
+                }
+            }
+            connectionToDatabase.Close();
+            return false;
+        }
+        public bool DeleteIngredientFromShoppingList(string ingredient, int shoppingList, int user)
+        {
+            int id_ingredient = GetIngredientId(ingredient);
+            if (id_ingredient > 0)
+            {
+                MakeConnection("exec [dbo].DeleteIngredient @id_ingr = @ingr, @id_list = @list, @id_creator = @user");
+                commandsToDatabase.Parameters.AddWithValue("@ingr", id_ingredient);
+                commandsToDatabase.Parameters.AddWithValue("@list", shoppingList);
+                commandsToDatabase.Parameters.AddWithValue("@user", user);
+                SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    if (int.Parse(sqlDataReader["Ingredient_Id_Ingredient"].ToString()) > 0) return true;
+                }
+            }
+            return false;
+        }
+        public bool DeleteFriendFromShoppingList(string email, int shoppingList, int user)
+        {
+            int id_friend = GetIdFromEmail(email);
+            if (id_friend > 0)
+            {
+                MakeConnection("exec [dbo].DeleteFriend @id_friend = @friend, @id_list = @list, @id_creator = @user");
+                commandsToDatabase.Parameters.AddWithValue("@friend", id_friend);
+                commandsToDatabase.Parameters.AddWithValue("@list", shoppingList);
+                commandsToDatabase.Parameters.AddWithValue("@user", user);
+                SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+                while (sqlDataReader.Read())
+                {
+                    if (int.Parse(sqlDataReader["Id_User"].ToString()) > 0) return true;
+                }
+            }
+            return false;
         }
     }
 }
