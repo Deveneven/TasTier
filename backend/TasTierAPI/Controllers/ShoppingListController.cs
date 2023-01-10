@@ -29,8 +29,9 @@ namespace TasTierAPI.Controllers
             return int.Parse(id);
         }
 
-        [Route("get/userlists")]
+
         [HttpGet]
+        [Route("get/userlists")]
         public IActionResult Get()
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
@@ -42,7 +43,7 @@ namespace TasTierAPI.Controllers
         [HttpGet]
         public IActionResult GetShoppingList(int Id_ShoppingList)
         {
-            return Ok(GetShoppingList(Id_ShoppingList));
+            return Ok(_dbService.GetUserList(Id_ShoppingList));
         }
 
     }
