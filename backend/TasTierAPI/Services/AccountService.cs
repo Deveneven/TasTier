@@ -42,6 +42,7 @@ namespace TasTierAPI.Services
                     salt = sqlDataReader["salt"].ToString()
                 };
             }
+            connectionToDatabase.Close();
             return loginAuth;
         }
 

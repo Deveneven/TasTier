@@ -178,13 +178,11 @@ namespace TasTierAPI.Services
 
                 ms.Close();
             }
-
             return uri;
         }
 
-        public bool SetAvatar(IFormFile file, int user_id)
+        public string SetAvatar(IFormFile file, int user_id)
         {
-            bool success = false;
             string avatarURI = null;
             avatarURI = UploadBinary(file);
             if (!avatarURI.Equals(null))
@@ -200,11 +198,11 @@ namespace TasTierAPI.Services
                 while (sqlDataReader.Read())
                 {
                     int tmp = int.Parse(sqlDataReader["Id_User"].ToString());
-                    if (tmp > 0) success = true;
+                    if (tmp > 0) return avatarURI;
                 }
                 connectionToDatabase.Close();
             }
-            return success;
+            return "Error";
         }
     }
 }

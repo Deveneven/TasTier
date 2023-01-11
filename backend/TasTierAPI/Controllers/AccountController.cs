@@ -71,7 +71,7 @@ namespace TasTierAPI.Controllers
                         jwt
                     );
                 }
-                else { return Unauthorized("\tWrong login or password"); }
+                else { return Unauthorized("Wrong login or password"); }
             }
         }
         [AllowAnonymous]
