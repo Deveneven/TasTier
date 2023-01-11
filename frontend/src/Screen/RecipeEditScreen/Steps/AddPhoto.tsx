@@ -1,11 +1,12 @@
-import {Grid, ImageList, ImageListItem} from '@mui/material';
+import {Button, Grid, IconButton, ImageList, ImageListItem, ImageListItemBar} from '@mui/material';
 import React, {useEffect, useState} from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const AddPhoto = (props: any) => {
   const [image, setImage] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<string[]>([]);
   const [filesToUpload, setFilesToUpload] = useState([]);
-  // TO DO: Usuwanie zdjęcia
+
   const handleSetImage = (event) => {
     const files = event.target.files;
     setFilesToUpload(event.target.files);
@@ -20,34 +21,57 @@ const AddPhoto = (props: any) => {
       };
     });
   };
+
   useEffect(() => {
     if (!!image) {
       setSelectedFile([...selectedFile, image]);
       props.onChange({name: 'images', value: filesToUpload});
     };
   }, [image]);
+
+  const deletePhoto = (index) => {
+    console.log(index);
+    if (index !== -1) {
+      const updatedList = selectedFile;
+      updatedList.splice(index, 1);
+      setSelectedFile((prevLists) => [...updatedList]);
+    }
+  };
   return (
     <Grid
       container
       spacing={4}>
       <Grid item md={12} xs={12}>
-        <input
-          multiple
-          type="file"
-          name="image"
-          placeholder='Image'
-          onChange={(e) => handleSetImage(e)}/>
+        <span>
+          Add some photos of your dish : &nbsp;
+        </span>
+        <Button
+          variant='contained'
+          component='label'>
+          Choose a file
+          <input
+            multiple
+            hidden
+            accept="image/*"
+            type="file"
+            onChange={handleSetImage}/>
+        </Button>
       </Grid>
       <Grid item md={12} xs={12}>
-        <ImageList
-          sx={{width: 600, height: 450}}
-          cols={3}
-          rowHeight={164}>
+        <ImageList>
           {selectedFile.map((item, index) => (
             <ImageListItem key={index}>
               <img
                 src={!!item ? item : undefined}
               />
+              <ImageListItemBar
+                actionIcon={
+                  <IconButton
+                    sx={{color: 'white'}}
+                    onClick={() => deletePhoto(index)}>
+                    <DeleteIcon />
+                  </IconButton>
+                }/>
             </ImageListItem>
           ))}
         </ImageList>
