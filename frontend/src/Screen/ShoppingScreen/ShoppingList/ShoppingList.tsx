@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -9,13 +9,29 @@ import EditIcon from '@material-ui/icons/Edit';
 import {IconButton, styled, Button} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import AddListPopOut from './AddListPopOut';
-import {ShoppingListDTO} from '../../../Shared/DTOs/ShoppingListDTO';
+import {Api} from '../../../Utils/Api';
 
-type ShoppingListProps = {
-lists: Array<ShoppingListDTO>;
-setLists;
+const ShoppingList = () => {
+  const [lists, setLists] = useState<any>([]);
+
+  useEffect(() => {
+    Api.get(`${process.env.REACT_APP_DB_API}/shoppinglist/get/userlists`)
+        .then((response) => {
+          console.log(response);
+          if (response.success) {
+            setLists(response.text);
+          }
+        });
+  }, []);
+  const deleteListFromAPI = (id) => {
+    Api.remove(`${process.env.REACT_APP_DB_API}/shoppinglist/delete?id_list=${id}`)
+        .then((response) => {
+          console.log(response);
+          if (response.success) {
+            setLists(lists.filter((item) => item.id !== id));
+          }
+        });
   };
-const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
   const IconContainer = styled(Box)(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
@@ -62,11 +78,11 @@ const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
               direction="row"
               alignItems="center"
               justifyContent="center"
-              key={list.Id}
+              key={list.id}
             >
               <Grid item md={10}>
                 <Typography component="h4" variant="h6" sx={{wordWrap: ' break-word'}}>
-                  {list.Name}
+                  {list.name}
                 </Typography>
               </Grid>
               <Grid item md={2}>
@@ -76,7 +92,7 @@ const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
                     component="span"
                     color="inherit"
                     onClick={() => {
-                      navigate(`./edit/${list.Id}`);
+                      navigate(`./edit/${list.id}`);
                     }}
                   >
                     <EditIcon
@@ -88,8 +104,7 @@ const ShoppingList = ({lists, setLists}:ShoppingListProps) => {
                     component="span"
                     color="inherit"
                     onClick={() => {
-                      console.log(lists.filter((item) => item.Id == list.Id));
-                      setLists(lists.filter((item) => item.Id !== list.Id));
+                      deleteListFromAPI(list.id);
                     }}
                   >
                     <DeleteIcon
