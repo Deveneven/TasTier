@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using TasTierAPI.Models;
 
@@ -317,6 +318,23 @@ namespace TasTierAPI.Services
             }
             connectionToDatabase.Close();
             return result;
+        }
+        public int GetUserListIdByName (string name, int id_user)
+        {
+            int id = 0;
+            MakeConnection("SELECT TOP 1 su.Id_ShoppingList FROM [dbo].[ShoppingList_User] as su " +
+                "INNER JOIN [dbo].[ShoppingList] as s ON s.Id_ShoppingList = su.Id_ShoppingList " +
+                "WHERE su.Id_User = @id_user AND s.Name = @name");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            commandsToDatabase.Parameters.AddWithValue("@name", name);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                id = int.Parse(sqlDataReader["Id_ShoppingList"].ToString());
+            }
+            connectionToDatabase.Close();
+            return id;
         }
     }
 }

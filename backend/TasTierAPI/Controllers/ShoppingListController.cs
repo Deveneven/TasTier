@@ -83,16 +83,20 @@ namespace TasTierAPI.Controllers
         {
             var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
             int id = getIDFromToken(jwt);
-            if (ingredients.ingredients.Count() > 0)
+            int id_list = _dbService.GetUserListIdByName(ingredients.list_name,id);
+            if (id_list > 0)
             {
-                foreach (RecipeToShoppingList ingredient in ingredients.ingredients)
+                if (ingredients.ingredients.Count() > 0)
                 {
-                    bool success = _dbService.AddIngredientToList(ingredient.ingredient, int.Parse(ingredients.id_list), id, ingredient.amount);
-                    if (!success) { return BadRequest("Something went wrong"); }
+                    foreach (IngriedientInRecipe ingredient in ingredients.ingredients)
+                    {
+                        bool success = _dbService.AddIngredientToList(ingredient.Name, id_list, id, int.Parse(ingredient.TotalMass));
+                        if (!success) { return BadRequest("Something went wrong"); }
+                    }
+                    return Ok("Successfuly added ingredients to shopping list");
                 }
-                return Ok("Successfuly added ingredients to shopping list");
-            }
-            return BadRequest("Could not pass the ingredients to shopping list");
+                return BadRequest("Could not pass the ingredients to shopping list");
+            } return Unauthorized("Seems like you do not have access to this list");
         }
         [HttpPost]
         [Route("edit/ingredient")]

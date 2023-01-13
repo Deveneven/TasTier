@@ -5,8 +5,8 @@ namespace TasTierAPI.Models
 {
 	public class RecipeToShoppingListInsert
 	{
-		public string id_list { get; set; }
-		public List<RecipeToShoppingList> ingredients { get; set; }
+		public string list_name { get; set; }
+		public List<IngriedientInRecipe> ingredients { get; set; }
 	}
 }
 

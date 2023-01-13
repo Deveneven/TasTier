@@ -23,6 +23,7 @@ namespace TasTierAPI.Services
         public int DeleteFriendFromShoppingList(string email, int shoppingList, int user);
         public bool DeleteIngredientFromShoppingList(string ingredient, int shoppingList, int user);
         public int DeleteList(int id_list, int id_user);
+        public int GetUserListIdByName(string name, int id_user);
     }
 }
 
