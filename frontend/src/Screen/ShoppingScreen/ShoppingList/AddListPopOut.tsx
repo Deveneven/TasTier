@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -8,12 +8,17 @@ import {useTheme} from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import {Api} from '../../../Utils/Api';
+import CustomizableAlert from '../../../Shared/Components/Alert/CustomizableAlert';
 
 
 const AddListPopOut = ({open, setOpen, setLists, lists} : any) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+  const [alert, setAlert] = useState<{
+display:boolean,
+text: string,
+type: 'warning' | 'success' |'error' | 'info'
+}>({display: false, text: 'something went wrong!', type: 'error'});
   const handleClose = () => {
     setOpen(false);
   };
@@ -28,13 +33,20 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : any) => {
 
   const submitList = () => {
     if (listName.length > 0) {
-      Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add`, listName)
-          .then((response) => {
-            if (response.success) {
-              setLists((prvsLists) => [...prvsLists, {name: listName, id: response.text}]);
-              setOpen(false);
-            }
-          });
+      const names = lists.map(function(item) {
+        return item['name'];
+      });
+      if (!names.includes(listName)) {
+        Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add`, listName)
+            .then((response) => {
+              if (response.success) {
+                setLists((prvsLists) => [...prvsLists, {name: listName, id: response.text}]);
+                setOpen(false);
+              }
+            });
+      } else {
+        setAlert({display: true, text: 'Lists have to be diffrent name', type: 'error'});
+      }
     };
   };
   return (
@@ -68,7 +80,7 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : any) => {
           />
           <Button
             variant="contained"
-            sx={textCenter}
+            sx={[textCenter, {marginBottom: '0.5rem'}]}
             fullWidth
             onClick={submitList}
           >
@@ -83,6 +95,9 @@ const AddListPopOut = ({open, setOpen, setLists, lists} : any) => {
             {' '}
             Close
           </Button>
+          {alert.display && (
+            <CustomizableAlert setOpen={setAlert} message={alert.text} type={alert.type}/>
+          )}
         </DialogContent>
       </Dialog>
     </div>

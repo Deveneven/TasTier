@@ -29,6 +29,13 @@ const ListScreen = () => {
   const [error, setError] = useState({display: false, text: ''});
   const [ingredientError, setIngredientError] = useState({display: false, text: ''});
   const {user} = useContext(UserContext);
+  // const [ingredients] = useState<any>();
+
+  //   const onValueChange = (event: any) => {
+  //     const {name, value} = !!event.target ? event.target : event;
+  //     ingredients[name] = value;
+  //   };
+
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/shoppinglist/get/shoppinglist?Id_ShoppingList=${params.id}`)
         .then((response) => {

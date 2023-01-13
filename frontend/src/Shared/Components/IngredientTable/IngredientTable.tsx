@@ -52,9 +52,12 @@ const IngredientTable = (props: IngredientTableProps) => {
     console.log(props.data);
   }, [testData]);
 
-  const deleteIngredient = (id: number, name: string) => {
+  const deleteIngredient = async (id: number, name: string) => {
     if (!!testData && !!props.deleteIngredientInApi) {
       console.log('przed sprawdzeniem delete w if ingrefient table');
+      const tmp = await props.deleteIngredientInApi(name);
+      console.log(tmp);
+      console.log(typeof tmp);
       setTestData(testData.filter((item) => item.id !== id));
       if (props.deleteIngredientInApi(name)) {
         console.log('zwraca true w table');
