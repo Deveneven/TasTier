@@ -54,6 +54,7 @@ namespace TasTierAPI
             services.AddScoped<IDietSettingsService, DietSettingsService>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IShoppingListService, ShoppingListService>();
             services.AddSwaggerGen();
 
             
