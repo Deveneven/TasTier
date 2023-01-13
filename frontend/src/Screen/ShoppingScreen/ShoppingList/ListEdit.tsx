@@ -69,7 +69,7 @@ const ListScreen = () => {
         });
   };
   const editIngredientInApi = (ingrid) => {
-    Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/edit/ingredient`,
+    return Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/edit/ingredient`,
         {ingredient: ingrid.name, id_list: params.id, amount: ingrid.amount})
         .then((response) => {
           console.log(response);
@@ -77,11 +77,12 @@ const ListScreen = () => {
             return true;
           } else {
             setIngredientError({display: true, text: response.text});
+            return false;
           }
         });
   };
   const deleteIngredientInApi = (ingridName) => {
-    Api.remove(`${process.env.REACT_APP_DB_API}/shoppinglist/delete/ingredient`,
+    return Api.remove(`${process.env.REACT_APP_DB_API}/shoppinglist/delete/ingredient`,
         {ingredient: ingridName, id_list: params.id})
         .then((response) => {
           console.log(response);
@@ -90,11 +91,12 @@ const ListScreen = () => {
             return true;
           } else {
             setIngredientError({display: true, text: response.text});
+            return false;
           }
         });
   };
   const addIngredientInApi = (ingrid) => {
-    Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add/ingredient`,
+    return Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add/ingredient`,
         {ingredient: ingrid.name, id_list: params.id, amount: ingrid.amount})
         .then((response) => {
           console.log(response);
@@ -102,6 +104,7 @@ const ListScreen = () => {
             return true;
           } else {
             setIngredientError({display: true, text: response.text});
+            return false;
           }
         });
   };
