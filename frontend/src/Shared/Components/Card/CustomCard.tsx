@@ -22,7 +22,7 @@ import {CardMedia, Typography} from '@material-ui/core';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SquareIcon from '@mui/icons-material/Square';
 import SquareOutlinedIcon from '@mui/icons-material/SquareOutlined';
-
+import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingListButton';
 type CustomCardProps = {
   data: RecipeDTO;
 };
@@ -50,6 +50,7 @@ const CustomCard = ({data}: CustomCardProps) => {
         <IconButton>
           <ThumbUpAltOutlined />
         </IconButton>
+		<AddToShoppingListButton  data={data.ingredients}/>
       </CardActions>
       <CardContent>
         {data.name}
