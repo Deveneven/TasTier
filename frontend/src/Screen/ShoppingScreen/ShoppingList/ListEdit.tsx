@@ -27,6 +27,7 @@ const ListScreen = () => {
   const [friends, setFriends] = useState<any>();
   const [friendInput, setFriendInput] = useState<any>();
   const [error, setError] = useState({display: false, text: ''});
+  const [ingredientError, setIngredientError] = useState({display: false, text: ''});
   const {user} = useContext(UserContext);
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/shoppinglist/get/shoppinglist?Id_ShoppingList=${params.id}`)
@@ -38,7 +39,6 @@ const ListScreen = () => {
           }
         });
   }, [params.id]);
-
   const addFriend = () => {
     Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add/friend`, {id_list: params.id, email: friendInput})
         .then((response) => {
@@ -58,6 +58,43 @@ const ListScreen = () => {
             setFriends(friends.filter((item) => item.id_user !== response.text));
           } else {
             setError({display: true, text: response.text});
+          }
+        });
+  };
+  const editIngredientInApi = (ingrid) => {
+    Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/edit/ingredient`,
+        {ingredient: ingrid.name, id_list: params.id, amount: ingrid.amount})
+        .then((response) => {
+          console.log(response);
+          if (response.success) {
+            return true;
+          } else {
+            setIngredientError({display: true, text: response.text});
+          }
+        });
+  };
+  const deleteIngredientInApi = (ingridName) => {
+    Api.remove(`${process.env.REACT_APP_DB_API}/shoppinglist/delete/ingredient`,
+        {ingredient: ingridName, id_list: params.id})
+        .then((response) => {
+          console.log(response);
+          if (response.success) {
+            console.log('list edit zwraca true');
+            return true;
+          } else {
+            setIngredientError({display: true, text: response.text});
+          }
+        });
+  };
+  const addIngredientInApi = (ingrid) => {
+    Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add/ingredient`,
+        {ingredient: ingrid.name, id_list: params.id, amount: ingrid.amount})
+        .then((response) => {
+          console.log(response);
+          if (response.success) {
+            return true;
+          } else {
+            setIngredientError({display: true, text: response.text});
           }
         });
   };
@@ -102,11 +139,19 @@ const ListScreen = () => {
             {list && list.Name}
           </Typography>
         </Box>
-        {list && (
+        {list && list.ingredientList && (
           <IngredientTable
             isEditable={true}
-            data={list.IngredientsList}
+            data={list.ingredientList}
+            editIngredientInApi={editIngredientInApi}
+            addIngredientInApi={addIngredientInApi}
+            deleteIngredientInApi={deleteIngredientInApi}
           />
+        )}
+        {ingredientError.display && (
+          <ListItem>
+            <CustomizableAlert setOpen={setIngredientError} message={ingredientError.text} type={'error'}/>
+          </ListItem>
         )}
       </Box>
       <Dialog onClose={handleClose} open={open}>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './IngredientTable.scss';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@mui/icons-material/Add';
+// import AddIcon from '@mui/icons-material/Add';
 import {
   IconButton,
   MenuItem,
@@ -25,6 +25,9 @@ type IngredientTableProps = {
   data: Array<IngredientDTO>;
   isEditable: boolean;
   onChange?: any;
+  editIngredientInApi? :any;
+  addIngredientInApi? :any;
+  deleteIngredientInApi? :any;
 };
 
 const IngredientTable = (props: IngredientTableProps) => {
@@ -37,7 +40,6 @@ const IngredientTable = (props: IngredientTableProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [units, setUnits] = useState<MetricsDTO[]>([]);
   const [allIngredients, setAllIngredients] = useState<TableIngredientDTO[]>([]);
-
   useEffect(() => {
     if (!!testData) {
       const sum = testData.reduce((partSum, ingredient) => partSum + ingredient.calories, 0);
@@ -46,11 +48,17 @@ const IngredientTable = (props: IngredientTableProps) => {
     if (!!props.onChange) {
       props.onChange({name: 'ingredients', value: testData});
     }
+    console.log(testData);
+    console.log(props.data);
   }, [testData]);
 
-  const deleteIngredient = (id: number) => {
-    if (!!testData) {
+  const deleteIngredient = (id: number, name: string) => {
+    if (!!testData && !!props.deleteIngredientInApi) {
+      console.log('przed sprawdzeniem delete w if ingrefient table');
       setTestData(testData.filter((item) => item.id !== id));
+      if (props.deleteIngredientInApi(name)) {
+        console.log('zwraca true w table');
+      }
     }
   };
   const editIngredient = (ingredient: IngredientDTO) => {
@@ -64,9 +72,12 @@ const IngredientTable = (props: IngredientTableProps) => {
   const AddIngredientToList = () => {
     const existedIndex = testData.findIndex((elem) => elem.name == ingredientName);
     if (existedIndex !== -1) {
+      console.log('jestesmy w existed element');
       testData[existedIndex].amount = amount;
       testData[existedIndex].unit = unit;
+      props.editIngredientInApi(testData[existedIndex]);
     } else if (!!ingredientName) {
+      console.log('jestesmy w ingredientName');
       const ingredient = allIngredients.find((elem) => elem.name ==ingredientName);
       // TO DO: Liczenie kalorii
       // TO DO: Określenie czy jest to składnik alergiczny
@@ -79,10 +90,13 @@ const IngredientTable = (props: IngredientTableProps) => {
           calories: 210,
           allergen: false,
         };
-        setTestData([...testData, ingrid]);
+        console.log('jestesmy w ingredient');
+        if (isEdit && !!props.addIngredientInApi) {
+          setTestData([...testData, ingrid]);
+          if (props.addIngredientInApi(ingrid)) {};
+        }
       }
     }
-
     setIngredientName('');
     setBrandName('');
     setAmount(0);
@@ -120,7 +134,8 @@ const IngredientTable = (props: IngredientTableProps) => {
 
   const getUnitName = (ingredient) => {
     const unitName = units.find((x) => x.id == ingredient.unit)?.name;
-    return unitName ?? ingredient.unit;
+    if (!!ingredient.unit) return unitName ?? ingredient.unit;
+    return 'g';
   };
   // TO DO: Zabezpieczenie przed dodaniem pustego
   return (
@@ -135,8 +150,12 @@ const IngredientTable = (props: IngredientTableProps) => {
                 <TableCell>Name</TableCell>
                 <TableCell>Amount</TableCell>
                 <TableCell>Unit</TableCell>
-                <TableCell>Calories (kcal)</TableCell>
-                {props.isEditable && <TableCell></TableCell>}
+                {!props.isEditable && (
+                  <TableCell>Calories (kcal / 100g)</TableCell>
+                )}
+                {props.isEditable && (
+                  <TableCell>Edit Options</TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -144,11 +163,13 @@ const IngredientTable = (props: IngredientTableProps) => {
                 <TableRow key={ingredient.id}>
                   <TableCell>{ingredient.name}</TableCell>
                   <TableCell>{ingredient.amount}</TableCell>
-                  <TableCell>{getUnitName(ingredient)}</TableCell>
-                  <TableCell>{ingredient.calories}</TableCell>
+                  <TableCell> {getUnitName(ingredient)} </TableCell>
+                  {!props.isEditable && (
+                    <TableCell>{ingredient.calories}</TableCell>
+                  )}
                   {props.isEditable && (
                     <TableCell align='center'>
-                      <IconButton onClick={() => deleteIngredient(ingredient.id)}>
+                      <IconButton onClick={() => deleteIngredient(ingredient.id, ingredient.name)}>
                         <DeleteIcon/>
                       </IconButton>
                       <IconButton onClick={() => editIngredient(ingredient)}>
@@ -161,14 +182,21 @@ const IngredientTable = (props: IngredientTableProps) => {
             </TableBody>
           </Table>
           <div className='table-panel'>
-            <span className='calories-Sum'>Total calories: {caloriesSum} kcal</span>
+            {!props.isEditable && (
+              <span className='calories-Sum'>Total calories: {caloriesSum} kcal</span>
+            ) }
             {props.isEditable && (
-              <IconButton
-                color='primary'
-                className='add-button'
+            //   <IconButton
+            //     color='primary'
+            //     className='add-button'
+            //     onClick={showAddPanel}>
+            //     <AddIcon/>
+            //   </IconButton>
+              <Button
+                variant='contained'
                 onClick={showAddPanel}>
-                <AddIcon/>
-              </IconButton>
+                Add Ingredient
+              </Button>
             )}
           </div>
         </TableContainer>
@@ -188,7 +216,7 @@ const IngredientTable = (props: IngredientTableProps) => {
               placeholder='Ingredient name'
             />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={3}>
             <CustomAutocomplete
               freeSolo
               options={['jogobela', 'zott', 'schar']}
@@ -199,7 +227,7 @@ const IngredientTable = (props: IngredientTableProps) => {
               placeholder='Search for specific brand'
             />
           </Grid>
-          <Grid item xs={10} md={1}>
+          <Grid item xs={10} md={2}>
             <TextField
               required
               variant='outlined'

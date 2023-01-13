@@ -65,6 +65,7 @@ const RecipeEditScreen = () => {
       description: newRecipe.description,
       id_Cousine: newRecipe.id_cousine,
       priv: newRecipe.priv,
+      totalCalories: 0, // dodac obliczanie total calories
     },
     ingrs: newRecipe.ingredients.map((elem) => {
       return {id_ingredient: elem.id, amount: elem.amount, id_metric: elem.unit};
