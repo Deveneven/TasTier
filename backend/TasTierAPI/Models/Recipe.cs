@@ -21,5 +21,6 @@ namespace TasTierAPI.Models
         public List<Step> Steps { get;set; }
         public List<Tag> Tags { get; set; }
         public string Avatar { get; set; }
+        public string Total_Calories { get; set; }
     }
 }

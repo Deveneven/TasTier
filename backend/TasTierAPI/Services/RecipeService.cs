@@ -74,7 +74,7 @@ namespace TasTierAPI.Services
 
             List<Recipe> recipes = new List<Recipe>();
             //Defining method query
-            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private " +
+            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, Total_Calories " +
                 "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
                 " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine");
 
@@ -98,7 +98,8 @@ namespace TasTierAPI.Services
                     Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
                     Rating = int.Parse(sqlDataReader["Rating"].ToString()),
                     Priv = bool.Parse(sqlDataReader["Private"].ToString()),
-                    Avatar = sqlDataReader["Avatar"].ToString()
+                    Avatar = sqlDataReader["Avatar"].ToString(),
+                    Total_Calories = sqlDataReader["Total_Calories"].ToString() 
                 };
                 recipes.Add(tmpRecipe);
 
@@ -150,7 +151,7 @@ namespace TasTierAPI.Services
         public List<IngriedientInRecipe> GetIngriedientList(int Id_Recipe)
         {
             List<IngriedientInRecipe> ingredientList = new List<IngriedientInRecipe>();
-            MakeConnection("SELECT r.Id_Ingredient, r.Name,r.Calories_Per_100g, ri.Amount, md.Name as MetricName, md.WeightPerUnit, ai.Id_Allergen FROM [dbo].[Recipe_Ingredient] as ri" +
+            MakeConnection("SELECT r.Id_Ingredient, r.Name,r.Calories_Per_100g, ri.Amount, md.Name as MetricName, md.WeightPerUnit, ai.Id_Allergen, ri.Total_Mass FROM [dbo].[Recipe_Ingredient] as ri" +
             " inner join[dbo].[Ingredient] as r on ri.Ingredient_Id_Ingredient = r.Id_Ingredient" +
             " inner join[dbo].[Metric_Definiton] as md on ri.Id_Metric_Definition = md.Id_Metric_Definiton" +
             " inner join [dbo].[Allergen_Ingredient] as ai on r.Id_Ingredient = ai.Id_Ingredient" +
@@ -165,11 +166,11 @@ namespace TasTierAPI.Services
                 {
                     Id = int.Parse(sqlDataReader["Id_Ingredient"].ToString()),
                     Name = sqlDataReader["Name"].ToString(),
-                    Calories = (int.Parse(sqlDataReader["WeightPerUnit"].ToString()) * int.Parse(sqlDataReader["Amount"].ToString()) * (int.Parse(sqlDataReader["Calories_Per_100g"].ToString()) / 100)),
+                    Calories = int.Parse(sqlDataReader["Calories_Per_100g"].ToString()),
                     Allergen = String.IsNullOrEmpty(sqlDataReader["Id_Allergen"].ToString()),
                     Amount = int.Parse(sqlDataReader["Amount"].ToString()),
-                    Unit = sqlDataReader["MetricName"].ToString()
-
+                    Unit = sqlDataReader["MetricName"].ToString(),
+                    TotalMass = sqlDataReader["Total_Mass"].ToString()
                 };
                 ingredientList.Add(ingredient);
             }
@@ -313,12 +314,12 @@ namespace TasTierAPI.Services
         public bool AddRecipeIngredient(IngredientInRecipeInsertDTO ingr, int id_recipe)
         {
             bool success = false;
-            MakeConnection("INSERT INTO [dbo].[Recipe_Ingredient] OUTPUT inserted.Recipe_Id_Recipe VALUES (@id_recipe,@id_ingredient,@amount,@id_metrics);");
+            MakeConnection("exec AddIngrToRecipe @id_recipe = @recipe ,@id_ingredient = @ingr ,@amount = @amnt ,@id_metrics  = @metric;");
             connectionToDatabase.Open();
-            commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
-            commandsToDatabase.Parameters.AddWithValue("@id_ingredient", ingr.id_ingredient);
-            commandsToDatabase.Parameters.AddWithValue("@amount", (ingr.amount.ToString()));
-            commandsToDatabase.Parameters.AddWithValue("id_metrics", ingr.id_metric);
+            commandsToDatabase.Parameters.AddWithValue("@recipe", id_recipe);
+            commandsToDatabase.Parameters.AddWithValue("@ingr", ingr.id_ingredient);
+            commandsToDatabase.Parameters.AddWithValue("@amnt", (ingr.amount.ToString()));
+            commandsToDatabase.Parameters.AddWithValue("metric", ingr.id_metric);
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
             while (sqlDataReader.Read())
             {
@@ -417,15 +418,16 @@ namespace TasTierAPI.Services
         public int AddRecipeDefinition(RecipeInsertDTO recipe, int id_user)
         {
             int id_recipe = 0;
-            MakeConnection("INSERT INTO [dbo].[Recipe] OUTPUT inserted.Id_Recipe VALUES (@name,@diff,@time,@desc,@id_user,@id_cousine,GETDATE(),0,@private);");
+            MakeConnection("INSERT INTO [dbo].[Recipe] OUTPUT inserted.Id_Recipe VALUES (@name,@diff,@time,@desc,@id_user,@id_cousine,GETDATE(),0,@private,@calories);");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@name", recipe.Name);
             commandsToDatabase.Parameters.AddWithValue("@diff", int.Parse(recipe.Difficulty));
             commandsToDatabase.Parameters.AddWithValue("@time", recipe.Time);
-            commandsToDatabase.Parameters.AddWithValue("desc", recipe.Description);
-            commandsToDatabase.Parameters.AddWithValue("id_user", id_user);
-            commandsToDatabase.Parameters.AddWithValue("id_cousine", recipe.Id_Cousine);
-            commandsToDatabase.Parameters.AddWithValue("private", recipe.Priv);
+            commandsToDatabase.Parameters.AddWithValue("@desc", recipe.Description);
+            commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
+            commandsToDatabase.Parameters.AddWithValue("@id_cousine", recipe.Id_Cousine);
+            commandsToDatabase.Parameters.AddWithValue("@private", recipe.Priv);
+            commandsToDatabase.Parameters.AddWithValue("@calories", recipe.TotalCalories);
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
             while (sqlDataReader.Read())
             {
@@ -520,9 +522,8 @@ namespace TasTierAPI.Services
         }
     }
 }
-//TODO DODAC DO ZWROTU SKLADNIKOW KALORIE NA 100 G I ILOSC SKLADNIKU
-//TODO DODAC POLE SUMY KALORI DO BAZY DO TABELI RECIPE I PRZYJMOWAC ZMIENNA SUMY W KONCOWCE ADD RECIPE
-//TODO DODAWANIA USUWANIE GETOWANIE KOMENTARZY / USUWAC MOZE TEZ ADMINISTRATOR
+
+
 //TODO DODAWNIE USUWANIA PRZPISOW > USUWAC MOZE TEZ ADMIN
-//TODO DODAC RATING I DODAC KONCOWKE DO DODAWNIA RATINGU DODAC DO GET RECIPES POLE NA SREDNI RATING
+//TODO DODAC RATING I DODAC DO DODAWNIA RATINGU DODAC DO GET RECIPES POLE NA SREDNI RATING
 //

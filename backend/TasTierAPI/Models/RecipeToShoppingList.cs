@@ -1,10 +1,10 @@
 ﻿using System;
 namespace TasTierAPI.Models
 {
-	public class IngredientListDelete
+	public class RecipeToShoppingList
 	{
         public string ingredient { get; set; }
-        public string id_list { get; set; }
+        public int amount { get; set; }
     }
 }
 

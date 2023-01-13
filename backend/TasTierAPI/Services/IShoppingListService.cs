@@ -17,11 +17,12 @@ namespace TasTierAPI.Services
         public int AddFriendToList(string email, int id_list, int id_user);
         public bool AddIngredientToList(string ingredient, int id_list, int id_user, int amount);
         public int GetIngredientId(string ingredient);
-        public bool CreateNewShoppingList(string name, int id_user);
+        public int CreateNewShoppingList(string name, int id_user);
         public int CreateNewListDefinition(string name);
         public bool ChangeAmountOfIngredient(string ingredient, int shoppingList, int user, int amount);
-        public bool DeleteFriendFromShoppingList(string email, int shoppingList, int user);
+        public int DeleteFriendFromShoppingList(string email, int shoppingList, int user);
         public bool DeleteIngredientFromShoppingList(string ingredient, int shoppingList, int user);
+        public int DeleteList(int id_list, int id_user);
     }
 }
 
