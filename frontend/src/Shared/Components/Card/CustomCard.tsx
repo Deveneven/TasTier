@@ -13,6 +13,10 @@ import {
   IconButton,
   Rating,
   Stack,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from '@mui/material';
 import {Chat, ExpandMore, ThumbUpAltOutlined} from '@material-ui/icons';
 import IngredientTable from '../IngredientTable/IngredientTable';
@@ -21,6 +25,8 @@ import {CardMedia, Typography} from '@material-ui/core';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SquareIcon from '@mui/icons-material/Square';
 import SquareOutlinedIcon from '@mui/icons-material/SquareOutlined';
+import {CommentDTO} from '../../DTOs/CommentDTO';
+import {Api} from '../../../Utils/Api';
 
 type CustomCardProps = {
   data: RecipeDTO;
@@ -29,9 +35,33 @@ type CustomCardProps = {
 const CustomCard = ({data}: CustomCardProps) => {
   const [expanded, setExpanded] = useState(false);
   const [commentIsVisible, setCommentIsVisible] = useState(false);
+  const [comments, setComments] = useState<CommentDTO[]>([]);
 
   const addNewComment = () => {
     setCommentIsVisible(!commentIsVisible);
+    if (data.id) {
+      Api.get(`${process.env.REACT_APP_DB_API}/recipes/comment/${data.id}`)
+          .then((response) => {
+            if (response.success) {
+              setComments(response.text);
+            }
+          });
+    }
+  };
+  const addRating = (event) => {
+    const {value} = !!event.target ? event.target : null;
+    const numberValue = Number(value);
+
+    const payload = {
+      rating: numberValue,
+      recipeid: data.id,
+    };
+    Api.post(`${process.env.REACT_APP_DB_API}/recipes/rating`, payload)
+        .then((response) => {
+          if (response.success) {
+            console.log(response);
+          }
+        });
   };
   return (
     <Card className="card">
@@ -56,10 +86,9 @@ const CustomCard = ({data}: CustomCardProps) => {
           <Rating
             max={10}
             color='primary'
-            disabled={true}
             size='small'
-            name="difficulty"
-            defaultValue={data.rating}/>
+            defaultValue={data.rating}
+            onChange={addRating}/>
         </div>
       </CardContent>
       <Button
@@ -110,9 +139,25 @@ const CustomCard = ({data}: CustomCardProps) => {
           </Stack>
         </div>
       </Collapse>
-      {!!commentIsVisible ?
-      <Comment /> :
-      ''}
+      {!!commentIsVisible &&
+      (
+        <div className='expanded-content'>
+          <Comment setComments={setComments} recipeId={data.id}/>
+          <List>
+            {comments?.map((comment, index) => {
+              return (
+                <ListItem key={index}>
+                  <ListItemAvatar>
+                    <Avatar src={comment.avatar}/>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={comment.text}/>
+                </ListItem>
+              );
+            })}
+          </List>
+        </div>
+      )}
     </Card>
   );
 };

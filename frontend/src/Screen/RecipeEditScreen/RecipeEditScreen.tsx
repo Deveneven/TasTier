@@ -19,7 +19,7 @@ const RecipeEditScreen = () => {
     difficulty: '1',
     time: '',
     description: '',
-    id_cousine: 0,
+    id_cousine: 1,
     priv: true,
     ingredients: [],
     steps: [],

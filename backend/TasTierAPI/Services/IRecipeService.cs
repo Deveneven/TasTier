@@ -34,7 +34,9 @@ namespace TasTierAPI.Services
         public bool AddNewTag(string tag);
         public int AddTag(string tag);
         public List<IngredientDTO> GetAllIngredients();
-
+        public List<CommentDTO> GetAllCommentsById(int id);
+        public List<CommentDTO> AddNewComment(CreateCommentDTO createCommentDTO);
+        public bool AddRating(CreateRatingDTO createRatingDTO);
     }
 }
 

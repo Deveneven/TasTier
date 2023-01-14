@@ -8,8 +8,6 @@ namespace TasTierAPI.Services
 	public class AccountService : IAccountService
 	{
         private string conURL;
-        private SqlConnection connectionToDatabase;
-        private SqlCommand commandsToDatabase;
 
         public AccountService(IConfiguration configuration)
         {
@@ -17,19 +15,20 @@ namespace TasTierAPI.Services
         }
 
 
-        public void MakeConnection(string methodQuery)
+        private (SqlConnection, SqlCommand) MakeConnection(string methodQuery)
         {
-            connectionToDatabase = new SqlConnection(conURL);
-            commandsToDatabase = new SqlCommand();
+            var connectionToDatabase = new SqlConnection(conURL);
+            var commandsToDatabase = new SqlCommand();
 
             commandsToDatabase.Connection = connectionToDatabase;
             commandsToDatabase.CommandText = methodQuery;
+            return (connectionToDatabase, commandsToDatabase);
         }
 
         public LoginAuthDTO GetUserByLogin(string login)
         {
             LoginAuthDTO loginAuth = new LoginAuthDTO();
-            MakeConnection("SELECT Id_User, Password, salt FROM [dbo].[User] WHERE Email=@login");
+            var (connectionToDatabase, commandsToDatabase) = MakeConnection("SELECT Id_User, Password, salt FROM [dbo].[User] WHERE Email=@login");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("login", login);
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
@@ -49,7 +48,7 @@ namespace TasTierAPI.Services
         public int Register(string name, string lastname, string password, string email, string salt)
         {
             int result = 0;
-            MakeConnection("exec [dbo].Register  @Name = @imie, @LastName = @nazwisko, @Password = @haslo, @Email = @mail,@Salt=@sol;");
+            var(connectionToDatabase, commandsToDatabase) = MakeConnection("exec [dbo].Register  @Name = @imie, @LastName = @nazwisko, @Password = @haslo, @Email = @mail,@Salt=@sol;");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@imie", name);
             commandsToDatabase.Parameters.AddWithValue("@nazwisko", lastname);
@@ -69,7 +68,7 @@ namespace TasTierAPI.Services
         public UserDTO GetUserDTO(int id)
         {
             UserDTO user = new UserDTO();
-            MakeConnection("SELECT Name,LastName,Nickname,Avatar,Email,Admin,Diet_Id_Diet FROM [dbo].[User] WHERE Id_User =@id");
+            var (connectionToDatabase, commandsToDatabase) = MakeConnection("SELECT Name,LastName,Nickname,Avatar,Email,Admin,Diet_Id_Diet FROM [dbo].[User] WHERE Id_User =@id");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@id", id);
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
