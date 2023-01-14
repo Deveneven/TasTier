@@ -15,7 +15,7 @@ namespace TasTierAPI.Models
         public string Username { get; set; }
         public string Cousine { get; set; }
         public DateTime Date { get; set; }  
-        public int Rating { get; set; }
+        public float Rating { get; set; }
         public bool Priv { get; set; }
         public List<IngriedientInRecipe> Ingredients { get; set;}
         public List<Step> Steps { get;set; }

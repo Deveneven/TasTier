@@ -10,7 +10,7 @@ const UserName = (props:any) => {
         {user.nickname}
       </Typography>);
   }
-  if (user && user.name && user.lastname) {
+  if (user && user.name || user.lastname) {
     console.log('drugi if userAvatar');
     console.log(user);
     return (

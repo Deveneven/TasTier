@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using TasTierAPI.Models;
@@ -15,10 +16,12 @@ namespace TasTierAPI.Controllers
     public class RecipeController:ControllerBase
     {
         private IRecipeService _dbService;
+        private IHttpContextAccessor HttpContextAccessor { get; set; }
 
-        public RecipeController (IRecipeService dbService)
+        public RecipeController (IRecipeService dbService, IHttpContextAccessor httpContext)
         {
             _dbService = dbService;
+            HttpContextAccessor = httpContext;
         }
 
         [Route("get/recipes")]
@@ -174,6 +177,41 @@ namespace TasTierAPI.Controllers
             bool success = _dbService.DeleteFromFavorites(id, id_recipe);
             if (success) return Ok("Successfuly deleted recipe");
             else return BadRequest("Could not delete recipe");
+        }
+
+        [HttpGet]
+        [Route("comment/{id}")]
+        public IActionResult GetAllComments(int id)
+        {
+            return Ok(_dbService.GetAllCommentsById(id));
+        }
+
+        [HttpPost]
+        [Route("comment")]
+        [Authorize]
+        public IActionResult AddNewComment(CreateCommentDTO createCommentDTO)
+        {
+            var userId = HttpContextAccessor.HttpContext.User.FindFirst("id").Value;
+            createCommentDTO.UserId = int.Parse(userId);
+            var result = _dbService.AddNewComment(createCommentDTO);
+
+            if (result == null)
+                return BadRequest("Something went wrong");
+            return Ok(_dbService.AddNewComment(createCommentDTO));
+        }
+
+        [HttpPost]
+        [Route("rating")]
+        [Authorize]
+        public IActionResult AddRating(CreateRatingDTO createRatingDTO)
+        {
+            var userId = HttpContextAccessor.HttpContext.User.FindFirst("id").Value;
+            createRatingDTO.UserId = int.Parse(userId);
+            var result = _dbService.AddRating(createRatingDTO);
+
+            if (!result)
+                return BadRequest("Something went wrong");
+            return Ok();
         }
     }
 }

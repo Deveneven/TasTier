@@ -6,9 +6,6 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using TasTierAPI.Models;
-using static System.Net.Mime.MediaTypeNames;
-using System.Security.Policy;
-using System.Linq;
 
 namespace TasTierAPI.Services
 {
@@ -86,6 +83,7 @@ namespace TasTierAPI.Services
             //Reading content of the results and assigning values to temporary variable which then is added to result list
             while (sqlDataReader.Read())
             {
+                var rating = sqlDataReader["Rating"].ToString();
                 Recipe tmpRecipe = new Recipe()
                 {
                     Id = int.Parse(sqlDataReader["Id_Recipe"].ToString()),
@@ -96,10 +94,10 @@ namespace TasTierAPI.Services
                     Username = sqlDataReader["Username"].ToString(),
                     Cousine = sqlDataReader["Cousine"].ToString(),
                     Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
-                    Rating = int.Parse(sqlDataReader["Rating"].ToString()),
                     Priv = bool.Parse(sqlDataReader["Private"].ToString()),
                     Avatar = sqlDataReader["Avatar"].ToString(),
-                    Total_Calories = sqlDataReader["Total_Calories"].ToString()
+                    Total_Calories = sqlDataReader["Total_Calories"].ToString(),
+                    Rating = string.IsNullOrEmpty(rating) ? 0 : float.Parse(rating),
                 };
                 recipes.Add(tmpRecipe);
 
@@ -126,6 +124,7 @@ namespace TasTierAPI.Services
             //Reading content of the results and assigning values to temporary variable which then is added to result list
             while (sqlDataReader.Read())
             {
+                var rating = sqlDataReader["Rating"].ToString();
                 Recipe tmpRecipe = new Recipe()
                 {
                     Id = int.Parse(sqlDataReader["Id_Recipe"].ToString()),
@@ -136,7 +135,7 @@ namespace TasTierAPI.Services
                     Username = sqlDataReader["Username"].ToString(),
                     Cousine = sqlDataReader["Cousine"].ToString(),
                     Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
-                    Rating = int.Parse(sqlDataReader["Rating"].ToString()),
+                    Rating = string.IsNullOrEmpty(rating) ? 0 : float.Parse(rating),
                     Priv = bool.Parse(sqlDataReader["Private"].ToString()),
                     Avatar = sqlDataReader["Avatar"].ToString()
                 };
@@ -420,7 +419,8 @@ namespace TasTierAPI.Services
         public int AddRecipeDefinition(RecipeInsertDTO recipe, int id_user)
         {
             int id_recipe = 0;
-            MakeConnection("INSERT INTO [dbo].[Recipe] OUTPUT inserted.Id_Recipe VALUES (@name,@diff,@time,@desc,@id_user,@id_cousine,GETDATE(),0,@private,@calories);");
+            MakeConnection("INSERT INTO [dbo].[Recipe] (Name, Difficulty, Time, Description, User_Id_User, Cousine_Id_Cousine, Date, Private, Total_Calories) "
+                + "OUTPUT inserted.Id_Recipe VALUES (@name,@diff,@time,@desc,@id_user,@id_cousine,GETDATE(),@private,@calories);");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@name", recipe.Name);
             commandsToDatabase.Parameters.AddWithValue("@diff", int.Parse(recipe.Difficulty));
@@ -601,7 +601,7 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return recipes;
         }
-        public bool DeleteFromFavorites (int id_user, int id_recipe)
+        public bool DeleteFromFavorites(int id_user, int id_recipe)
         {
             bool success = false;
             int id_fav = GetFavortiesId(id_user);
@@ -618,10 +618,88 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return success;
         }
+
+
+        public List<CommentDTO> GetAllCommentsById(int id)
+        {
+            List<CommentDTO> commentDTOs = new List<CommentDTO>();
+            MakeConnection("SELECT c.Text, u.Name as Username, u.Avatar " +
+            "FROM [dbo].[Comment] AS c INNER JOIN [dbo].[User] AS u ON c.Id_User = u.Id_User " +
+            "WHERE c.Recipe_Id_Recipe = @id_recipe");
+
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", id);
+
+            using (SqlDataReader reader = commandsToDatabase.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    CommentDTO tmpRecipe = new CommentDTO()
+                    {
+                        Text = reader["Text"].ToString(),
+                        Avatar = reader["Avatar"].ToString(),
+                        UserName = reader["Username"].ToString()
+                    };
+                    commentDTOs.Add(tmpRecipe);
+
+                }
+            }
+
+            connectionToDatabase.Close();
+            return commentDTOs;
+        }
+
+        public List<CommentDTO> AddNewComment(CreateCommentDTO createCommentDTO)
+        {
+            MakeConnection("exec [dbo].AddComment @text = @text, @userId = @userId, @recipeId = @recipeId");
+
+            commandsToDatabase.Parameters.AddWithValue("@text", createCommentDTO.Text);
+            commandsToDatabase.Parameters.AddWithValue("@userId", createCommentDTO.UserId);
+            commandsToDatabase.Parameters.AddWithValue("@recipeId", createCommentDTO.RecipeId);
+
+            try
+            {
+                connectionToDatabase.Open();
+                commandsToDatabase.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                connectionToDatabase.Close();
+            }
+            return GetAllCommentsById(createCommentDTO.RecipeId);
+        }
+
+        public bool AddRating(CreateRatingDTO createRatingDTO)
+        {
+            MakeConnection("exec [dbo].AddRating @rating = @rating, @userId = @userId, @recipeId = @recipeId");
+
+            commandsToDatabase.Parameters.AddWithValue("@rating", createRatingDTO.Rating);
+            commandsToDatabase.Parameters.AddWithValue("@userId", createRatingDTO.UserId);
+            commandsToDatabase.Parameters.AddWithValue("@recipeId", createRatingDTO.RecipeId);
+            try
+            {
+                connectionToDatabase.Open();
+                commandsToDatabase.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                connectionToDatabase.Close();
+            }
+            return true;
+        }
     }
 }
-
-
+//TODO DODAC DO ZWROTU SKLADNIKOW KALORIE NA 100 G I ILOSC SKLADNIKU
+//TODO DODAC POLE SUMY KALORI DO BAZY DO TABELI RECIPE I PRZYJMOWAC ZMIENNA SUMY W KONCOWCE ADD RECIPE
+//TODO DODAWANIA USUWANIE GETOWANIE KOMENTARZY / USUWAC MOZE TEZ ADMINISTRATOR
 //TODO DODAWNIE USUWANIA PRZPISOW > USUWAC MOZE TEZ ADMIN
 //TODO DODAC RATING I DODAC DO DODAWNIA RATINGU DODAC DO GET RECIPES POLE NA SREDNI RATING
 //

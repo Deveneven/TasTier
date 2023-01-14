@@ -34,12 +34,13 @@ const IngredientTable = (props: IngredientTableProps) => {
   const [caloriesSum, setCaloriesSum] = useState(0);
   const [testData, setTestData] = useState<Array<IngredientDTO>>(props.data);
   const [ingredientName, setIngredientName] = useState<string>('');
-  const [brandName, setBrandName] = useState<string>('');
-  const [unit, setUnit] = useState<number>(0);
+  const [unit, setUnit] = useState<number>(1);
   const [amount, setAmount] = useState(0);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [units, setUnits] = useState<MetricsDTO[]>([]);
   const [allIngredients, setAllIngredients] = useState<TableIngredientDTO[]>([]);
+  const [isValid, setIsValid] = useState<boolean>(false);
+
   useEffect(() => {
     if (!!testData) {
       const sum = testData.reduce((partSum, ingredient) => partSum + ingredient.calories, 0);
@@ -59,6 +60,8 @@ const IngredientTable = (props: IngredientTableProps) => {
         console.log('zwraca true w table');
         setTestData(testData.filter((item) => item.id !== id));
       }
+    } else {
+      setTestData(testData.filter((item) => item.id !== id));
     }
   };
   const editIngredient = (ingredient: IngredientDTO) => {
@@ -75,7 +78,9 @@ const IngredientTable = (props: IngredientTableProps) => {
       console.log('jestesmy w existed element');
       testData[existedIndex].amount = amount;
       testData[existedIndex].unit = unit;
-      props.editIngredientInApi(testData[existedIndex]);
+      if (!!props.editIngredientInApi) {
+        props.editIngredientInApi(testData[existedIndex]);
+      }
     } else if (!!ingredientName) {
       console.log('jestesmy w ingredientName');
       const ingredient = allIngredients.find((elem) => elem.name ==ingredientName);
@@ -92,22 +97,21 @@ const IngredientTable = (props: IngredientTableProps) => {
         };
         console.log('jestesmy w ingredient');
         if (isEdit && !!props.addIngredientInApi) {
-          setTestData([...testData, ingrid]);
           if (props.addIngredientInApi(ingrid)) {
             setTestData([...testData, ingrid]);
-          };
+          }
+        } else {
+          setTestData([...testData, ingrid]);
         }
       }
     }
     setIngredientName('');
-    setBrandName('');
     setAmount(0);
     setIsEdit(false);
   };
 
   const showAddPanel = () => {
     setIngredientName('');
-    setBrandName('');
     setAmount(0);
     setIsEdit(!isEdit);
   };
@@ -125,7 +129,6 @@ const IngredientTable = (props: IngredientTableProps) => {
       setUnits(JSON.parse(metrics));
     }
     if (props.isEditable) {
-      console.log(`IS EDITABLE: ${props.isEditable}`);
       fetchData();
     }
   }, []);
@@ -139,7 +142,9 @@ const IngredientTable = (props: IngredientTableProps) => {
     if (!!ingredient.unit) return unitName ?? ingredient.unit;
     return 'g';
   };
-  // TO DO: Zabezpieczenie przed dodaniem pustego
+  useEffect(() => {
+    setIsValid(ingredientName && amount > 0 ? true : false);
+  }, [ingredientName, amount]);
   return (
     <Grid
       container
@@ -218,18 +223,7 @@ const IngredientTable = (props: IngredientTableProps) => {
               placeholder='Ingredient name'
             />
           </Grid>
-          <Grid item xs={12} md={3}>
-            <CustomAutocomplete
-              freeSolo
-              options={['jogobela', 'zott', 'schar']}
-              value={brandName}
-              onChange={(event, newValue) => setBrandName(newValue)}
-              filterSelectedOptions
-              label='Brand name'
-              placeholder='Search for specific brand'
-            />
-          </Grid>
-          <Grid item xs={10} md={2}>
+          <Grid item xs={8} md={3}>
             <TextField
               required
               variant='outlined'
@@ -241,7 +235,7 @@ const IngredientTable = (props: IngredientTableProps) => {
               onChange={(e) => setAmount(parseInt(e.target.value))}
             />
           </Grid>
-          <Grid item xs={2} md={1}>
+          <Grid item xs={4} md={3}>
             <Select
               defaultValue={1}
               onChange={selectUnit}>
@@ -256,8 +250,9 @@ const IngredientTable = (props: IngredientTableProps) => {
               })}
             </Select>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={2}>
             <Button
+              disabled={!isValid}
               fullWidth
               variant='contained'
               onClick={AddIngredientToList}>

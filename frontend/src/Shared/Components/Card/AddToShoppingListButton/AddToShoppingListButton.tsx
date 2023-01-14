@@ -10,6 +10,9 @@ import Typography from '@mui/material/Typography';
 import CustomAutocomplete from '../../Autocomplete/CustomAutocomplete';
 import {Api} from '../../../../Utils/Api';
 import CustomizableAlert from '../../Alert/CustomizableAlert';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import {IconButton} from '@mui/material';
+
 const AddToShoppingListButton = ({data}:any) => {
   const [listName, setListName] = useState('');
   const [open, setOpen] = useState(false);
@@ -90,12 +93,12 @@ type: 'warning' | 'success' |'error' | 'info'
   };
   return (
     <>
-      <Button onClick={ () => {
+      <IconButton onClick={ () => {
         handleClickOpen();
         getListsFromApi();
-      }} variant='contained'>
-Add to shopping list
-      </Button>
+      }}>
+        <AddShoppingCartIcon />
+      </IconButton>
       <Dialog
         fullScreen={fullScreen}
         open={open}

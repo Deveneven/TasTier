@@ -19,7 +19,7 @@ const RecipeEditScreen = () => {
     difficulty: '1',
     time: '',
     description: '',
-    id_cousine: 0,
+    id_cousine: 1,
     priv: true,
     ingredients: [],
     steps: [],
@@ -91,6 +91,7 @@ const RecipeEditScreen = () => {
     formData.append('id_recipe', id);
     Api.postImage(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/images`, formData).then((response) => {
       if (response.success) {
+        console.log('Upload images success');
         navigate('/myrecipes');
       } else {
         setError({display: true, text: 'Uploading photo error'});
