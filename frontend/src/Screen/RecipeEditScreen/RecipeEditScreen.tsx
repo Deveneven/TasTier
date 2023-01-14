@@ -65,6 +65,7 @@ const RecipeEditScreen = () => {
       description: newRecipe.description,
       id_Cousine: newRecipe.id_cousine,
       priv: newRecipe.priv,
+      totalCalories: 0, // dodac obliczanie total calories
     },
     ingrs: newRecipe.ingredients.map((elem) => {
       return {id_ingredient: elem.id, amount: elem.amount, id_metric: elem.unit};
@@ -90,6 +91,7 @@ const RecipeEditScreen = () => {
     formData.append('id_recipe', id);
     Api.postImage(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/images`, formData).then((response) => {
       if (response.success) {
+        console.log('Upload images success');
         navigate('/myrecipes');
       } else {
         setError({display: true, text: 'Uploading photo error'});

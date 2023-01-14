@@ -34,6 +34,11 @@ namespace TasTierAPI.Services
         public bool AddNewTag(string tag);
         public int AddTag(string tag);
         public List<IngredientDTO> GetAllIngredients();
+        public int GetFavortiesId(int id_user);
+        public bool AddRecipeToFavorites(int id_recipe, int id_user);
+        public IEnumerable<Recipe> GetFavoriteRecipesDTO(int id_user);
+        public List<Recipe> GetFavoriteRecipes(int id_user);
+        public bool DeleteFromFavorites(int id_user, int id_recipe);
         public List<CommentDTO> GetAllCommentsById(int id);
         public List<CommentDTO> AddNewComment(CreateCommentDTO createCommentDTO);
         public bool AddRating(CreateRatingDTO createRatingDTO);

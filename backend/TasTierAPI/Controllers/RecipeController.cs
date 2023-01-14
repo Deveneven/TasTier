@@ -135,6 +135,49 @@ namespace TasTierAPI.Controllers
         {
             return Ok(_dbService.GetAllIngredients());
         }
+        [HttpPost]
+        [Route("add/recipe/favorites")]
+        public IActionResult AddRecipeToFavorites([FromBody] int id_recipe)
+        {
+            var jwtt = Request.Headers[HeaderNames.Authorization].ToString();
+            var jwt = jwtt.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            int id = int.Parse(idd);
+
+            bool success = _dbService.AddRecipeToFavorites(id_recipe, id);
+            if (success) return Ok("Successfuly added recipe to favorites");
+            else return BadRequest("Something went wrong");
+        }
+        [HttpGet]
+        [Route("get/recipes/favorite")]
+        public IActionResult GetFavoritesRecipes()
+        {
+            var jwtt = Request.Headers[HeaderNames.Authorization].ToString();
+            var jwt = jwtt.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            int id = int.Parse(idd);
+            return Ok(_dbService.GetFavoriteRecipesDTO(id));
+
+        }
+        [HttpDelete]
+        [Route("delete/recipes/favorites")]
+        public IActionResult DeleteFavoritesRecipes([FromBody]int id_recipe)
+        {
+            var jwtt = Request.Headers[HeaderNames.Authorization].ToString();
+            var jwt = jwtt.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            int id = int.Parse(idd);
+
+            bool success = _dbService.DeleteFromFavorites(id, id_recipe);
+            if (success) return Ok("Successfuly deleted recipe");
+            else return BadRequest("Could not delete recipe");
+        }
 
         [HttpGet]
         [Route("comment/{id}")]

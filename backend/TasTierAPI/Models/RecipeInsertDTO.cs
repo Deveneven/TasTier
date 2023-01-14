@@ -11,6 +11,7 @@ namespace TasTierAPI.Models
         public string Description { get; set; }
         public int Id_Cousine { get; set; }
         public bool Priv { get; set; }
+        public int TotalCalories { get; set; }
     }
 }
 

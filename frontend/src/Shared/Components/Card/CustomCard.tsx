@@ -25,6 +25,7 @@ import {CardMedia, Typography} from '@material-ui/core';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SquareIcon from '@mui/icons-material/Square';
 import SquareOutlinedIcon from '@mui/icons-material/SquareOutlined';
+import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingListButton';
 import {CommentDTO} from '../../DTOs/CommentDTO';
 import {Api} from '../../../Utils/Api';
 
@@ -79,6 +80,7 @@ const CustomCard = ({data}: CustomCardProps) => {
         <IconButton>
           <ThumbUpAltOutlined />
         </IconButton>
+        <AddToShoppingListButton data={data.ingredients}/>
       </CardActions>
       <CardContent>
         {data.name}
