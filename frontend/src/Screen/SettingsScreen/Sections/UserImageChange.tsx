@@ -22,8 +22,10 @@ type: 'warning' | 'success' |'error' | 'info'
     console.log(formData);
     Api.postImage(`${process.env.REACT_APP_DB_API}/settings/avatar/change`, formData).then((response) => {
       if (response.success) {
-        setAlert({display: true, text: response.text.message, type: 'success'});
-        updateUser('avatar', response.text.avatarURL);
+        const jsonResp = JSON.parse(response.text);
+        console.log(jsonResp);
+        setAlert({display: true, text: jsonResp.message, type: 'success'});
+        updateUser('avatar', jsonResp.avatarURL);
       } else setAlert({display: true, text: response.text, type: 'error'});
     });
   };
