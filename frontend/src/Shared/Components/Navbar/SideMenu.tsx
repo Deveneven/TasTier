@@ -13,7 +13,6 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import RestaurantMenuOutlinedIcon from '@material-ui/icons/RestaurantMenuOutlined';
 function SideMenu() {
   const navigate = useNavigate();
 
@@ -62,14 +61,6 @@ function SideMenu() {
                 <MenuBookIcon fontSize="large" />
               </ListItemIcon>
               <ListItemText primary={'Your Recipes'} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemIcon>
-                <RestaurantMenuOutlinedIcon fontSize="large" />
-              </ListItemIcon>
-              <ListItemText primary={'Followed users'} />
             </ListItemButton>
           </ListItem>
           <ListItem>
