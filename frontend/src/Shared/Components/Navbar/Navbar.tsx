@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import {
   Box,
@@ -18,21 +18,8 @@ import RestaurantMenuOutlinedIcon from '@material-ui/icons/RestaurantMenuOutline
 import BottomNavigate from './BottomNavigate';
 import UserMenu from './UserMenu';
 import NavbarMobile from './NavbarMobile';
-import {Api} from '../../../Utils/Api';
-import UserContext from '../../../Contexts/UserContext';
-function Navbar() {
-  const {setupUser} = useContext(UserContext);
-  useEffect(() => {
-    Api.get(`${process.env.REACT_APP_DB_API}/accounts/user`)
-        .then((response) => {
-          console.log(response);
-          if (response.success) {
-            setupUser(response.text);
-          }
-        });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
+function Navbar() {
   const navigate = useNavigate();
   const StyledToolbar = styled(Toolbar)(({theme}) => ({
     display: 'flex',

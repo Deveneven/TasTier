@@ -1,4 +1,4 @@
-import {Button, Card, Step, StepLabel, Stepper} from '@mui/material';
+import {Box, Button, Card, Step, StepLabel, Stepper} from '@mui/material';
 import React, {useState} from 'react';
 import './RecipeEditScreen.scss';
 import AddBasicInformation from './Steps/AddBasicInformation';
@@ -90,6 +90,7 @@ const RecipeEditScreen = () => {
     formData.append('file', images[0]);
     formData.append('id_recipe', id);
     Api.postImage(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/images`, formData).then((response) => {
+      console.log(response);
       if (response.success) {
         console.log('Upload images success');
         navigate('/myrecipes');
@@ -108,29 +109,38 @@ const RecipeEditScreen = () => {
 
   return (
     <BaseLayout>
-      {error.display && (
-        <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
-      )}
-      <Card className='create-recipe-card'>
-        <Stepper
-          activeStep={activeStep}>
-          {stepList?.map((step) => {
-            return (
-              <Step key={step.id}>
-                <StepLabel>{step.name}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-        <div className='create-recipe-step-content'>
-          {setStep(activeStep)}
-        </div>
-        <Button
-          disabled={isValid}
-          onClick={activeStep < stepList.length-1 ? setNextStep : submitSteps}>
-          {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
-        </Button>
-      </Card>
+      <Box
+        maxWidth="lg"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: 'auto',
+        }}
+      >
+        {error.display && (
+          <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
+        )}
+        <Card className='create-recipe-card' >
+          <Stepper
+            activeStep={activeStep}>
+            {stepList?.map((step) => {
+              return (
+                <Step key={step.id}>
+                  <StepLabel>{step.name}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+          <div className='create-recipe-step-content'>
+            {setStep(activeStep)}
+          </div>
+          <Button
+            disabled={isValid}
+            onClick={activeStep < stepList.length-1 ? setNextStep : submitSteps}>
+            {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
+          </Button>
+        </Card>
+      </Box>
     </BaseLayout>
   );
 };
