@@ -1,5 +1,5 @@
-import {Button, Card, Step, StepLabel, Stepper} from '@mui/material';
-import React, {useState} from 'react';
+import {Button, Card, MobileStepper, Step, StepLabel, Stepper} from '@mui/material';
+import React, {useEffect, useState} from 'react';
 import './RecipeEditScreen.scss';
 import AddBasicInformation from './Steps/AddBasicInformation';
 import AddIngridiensList from './Steps/AddIngredientsList';
@@ -10,6 +10,8 @@ import {CreateRecipeDTO} from '../../Shared/DTOs/CreateRecipeDTO';
 import {Api} from '../../Utils/Api';
 import CustomizableAlert from '../../Shared/Components/Alert/CustomizableAlert';
 import {useNavigate} from 'react-router-dom';
+import {Box} from '@mui/system';
+import MediaQuery from 'react-responsive';
 
 const RecipeEditScreen = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -112,24 +114,49 @@ const RecipeEditScreen = () => {
         <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
       )}
       <Card className='create-recipe-card'>
-        <Stepper
-          activeStep={activeStep}>
-          {stepList?.map((step) => {
-            return (
-              <Step key={step.id}>
-                <StepLabel>{step.name}</StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
-        <div className='create-recipe-step-content'>
-          {setStep(activeStep)}
-        </div>
-        <Button
-          disabled={isValid}
-          onClick={activeStep < stepList.length-1 ? setNextStep : submitSteps}>
-          {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
-        </Button>
+        <MediaQuery maxWidth={800}>
+          <Box className='box-step'>
+            {setStep(activeStep)}
+          </Box>
+          <MobileStepper
+            variant="text"
+            steps={stepList.length}
+            position="static"
+            activeStep={activeStep}
+            nextButton={
+              <Button
+                disabled={isValid}
+                onClick={activeStep < stepList.length-1 ? setNextStep : submitSteps}>
+                {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
+              </Button>
+            }
+            backButton={
+              <Button disabled={activeStep < 1}>
+                Back
+              </Button>
+            }
+          />
+        </MediaQuery>
+        <MediaQuery minWidth={800}>
+          <Stepper
+            activeStep={activeStep}>
+            {stepList?.map((step) => {
+              return (
+                <Step key={step.id}>
+                  <StepLabel>{step.name}</StepLabel>
+                </Step>
+              );
+            })}
+          </Stepper>
+          <div className='create-recipe-step-content'>
+            {setStep(activeStep)}
+          </div>
+          <Button
+            disabled={isValid}
+            onClick={activeStep < stepList.length-1 ? setNextStep : submitSteps}>
+            {activeStep < stepList.length-1 ? 'Next' : 'Submit'}
+          </Button>
+        </MediaQuery>
       </Card>
     </BaseLayout>
   );
