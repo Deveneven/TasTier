@@ -17,6 +17,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  CardActionArea,
 } from '@mui/material';
 import {Chat, ExpandMore, ThumbUpAltOutlined} from '@material-ui/icons';
 import IngredientTable from '../IngredientTable/IngredientTable';
@@ -28,6 +29,7 @@ import SquareOutlinedIcon from '@mui/icons-material/SquareOutlined';
 import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingListButton';
 import {CommentDTO} from '../../DTOs/CommentDTO';
 import {Api} from '../../../Utils/Api';
+import {useNavigate} from 'react-router-dom';
 
 type CustomCardProps = {
   data: RecipeDTO;
@@ -37,7 +39,7 @@ const CustomCard = ({data}: CustomCardProps) => {
   const [expanded, setExpanded] = useState(false);
   const [commentIsVisible, setCommentIsVisible] = useState(false);
   const [comments, setComments] = useState<CommentDTO[]>([]);
-
+  const navigate = useNavigate();
   const addNewComment = () => {
     setCommentIsVisible(!commentIsVisible);
     if (data.id) {
@@ -66,10 +68,15 @@ const CustomCard = ({data}: CustomCardProps) => {
   };
   return (
     <Card className="card">
-      <CardHeader
-        avatar={<Avatar src={data.avatar} />}
-        title={data.username}
-      />
+      <CardActionArea
+        onClick={()=> {
+          navigate(`../recipes/user/${0}`);
+        }}>
+        <CardHeader
+          avatar={<Avatar src={data.avatar} />}
+          title={data.username}
+        />
+      </CardActionArea>
       {data.images && (
         <CardMedia component="img" height="200" image={data.images[0]} />
       )}
