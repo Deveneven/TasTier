@@ -1,4 +1,4 @@
-import {Button, Card, MobileStepper, Step, StepLabel, Stepper} from '@mui/material';
+import {Button, Card, MobileStepper, Step, StepLabel, Stepper, Box} from '@mui/material';
 import React, {useState} from 'react';
 import './RecipeEditScreen.scss';
 import AddBasicInformation from './Steps/AddBasicInformation';
@@ -92,6 +92,7 @@ const RecipeEditScreen = () => {
     formData.append('file', images[0]);
     formData.append('id_recipe', id);
     Api.postImage(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/images`, formData).then((response) => {
+      console.log(response);
       if (response.success) {
         console.log('Upload images success');
         navigate('/myrecipes');
