@@ -1,5 +1,5 @@
 .card {
-  width: 100vh;
+  margin-bottom: 2vh;
   .recipe-rating {
     float: right;
   }
@@ -16,5 +16,11 @@
   }
   .MuiRating-root {
     background-color: red($color: #000000);
+  }
+}
+@media(min-width: 800px) {
+  .card {
+    margin-left: calc(50% + 5px);
+    transform: translateX(-50%);
   }
 }

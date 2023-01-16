@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -28,6 +28,7 @@ import SquareOutlinedIcon from '@mui/icons-material/SquareOutlined';
 import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingListButton';
 import {CommentDTO} from '../../DTOs/CommentDTO';
 import {Api} from '../../../Utils/Api';
+import UserContext from '../../../Contexts/UserContext';
 
 type CustomCardProps = {
   data: RecipeDTO;
@@ -37,6 +38,7 @@ const CustomCard = ({data}: CustomCardProps) => {
   const [expanded, setExpanded] = useState(false);
   const [commentIsVisible, setCommentIsVisible] = useState(false);
   const [comments, setComments] = useState<CommentDTO[]>([]);
+  const {user} = useContext(UserContext);
 
   const addNewComment = () => {
     setCommentIsVisible(!commentIsVisible);
@@ -89,6 +91,7 @@ const CustomCard = ({data}: CustomCardProps) => {
             max={10}
             color='primary'
             size='small'
+            disabled={!!!user}
             defaultValue={data.rating}
             onChange={addRating}/>
         </div>
@@ -144,7 +147,9 @@ const CustomCard = ({data}: CustomCardProps) => {
       {!!commentIsVisible &&
       (
         <div className='expanded-content'>
-          <Comment setComments={setComments} recipeId={data.id}/>
+          {user && (
+            <Comment setComments={setComments} recipeId={data.id}/>
+          )}
           <List>
             {comments?.map((comment, index) => {
               return (

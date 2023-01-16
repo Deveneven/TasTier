@@ -1,5 +1,5 @@
 import {Button, Card, MobileStepper, Step, StepLabel, Stepper} from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './RecipeEditScreen.scss';
 import AddBasicInformation from './Steps/AddBasicInformation';
 import AddIngridiensList from './Steps/AddIngredientsList';
