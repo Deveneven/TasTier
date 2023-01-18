@@ -28,12 +28,35 @@ namespace TasTierAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<Recipe> result = _dbService.GetRecipesDTO();
-            if (result.Count() > 0)
+            var jwtt = Request.Headers[HeaderNames.Authorization].ToString();
+            if (!jwtt.Contains("Bearer"))
             {
-                return Ok(_dbService.GetRecipesDTO());
+                IEnumerable<Recipe> result = _dbService.GetRecipesDTO();
+                if (result.Count() > 0)
+                {
+                    return Ok(_dbService.GetRecipesDTO());
+                }
+                return BadRequest("Something went wrong");
             }
-            return BadRequest("Something went wrong");
+            else
+            {
+                var jwt = jwtt.Replace("Bearer ", "");
+                var handler = new JwtSecurityTokenHandler();
+                var securityToken = handler.ReadJwtToken(jwt);
+                var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
+                int id = int.Parse(idd);
+                IEnumerable<Recipe> result = _dbService.GetRecipesDTO();
+                if (result.Count() > 0)
+                {
+                    foreach(Recipe recipe in result)
+                    {
+                        recipe.isLiked = _dbService.IsRecipeLiked(recipe.Id,id);
+                    }
+                    return Ok(result);
+                }
+                return BadRequest("Something went wrong");
+            }
+
         }
         [Route("get/user/recipes")]
         [HttpGet]
@@ -47,6 +70,24 @@ namespace TasTierAPI.Controllers
             int id = int.Parse(idd);
 
             return Ok(_dbService.GetUserRecipesDTO(id));
+        }
+        [Route("get/friend/recipes")]
+        [HttpGet]
+        public IActionResult GetFriendRecipes(int id_friend)
+        {
+            if (!_dbService.CheckForPrivateAccount(id_friend))
+            {
+                return Ok(_dbService.GetUserRecipesDTO(id_friend));
+            }
+
+            return Unauthorized("User's account is private");
+                
+        }
+        [Route("get/recipe")]
+        [HttpGet]
+        public IActionResult GetSingleRecipe(int id_recipe)
+        {
+            return Ok(_dbService.GetSingleRecipe(id_recipe));
         }
         [Route("get/ingredients")]
         [HttpGet]
@@ -99,6 +140,22 @@ namespace TasTierAPI.Controllers
        //     return BadRequest("Missing from content");
         }
         [Authorize]
+        [Route("delete/recipe")]
+        [HttpDelete]
+        public IActionResult DeleteRecipe([FromBody] int id_recipe)
+        {
+            var jwtt = Request.Headers[HeaderNames.Authorization].ToString();
+            var jwt = jwtt.Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
+            int id = int.Parse(idd);
+
+            bool success = _dbService.DeleteRecipe(id_recipe, id);
+            if (success) { return Ok("Successfuly deleted recipe"); }
+            return BadRequest("Could not delete recipe");
+        }
+        [Authorize]
         [Route("add/tag")]
         [HttpPost]
         public IActionResult AddTag([FromBody] string tag)
@@ -114,18 +171,25 @@ namespace TasTierAPI.Controllers
         {
             if (Request.HasFormContentType)
             {
+
+                int id_recipe = int.Parse(Request.Form["id_recipe"].ToString());
+
                 List<string> url = _dbService.UploadRecipeImages(Request.Form.Files);
-                if (url.Count > 0)
+                if (id_recipe > 0)
                 {
-                    int id_recipe = int.Parse(Request.Form["id_recipe"].ToString());
-                    if (id_recipe > 0)
+                    if (url.Count > 0)
                     {
                         bool success = _dbService.AddRecipeImages(url, id_recipe);
                         if (success) return Ok("Successfuly uploaded images for the recipe");
                     }
-                    return BadRequest("Could not find recipe with passed id");
+                    else
+                    {
+                        string default_image = "https://tastierblobstorage.blob.core.windows.net/images/no_photo.jpg";
+                        bool success = _dbService.AddRecipeImage(default_image, id_recipe);
+                        if (success) return Ok("Successfuly uploaded images for the recipe");
+                    }
                 }
-                return BadRequest("No images were attached");
+                return Ok("Could not find passed recipe");
             }
             return BadRequest("Request doesnt have form content");
         }

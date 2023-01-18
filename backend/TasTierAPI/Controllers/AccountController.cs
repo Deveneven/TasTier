@@ -27,7 +27,6 @@ namespace TasTierAPI.Controllers
             _dbService = dbService;
         }
 
-        //MOCK LOGIN B4 GOOGLE/FB
         [AllowAnonymous]
         [Route("login")]
         [HttpPost]

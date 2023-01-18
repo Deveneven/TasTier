@@ -24,7 +24,7 @@ namespace TasTierAPI.Services
             containerName = configuration.GetConnectionString("ContainerName"); ;
 
         }
-
+        
         public void MakeConnection(string methodQuery)
         {
             connectionToDatabase = new SqlConnection(conURL);
@@ -34,7 +34,26 @@ namespace TasTierAPI.Services
             commandsToDatabase.CommandText = methodQuery;
         }
 
+        public bool ChangePrivacy(int id, bool state)
+        {
+            bool success = false;
+            MakeConnection("UPDATE[dbo].[User] " +
+             "SET Private_account = @state " +
+            "OUTPUT inserted.Id_User " +
+            "WHERE Id_User = @id");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@state", state);
+            commandsToDatabase.Parameters.AddWithValue("@id", id);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
 
+            while (sqlDataReader.Read())
+            {
+                int tmp = int.Parse(sqlDataReader["Id_User"].ToString());
+                if (tmp > 0) success = true;
+            }
+            connectionToDatabase.Close();
+            return success;
+        }
         public bool ChangeUsername(string username, int id)
         {
             bool success = false;
