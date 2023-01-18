@@ -18,5 +18,5 @@ export interface RecipeDTO {
   tags: Array<TagDTO>,
   steps: Array<StepDTO>
   id_user: number,
-  liked : boolean,
+  isLiked : boolean,
 }

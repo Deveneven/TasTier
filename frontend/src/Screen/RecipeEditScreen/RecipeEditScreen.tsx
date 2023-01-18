@@ -50,12 +50,15 @@ const RecipeEditScreen = () => {
   };
   const checkIsValid = (elem: ({name: string, isValid: boolean})) => {
     const index = results.findIndex((x) => x.name == elem.name);
+    console.log(index);
+    console.log(results);
     if (index !== -1) {
       results[index] = elem;
     } else {
       results.push(elem);
     }
     const isAnyInValid = results.some((x) => x.isValid == false);
+    console.log(isAnyInValid);
     setIsValid(isAnyInValid);
   };
   const submitSteps = async () => {
@@ -104,8 +107,8 @@ const RecipeEditScreen = () => {
   const stepList = [{id: 0, name: 'Complete the basic information',
     content: <AddBasicInformation onChange={onValueChange} checkIsValid={checkIsValid}/>},
   {id: 1, name: 'Add a list of ingredients',
-    content: <AddIngridiensList onChange={onValueChange} checkIsValid={checkIsValid}/>},
-  {id: 2, name: 'Add steps', content: <AddCookingSteps onChange={onValueChange}/>},
+    content: <AddIngridiensList onChange={onValueChange}/>},
+  {id: 2, name: 'Add steps', content: <AddCookingSteps onChange={onValueChange} />},
   {id: 3, name: 'Add photo', content: <AddPhoto onChange={onValueChange}/>}];
 
   return (

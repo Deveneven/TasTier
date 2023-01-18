@@ -35,6 +35,7 @@ import {useNavigate} from 'react-router-dom';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 type CustomCardProps = {
   data: RecipeDTO;
+  setData?;
 };
 
 const CustomCard = ({data}: CustomCardProps) => {
@@ -43,6 +44,7 @@ const CustomCard = ({data}: CustomCardProps) => {
   const [comments, setComments] = useState<CommentDTO[]>([]);
   const {user} = useContext(UserContext);
   const [liked, setLiked] = useState(false);
+  const [deleteButtonName, setDeleteButtonName] = useState('Delete');
   const navigate = useNavigate();
   const addNewComment = () => {
     setCommentIsVisible(!commentIsVisible);
@@ -57,7 +59,7 @@ const CustomCard = ({data}: CustomCardProps) => {
   };
   const likeTheRecipe = () => {
     if (data.id) {
-      Api.get(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/favorites?id_recipe=${data.id}`)
+      Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/favorites`, data.id)
           .then((response) => {
             if (response.success) {
               setLiked(true);
@@ -67,10 +69,22 @@ const CustomCard = ({data}: CustomCardProps) => {
   };
   const dislikeTheRecipe = () => {
     if (data.id) {
-      Api.get(`${process.env.REACT_APP_DB_API}/recipes/delete/recipe/favorites?id_recipe=${data.id}`)
+      Api.remove(`${process.env.REACT_APP_DB_API}/recipes/delete/recipe/favorites`, data.id)
           .then((response) => {
             if (response.success) {
               setLiked(false);
+            }
+          });
+    }
+  };
+  const deleteRecipe = () => {
+    if (data.id) {
+      Api.remove(`${process.env.REACT_APP_DB_API}/recipes/delete/recipe`, data.id)
+          .then((response) => {
+            if (response.success) {
+              setDeleteButtonName('Sucessfuly deleted, please refresh the page');
+            } else {
+              setDeleteButtonName('Unsucessfuly deleted');
             }
           });
     }
@@ -90,6 +104,7 @@ const CustomCard = ({data}: CustomCardProps) => {
           }
         });
   };
+  console.log(data);
   return (
     <Card className="card">
       <CardActions sx={{display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', padding: '0'}}
@@ -121,7 +136,7 @@ const CustomCard = ({data}: CustomCardProps) => {
         <IconButton onClick={addNewComment}>
           <Chat />
         </IconButton>
-        {data.liked || liked ? (<><IconButton onClick={dislikeTheRecipe}>
+        {user && (!!data.isLiked || liked )? (<><IconButton onClick={dislikeTheRecipe}>
           <ThumbUpIcon />
         </IconButton></>
 ) : (
@@ -129,7 +144,18 @@ const CustomCard = ({data}: CustomCardProps) => {
   <ThumbUpAltOutlined />
 </IconButton>
 </>) }
+        {!user && (
+          <><IconButton onClick={() => {
+            navigate('../signin');
+          }}>
+            <ThumbUpAltOutlined />
+          </IconButton></>
+        )}
         <AddToShoppingListButton data={data.ingredients}/>
+        { user && (user.id === data.id_user) &&(
+          <Button variant="contained" sx={{backgroundColor: 'red !important'}}
+            onClick={deleteRecipe}> {deleteButtonName} </Button>
+        )}
       </CardActions>
       <CardContent>
         {data.name}
