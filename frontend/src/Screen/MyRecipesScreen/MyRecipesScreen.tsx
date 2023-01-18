@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {RecipeDTO} from '../../Shared/DTOs/RecipeDTO';
 import {Api} from '../../Utils/Api';
 import RecipesList from '../../Shared/Components/RecipesList/RecipesList';
+import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
 
 const MyRecipesScreen = () => {
   const [dataAll, setDataAll] = useState<RecipeDTO[]>([]);
@@ -18,7 +19,9 @@ const MyRecipesScreen = () => {
     fetchData();
   }, []);
   return (
-    <RecipesList dataAll={dataAll}/>
+    <BaseLayout>
+      <RecipesList dataAll={dataAll}/>
+    </BaseLayout>
   );
 };
 
