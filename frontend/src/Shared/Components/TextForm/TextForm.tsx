@@ -22,7 +22,11 @@ const TextForm = (props: any) => {
       const regex = new RegExp(props.regex);
       if (!regex.test(value)) {
         setIsInvalid(true);
-        results.push('Incorrect entry');
+        if (!!props.customMessage) {
+          results.push(props.customMessage);
+        } else {
+          results.push('Incorrect entry');
+        }
       }
     }
     if (props.minLenght && value.length < props.minLenght ) {

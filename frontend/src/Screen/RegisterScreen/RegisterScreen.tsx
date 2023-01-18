@@ -31,16 +31,6 @@ const RegisterScreen = () => {
   const [emailIsValid, setEmailIsValid] = useState({name: 'email', isValid: false});
   const [passwordIsValid, setPasswordIsValid] = useState({name: 'password', isValid: false});
   const [confirmPasswordIsValid, setConfirmPasswordIsValid] = useState({name: 'confirmPassword', isValid: false});
-  // console.log(process.env.REACT_APP_DB_API);
-  //   console.log(nameIsValid);
-
-  //   console.log(lastNameIsValid);
-
-  //   console.log(emailIsValid);
-
-  //   console.log(passwordIsValid);
-
-  //   console.log(confirmPasswordIsValid);
 
   const register = () => {
     if (
@@ -141,6 +131,7 @@ const RegisterScreen = () => {
                 minLength={3}
                 maxLength={20}
                 regex={/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g} // do podwojnego przejrzenia regex
+                customMessage={'Please put an email'}
                 checkIsValid={setEmailIsValid}
                 onChange={ (e) => {
                   setEmail(e.target.value);
@@ -158,6 +149,7 @@ const RegisterScreen = () => {
                 minLength={8}
                 maxLength={20}
                 regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/}
+                customMessage={'Passwords must be the same and contain 8 characters, big& small letter, number and special character'}
                 checkIsValid={setPasswordIsValid}
                 onChange={ (e) => {
                   setPassword(e.target.value);
@@ -174,6 +166,7 @@ const RegisterScreen = () => {
                 autoComplete="current-password"
                 minLength={8}
                 maxLength={20}
+                customMessage={'Passwords must be the same and contain 8 characters, big& small letter, number and special character'}
                 regex={/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/}
                 checkIsValid={setConfirmPasswordIsValid}
                 onChange={ (e) => {

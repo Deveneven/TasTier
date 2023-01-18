@@ -75,6 +75,7 @@ const SignInScreen = () => {
                 autoComplete="email"
                 autoFocus
                 regex={/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g}
+                customMessage={'Please put an email'}
                 checkIsValid={setEmailIsValid}
                 onChange={ (e) => {
                   setEmail(e.target.value);

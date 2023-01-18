@@ -98,6 +98,7 @@ const AddBasicInformation = (props: any) => {
           label="Cooking time"
           name="time"
           fullWidth
+          customMessage={'Wrong cooking time'}
           InputProps={{
             inputComponent: TextMaskCustom,
             startAdornment: (
