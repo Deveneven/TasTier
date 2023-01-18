@@ -17,4 +17,5 @@ export interface RecipeDTO {
   avatar: string,
   tags: Array<TagDTO>,
   steps: Array<StepDTO>
+  id_user: number,
 }

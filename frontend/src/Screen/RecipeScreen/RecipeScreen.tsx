@@ -1,58 +1,27 @@
-import React from 'react';
-import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
-import CustomCard from '../../Shared/Components/Card/CustomCard';
-// import {useParams} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import RecipesList from '../../Shared/Components/RecipesList/RecipesList';
+import {useParams} from 'react-router-dom';
+import {RecipeDTO} from '../../Shared/DTOs/RecipeDTO';
+import {Api} from '../../Utils/Api';
 const RecipeScreen = () => {
-  // const {id} = useParams();
-  const recipe = {
-    'id': 49,
-    'name': 'Carrots',
-    'difficulty': 1,
-    'time': '00:10',
-    'images': [
-      // eslint-disable-next-line max-len
-      'https://tastierblobstorage.blob.core.windows.net/images/png-clipart-hawaiian-pizza-kebab-pizza-hut-long-ping-yuen-long-pizza-food-recipe.png',
-    ],
-    'description': 'Carrots',
-    'username': 'Konrad',
-    'cousine': 'French',
-    'date': '2023-01-15T00:00:00',
-    'rating': 0,
-    'priv': true,
-    'ingredients': [
-      {
-        'id': 21,
-        'name': 'CARROT',
-        'calories': 10,
-        'allergen': false,
-        'amount': 200,
-        'unit': 'Spoon',
-        'totalMass': '3000',
-      },
-    ],
-    'steps': [
-      {
-        'step_Number': 0,
-        'stepDesc': 'peel carrots',
-      },
-    ],
-    'tags': [
-      {
-        'id_tag': 5,
-        'tagName': 'vegan',
-      },
-      {
-        'id_tag': 9,
-        'tagName': 'carrot',
-      },
-    ],
-    'avatar': 'https://tastierblobstorage.blob.core.windows.net/images/mata.png',
-    'total_Calories': null,
+  const {id} = useParams();
+  const [data, setData] = useState<RecipeDTO>();
+  const fetchData = async () => {
+    const data = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/recipe?id_recipe=${id}`);
+    if (data.success) {
+      // TO DO: Sortowanie po dacie
+      console.log('przepis pojedynczy !!!!!!!!!!!!!!!!!!!');
+      console.log(data);
+      setData(data.text);
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
-    <BaseLayout>
-      <CustomCard data={recipe} />
-    </BaseLayout>
+    <RecipesList recipeSingle={data} />
   );
 };
 

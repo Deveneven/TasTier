@@ -1,20 +1,34 @@
 .card {
-  width: 100vh;
-  .recipe-rating {
-    float: right;
+	margin-bottom: 2vh;
+	.recipe-rating {
+	  float: right;
+	}
+	.expanded-content {
+	  line-height: 20px;
+	  margin-left: 2vh;
+	  margin-right: 2vh;
+	  margin-bottom: 2vh;
+	  .cooking-time {
+		display: flex;
+		float: right;
+		align-items: center;
+	  }
+	}
+	.MuiRating-root {
+	  background-color: red($color: #000000);
+	}
   }
-  .expanded-content {
-    line-height: 20px;
-    margin-left: 2vh;
-    margin-right: 2vh;
-    margin-bottom: 2vh;
-    .cooking-time {
-      display: flex;
-      float: right;
-      align-items: center;
-    }
+  @media(min-width: 800px) {
+	.card {
+	  margin-left: calc(50% + 5px);
+	  transform: translateX(-50%);
+	}
   }
-  .MuiRating-root {
-    background-color: red($color: #000000);
-  }
+
+.cardHeaderAction-focusHighlight__none{
+	&:hover, :active, :focus{
+		background-color:transparent  !important;
+		transition: none;
+	}
+	background-color:transparent !important;
 }

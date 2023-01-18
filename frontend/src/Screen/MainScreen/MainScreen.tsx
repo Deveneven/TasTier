@@ -3,7 +3,6 @@ import {RecipeDTO} from '../../Shared/DTOs/RecipeDTO';
 import './MainScreen.scss';
 import {Api} from '../../Utils/Api';
 import RecipesList from '../../Shared/Components/RecipesList/RecipesList';
-import BaseLayout from '../../Shared/Components/BaseLayout/BaseLayout';
 
 const MainScreen = () => {
   const [dataAll, setDataAll] = useState<RecipeDTO[]>([]);
@@ -25,9 +24,7 @@ const MainScreen = () => {
   }, []);
 
   return (
-    <BaseLayout>
-      <RecipesList dataAll={dataAll}/>
-    </BaseLayout>
+    <RecipesList dataAll={dataAll}/>
   );
 };
 export default MainScreen;

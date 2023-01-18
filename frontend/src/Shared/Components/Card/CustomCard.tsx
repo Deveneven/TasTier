@@ -30,7 +30,7 @@ import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingList
 import {CommentDTO} from '../../DTOs/CommentDTO';
 import {Api} from '../../../Utils/Api';
 import {useNavigate} from 'react-router-dom';
-
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 type CustomCardProps = {
   data: RecipeDTO;
 };
@@ -68,15 +68,28 @@ const CustomCard = ({data}: CustomCardProps) => {
   };
   return (
     <Card className="card">
-      <CardActionArea
-        onClick={()=> {
-          navigate(`../recipes/user/${0}`);
-        }}>
-        <CardHeader
-          avatar={<Avatar src={data.avatar} />}
-          title={data.username}
-        />
-      </CardActionArea>
+      <CardActions sx={{display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', padding: '0'}}
+        className='cardHeaderAction-focusHighlight__none' >
+        <CardActionArea
+          onClick={()=> {
+            navigate(`../recipes/user/${data.id_user}`);
+          }}
+          sx={{width: '95%'}}
+        >
+          <CardHeader
+            avatar={<Avatar src={data.avatar} />}
+            title={data.username}
+          />
+        </CardActionArea>
+        <Button
+          sx={{margin: 'auto', display: 'block', height: '72px', padding: '0'}}
+          onClick={() => {
+            navigate(`/recipes/recipe/${data.id}`);
+          }}
+        >
+          <KeyboardArrowRightIcon fontSize='large'/>
+        </Button>
+      </CardActions>
       {data.images && (
         <CardMedia component="img" height="200" image={data.images[0]} />
       )}
