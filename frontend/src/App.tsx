@@ -16,28 +16,34 @@ import DietSettingsScreen from './Screen/DietSettingsScreen/DietSettingsScreen';
 import {UserProvider} from './Contexts/UserContext';
 import PrivateRoute from './Utils/PrivateRoute';
 import MyRecipesScreen from './Screen/MyRecipesScreen/MyRecipesScreen';
+import UserRecipesScreen from './Screen/UserRecipesScreen/UserRecipesScreen';
+import RecipeScreen from './Screen/RecipeScreen/RecipeScreen';
+import FavoriteRecipesScreen from './Screen/FavoriteRecipesScreen/FavoriteRecipesScreen';
 function App() {
   return (
     <UserProvider>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<MainScreen />} />
+            <Route path="/" element={<PrivateRoute outlet={<MainScreen />} />} />
             <Route path="/signin" element={<SignInScreen />} />
             <Route path="/register" element={<RegisterScreen />} />
             <Route
               path="/shoppinglist"
-              element={<ShoppingScreen />}
+              element={<PrivateRoute outlet={<ShoppingScreen />} />}
             />
             <Route
               path="/shoppinglist/edit/:id"
-              element={<ListScreen />}
+              element={<PrivateRoute outlet={<ListScreen />}/>}
             />
-            <Route path="/recipe/0" element={<RecipeEditScreen/>} />
+            <Route path="/recipe/0" element={<PrivateRoute outlet={<RecipeEditScreen/>} />} />
             <Route path="/recipe/:id" element={<PrivateRoute outlet={<RecipeEditScreen />} />} />
-            <Route path="/account/settings" element={<SettingsScreen/>} />
-            <Route path="/diets" element={<DietSettingsScreen/>} />
-            <Route path="/myrecipes" element={<MyRecipesScreen/>} />
+            <Route path="/account/settings" element={ <PrivateRoute outlet={<SettingsScreen/>} />} />
+            <Route path="/diets" element={<PrivateRoute outlet={<DietSettingsScreen/>} />} />
+            <Route path="/myrecipes" element={<PrivateRoute outlet={<MyRecipesScreen/>} />} />
+            <Route path="/recipes/user/:id" element={<PrivateRoute outlet={<UserRecipesScreen/>} />} />
+            <Route path="/recipes/recipe/:id" element={<PrivateRoute outlet={<RecipeScreen/>} />} />
+            <Route path="/recipes/favorite" element={<PrivateRoute outlet={<FavoriteRecipesScreen/>} />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

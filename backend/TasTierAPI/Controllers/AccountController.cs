@@ -55,8 +55,6 @@ namespace TasTierAPI.Controllers
                 var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(fakeToken));
                 var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
                 var token = new JwtSecurityToken(
-                    issuer: "https://localhost:44309",
-                    audience: "https://localhost:44309",
                     claims: userClaim,
                     expires: DateTime.UtcNow.AddDays(3),
                     signingCredentials: cred

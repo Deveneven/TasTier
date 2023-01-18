@@ -94,14 +94,12 @@ async function postImage(url, payload) {
     referrerPolicy: 'no-referrer',
     body: payload,
   }).then(async (response) => {
-    console.log(response);
-    const resp = {success: true, text: await response.json()}; // zamienic na response.json()
+    const resp = {success: true, text: await response.text()}; // zamienic na response.json()
     if (response.status === 200) {
       return resp;
     }
     throw new Error(resp.text);
   }).then( (response) => {
-    console.log(response);
     return response;
   }).catch((error) => {
     console.log('jest to error');

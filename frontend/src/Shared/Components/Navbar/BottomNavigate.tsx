@@ -39,8 +39,11 @@ function BottomNavigate() {
           }}
         />
         <BottomNavigationAction
-          label="Favorites"
+          label="My Recipes"
           icon={<BookmarkBorderOutlinedIcon fontSize="large" />}
+          onClick={() => {
+            navigate(`../recipes/favorite`);
+          }}
         />
         <BottomNavigationAction
           onClick={() => {

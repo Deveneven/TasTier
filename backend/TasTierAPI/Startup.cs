@@ -41,12 +41,10 @@ namespace TasTierAPI
             {
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
-                    ValidIssuer = "https://localhost:44309",
-                    ValidAudience = "https://localhost:44309",
 
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("verysecretoken5912359213"))
                 };

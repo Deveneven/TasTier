@@ -12,8 +12,8 @@ import AddIcon from '@material-ui/icons/Add';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import SettingsIcon from '@material-ui/icons/Settings';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import RestaurantMenuOutlinedIcon from '@material-ui/icons/RestaurantMenuOutlined';
 function SideMenu() {
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ function SideMenu() {
           <ListItem>
             <ListItemButton
               onClick={() => {
-                navigate('../');
+                navigate('../recipe/0');
               }}
             >
               <ListItemIcon>
@@ -57,19 +57,14 @@ function SideMenu() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('../myrecipes');
+              }}>
               <ListItemIcon>
                 <MenuBookIcon fontSize="large" />
               </ListItemIcon>
               <ListItemText primary={'Your Recipes'} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem>
-            <ListItemButton>
-              <ListItemIcon>
-                <RestaurantMenuOutlinedIcon fontSize="large" />
-              </ListItemIcon>
-              <ListItemText primary={'Followed users'} />
             </ListItemButton>
           </ListItem>
           <ListItem>
@@ -101,7 +96,7 @@ function SideMenu() {
                 navigate('../signin');
               }}>
               <ListItemIcon>
-                <SettingsIcon fontSize="large" />
+                <PowerSettingsNewIcon fontSize="large" />
               </ListItemIcon>
               <ListItemText primary={'Log out'} />
             </ListItemButton>
