@@ -18,6 +18,7 @@ import PrivateRoute from './Utils/PrivateRoute';
 import MyRecipesScreen from './Screen/MyRecipesScreen/MyRecipesScreen';
 import UserRecipesScreen from './Screen/UserRecipesScreen/UserRecipesScreen';
 import RecipeScreen from './Screen/RecipeScreen/RecipeScreen';
+import FavoriteRecipesScreen from './Screen/FavoriteRecipesScreen/FavoriteRecipesScreen';
 function App() {
   return (
     <UserProvider>
@@ -42,6 +43,7 @@ function App() {
             <Route path="/myrecipes" element={<PrivateRoute outlet={<MyRecipesScreen/>} />} />
             <Route path="/recipes/user/:id" element={<PrivateRoute outlet={<UserRecipesScreen/>} />} />
             <Route path="/recipes/recipe/:id" element={<PrivateRoute outlet={<RecipeScreen/>} />} />
+            <Route path="/recipes/favorite" element={<PrivateRoute outlet={<FavoriteRecipesScreen/>} />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

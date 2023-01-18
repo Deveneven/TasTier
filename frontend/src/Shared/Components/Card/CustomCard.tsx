@@ -30,7 +30,7 @@ import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingList
 import {CommentDTO} from '../../DTOs/CommentDTO';
 import {Api} from '../../../Utils/Api';
 import UserContext from '../../../Contexts/UserContext';
-
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import {useNavigate} from 'react-router-dom';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 type CustomCardProps = {
@@ -42,7 +42,7 @@ const CustomCard = ({data}: CustomCardProps) => {
   const [commentIsVisible, setCommentIsVisible] = useState(false);
   const [comments, setComments] = useState<CommentDTO[]>([]);
   const {user} = useContext(UserContext);
-
+  const [liked, setLiked] = useState(false);
   const navigate = useNavigate();
   const addNewComment = () => {
     setCommentIsVisible(!commentIsVisible);
@@ -51,6 +51,26 @@ const CustomCard = ({data}: CustomCardProps) => {
           .then((response) => {
             if (response.success) {
               setComments(response.text);
+            }
+          });
+    }
+  };
+  const likeTheRecipe = () => {
+    if (data.id) {
+      Api.get(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/favorites?id_recipe=${data.id}`)
+          .then((response) => {
+            if (response.success) {
+              setLiked(true);
+            }
+          });
+    }
+  };
+  const dislikeTheRecipe = () => {
+    if (data.id) {
+      Api.get(`${process.env.REACT_APP_DB_API}/recipes/delete/recipe/favorites?id_recipe=${data.id}`)
+          .then((response) => {
+            if (response.success) {
+              setLiked(false);
             }
           });
     }
@@ -101,9 +121,14 @@ const CustomCard = ({data}: CustomCardProps) => {
         <IconButton onClick={addNewComment}>
           <Chat />
         </IconButton>
-        <IconButton>
-          <ThumbUpAltOutlined />
-        </IconButton>
+        {data.liked || liked ? (<><IconButton onClick={dislikeTheRecipe}>
+          <ThumbUpIcon />
+        </IconButton></>
+) : (
+<> <IconButton onClick={likeTheRecipe}>
+  <ThumbUpAltOutlined />
+</IconButton>
+</>) }
         <AddToShoppingListButton data={data.ingredients}/>
       </CardActions>
       <CardContent>
