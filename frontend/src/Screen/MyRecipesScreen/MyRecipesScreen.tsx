@@ -19,9 +19,7 @@ const MyRecipesScreen = () => {
     fetchData();
   }, []);
   return (
-    <BaseLayout>
       <RecipesList dataAll={dataAll}/>
-    </BaseLayout>
   );
 };
 
