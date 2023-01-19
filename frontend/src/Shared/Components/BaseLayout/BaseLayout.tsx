@@ -4,11 +4,13 @@ import Navbar from '../Navbar/Navbar';
 import './BaseLayout.scss';
 interface Props {
   children;
+  onSearch?: any;
+  onFilter?: any
 }
 const BaseLayout = (props: Props) => {
   return (
     <>
-      <Navbar/>
+      <Navbar onSearch={props.onSearch} onFilter={props.onFilter}/>
       <Card className='base-layout-card'>
         {props.children}
       </Card>

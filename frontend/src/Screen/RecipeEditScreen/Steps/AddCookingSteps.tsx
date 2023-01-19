@@ -1,5 +1,5 @@
 import {Avatar, Button, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemText, TextField} from '@mui/material';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../../../Shared/Components/Comment/Comment.scss';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -47,6 +47,12 @@ const AddCookingSteps = (props: any) => {
       isEdit ? editStep() : addNextStep();
     }
   };
+  useEffect(()=>{
+    if (props.checkIsValid) {
+      props.checkIsValid({name: props.name, isValid: steps.length > 0});
+    }
+  }, [steps]);
+
   return (
     <Grid
       container

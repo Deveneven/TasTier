@@ -1,0 +1,13 @@
+.filter-menu {
+  background-color: white;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  box-shadow: 5px 5px 9px 0px rgba(0, 0, 0, 0.39);
+  padding: 10px;
+}
+@media(min-width: 800px) {
+  .filter-menu {
+    margin-left: calc(50% + 5px);
+    transform: translateX(-50%);
+  }
+}

@@ -6,6 +6,13 @@ import {IngredientDTO} from '../../../Shared/DTOs/IngredientDTO';
 const AddIngredientsList = (props: any) => {
   const [ingredients] = useState<IngredientDTO[]>([]);
 
+  const onChange = (event) => {
+    if (props.onChange && props.checkIsValid) {
+      props.onChange(event);
+      console.log(event.value.length);
+      props.checkIsValid({name: props.name, isValid: event.value.length > 0});
+    }
+  };
   return (
     <Grid
       container
@@ -14,7 +21,7 @@ const AddIngredientsList = (props: any) => {
         <IngredientTable
           isEditable={true}
           data={ingredients}
-          onChange={props.onChange}/>
+          onChange={onChange}/>
       </Grid>
     </Grid>
   );

@@ -105,7 +105,7 @@ const RecipeEditScreen = () => {
     content: <AddBasicInformation onChange={onValueChange} checkIsValid={checkIsValid}/>},
   {id: 1, name: 'Add a list of ingredients',
     content: <AddIngridiensList onChange={onValueChange} checkIsValid={checkIsValid}/>},
-  {id: 2, name: 'Add steps', content: <AddCookingSteps onChange={onValueChange}/>},
+  {id: 2, name: 'Add steps', content: <AddCookingSteps onChange={onValueChange} checkIsValid={checkIsValid}/>},
   {id: 3, name: 'Add photo', content: <AddPhoto onChange={onValueChange}/>}];
 
   return (
