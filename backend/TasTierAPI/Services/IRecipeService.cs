@@ -13,7 +13,6 @@ namespace TasTierAPI.Services
         public List<Recipe> GetRecipes();
         public List<IngriedientInRecipe> GetIngriedientList(int Id_Recipe);
         public List<Step> GetSteps(int Id_Recipe);
-       // public bool AddRecipe();
         public List<string> UploadRecipeImages(IFormFileCollection images);
         public bool AddRecipeImage(string url, int id_recipe);
         public bool AddRecipeImages(List<string> urls, int id_recipe);
@@ -21,7 +20,6 @@ namespace TasTierAPI.Services
         public bool AddRecipeIngredients(List<IngredientInRecipeInsertDTO> ingrs, int id_recipe);
         public List<MetricDefinition> GetMetricDefinitions();
         public int AddRecipeDefinition(RecipeInsertDTO recipe, int id_user);
-        //public bool AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, IFormFileCollection images, int id_user);
         public int AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, List<Step> steps,List<string>tags, int id_user);
         public bool AddRecipeSteps(List<Step> steps, int id_recipe);
         public bool AddRecipeStep(Step step, int id_recipe);
@@ -42,6 +40,11 @@ namespace TasTierAPI.Services
         public List<CommentDTO> GetAllCommentsById(int id);
         public List<CommentDTO> AddNewComment(CreateCommentDTO createCommentDTO);
         public bool AddRating(CreateRatingDTO createRatingDTO);
+        public Recipe GetRecipe(int id_recipe);
+        public Recipe GetSingleRecipe(int id_recipe);
+        public bool CheckForPrivateAccount(int id_user);
+        public bool IsRecipeLiked(int id_recipe, int id_user);
+        public bool DeleteRecipe(int id_recipe, int id_user);
     }
 }
 

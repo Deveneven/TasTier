@@ -11,7 +11,6 @@ import {
   Grid,
 } from '@mui/material';
 import {useNavigate} from 'react-router-dom';
-import ExploreOutlinedIcon from '@material-ui/icons/ExploreOutlined';
 import {Search as SearchIcon} from '@material-ui/icons';
 import HomeIcon from '@material-ui/icons/Home';
 import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutlined';
@@ -149,18 +148,18 @@ function Navbar(props: any) {
             <IconButton
               aria-label="upload picture"
               component="span"
-            >
-              <ExploreOutlinedIcon fontSize="large" />
-            </IconButton>
-            <IconButton
-              aria-label="upload picture"
-              component="span"
+              onClick={() => {
+                navigate(`../recipes/favorite`);
+              }}
             >
               <BookmarkBorderOutlinedIcon fontSize="large" />
             </IconButton>
             <IconButton
               aria-label="upload picture"
               component="span"
+              onClick={() => {
+                navigate(`../recipe/0`);
+              }}
             >
               <RestaurantMenuOutlinedIcon fontSize="large" />
             </IconButton>

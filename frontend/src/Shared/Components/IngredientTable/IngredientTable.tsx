@@ -49,8 +49,6 @@ const IngredientTable = (props: IngredientTableProps) => {
     if (!!props.onChange) {
       props.onChange({name: 'ingredients', value: testData});
     }
-    console.log(testData);
-    console.log(props.data);
   }, [testData]);
 
   const deleteIngredient = async (id: number, name: string) => {

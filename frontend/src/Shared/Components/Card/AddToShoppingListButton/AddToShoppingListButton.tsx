@@ -25,7 +25,6 @@ text: string,
 type: 'warning' | 'success' |'error' | 'info'
 }>({display: false, text: 'something went wrong!', type: 'error'});
 
-  console.log(data);
   const handleClickOpen = () => {
     setOpen(true);
   };

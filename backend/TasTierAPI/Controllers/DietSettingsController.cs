@@ -94,12 +94,14 @@ namespace TasTierAPI.Controllers
 
             return Ok(_dbService.GetUserDiet(id));
         }
+
         [HttpGet]
         [Route("allergens/get")]
         public IActionResult GetAllAllergens()
         {
             return Ok(_dbService.GetAllAllergens());
         }
+
         [HttpGet]
         [Route("allergens/user")]
         public IActionResult GetUserAllergens()
@@ -120,6 +122,7 @@ namespace TasTierAPI.Controllers
             if (success) return Ok("Successfuly deleted allergen from user's list");
             else return BadRequest("Something went wrong");
         }
+
         [HttpPost]
         [Route("allergens/user/add")]
         public IActionResult AddUserAllergen([FromBody] string allergen)
@@ -131,6 +134,7 @@ namespace TasTierAPI.Controllers
             if (success) return Ok("Successfuly added allergen to user's list");
             else return BadRequest("Something went wrong");
         }
+
         [HttpGet]
         [Route("ingredients/favorite")]
         public IActionResult GetFavIngredients()

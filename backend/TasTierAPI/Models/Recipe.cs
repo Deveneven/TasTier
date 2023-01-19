@@ -12,6 +12,7 @@ namespace TasTierAPI.Models
         public string Time { get; set; }
         public List<String> Images { get; set; }
         public string Description { get; set; }
+        public int id_user { get; set; }
         public string Username { get; set; }
         public string Cousine { get; set; }
         public DateTime Date { get; set; }  
@@ -22,5 +23,6 @@ namespace TasTierAPI.Models
         public List<Tag> Tags { get; set; }
         public string Avatar { get; set; }
         public string Total_Calories { get; set; }
+        public bool isLiked { get; set; }
     }
 }

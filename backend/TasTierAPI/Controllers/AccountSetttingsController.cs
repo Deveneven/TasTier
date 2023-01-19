@@ -32,9 +32,18 @@ namespace TasTierAPI.Controllers
             var jwt = jwtt.Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
             var securityToken = handler.ReadJwtToken(jwt);
-            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
             return int.Parse(id);
+        }
+        [HttpPut]
+        [Route("privacy/change")]
+        public IActionResult ChangePrivacy([FromBody] bool state)
+        {
+            var id = getIDFromToken(Request.Headers[HeaderNames.Authorization]);
+            bool success = _dbService.ChangePrivacy(id,state);
+
+            if (success) return Ok("Succesfully changed privacy settings");
+            return BadRequest("Could not change privacy settings");
         }
 
         [HttpPost]
@@ -47,6 +56,7 @@ namespace TasTierAPI.Controllers
             if (success) return Ok("Succesfully changed the username");
             return BadRequest("Could not change the username");
         }
+
         [HttpPost]
         [Route("name/change")]
         public IActionResult ChangeName([FromBody] string name)

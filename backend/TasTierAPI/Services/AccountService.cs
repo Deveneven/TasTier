@@ -68,7 +68,7 @@ namespace TasTierAPI.Services
         public UserDTO GetUserDTO(int id)
         {
             UserDTO user = new UserDTO();
-            var (connectionToDatabase, commandsToDatabase) = MakeConnection("SELECT Name,LastName,Nickname,Avatar,Email,Admin,Diet_Id_Diet FROM [dbo].[User] WHERE Id_User =@id");
+            var (connectionToDatabase, commandsToDatabase) = MakeConnection("SELECT Id_User,Name,LastName,Nickname,Avatar,Email,Admin,Diet_Id_Diet FROM [dbo].[User] WHERE Id_User =@id");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@id", id);
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
@@ -76,6 +76,7 @@ namespace TasTierAPI.Services
             {
                 user = new UserDTO()
                 {
+                    id = (sqlDataReader["Id_User"]) != null ? int.Parse(sqlDataReader["Id_User"].ToString()) : 0,
                     name = (sqlDataReader["Name"] != null ? sqlDataReader["Name"].ToString() : null),
                     lastname = (sqlDataReader["LastName"] != null ? sqlDataReader["LastName"].ToString() : null),
                     nickname = (sqlDataReader["Nickname"] != null ? sqlDataReader["Nickname"].ToString() : null),

@@ -17,6 +17,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  CardActionArea,
 } from '@mui/material';
 import {Chat, ExpandMore, ThumbUpAltOutlined} from '@material-ui/icons';
 import IngredientTable from '../IngredientTable/IngredientTable';
@@ -29,9 +30,12 @@ import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingList
 import {CommentDTO} from '../../DTOs/CommentDTO';
 import {Api} from '../../../Utils/Api';
 import UserContext from '../../../Contexts/UserContext';
-
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import {useNavigate} from 'react-router-dom';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 type CustomCardProps = {
   data: RecipeDTO;
+  setData?;
 };
 
 const CustomCard = ({data}: CustomCardProps) => {
@@ -39,7 +43,9 @@ const CustomCard = ({data}: CustomCardProps) => {
   const [commentIsVisible, setCommentIsVisible] = useState(false);
   const [comments, setComments] = useState<CommentDTO[]>([]);
   const {user} = useContext(UserContext);
-
+  const [liked, setLiked] = useState(false);
+  const [deleteButtonName, setDeleteButtonName] = useState('Delete');
+  const navigate = useNavigate();
   const addNewComment = () => {
     setCommentIsVisible(!commentIsVisible);
     if (data.id) {
@@ -47,6 +53,38 @@ const CustomCard = ({data}: CustomCardProps) => {
           .then((response) => {
             if (response.success) {
               setComments(response.text);
+            }
+          });
+    }
+  };
+  const likeTheRecipe = () => {
+    if (data.id) {
+      Api.post(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/favorites`, data.id)
+          .then((response) => {
+            if (response.success) {
+              setLiked(true);
+            }
+          });
+    }
+  };
+  const dislikeTheRecipe = () => {
+    if (data.id) {
+      Api.remove(`${process.env.REACT_APP_DB_API}/recipes/delete/recipe/favorites`, data.id)
+          .then((response) => {
+            if (response.success) {
+              setLiked(false);
+            }
+          });
+    }
+  };
+  const deleteRecipe = () => {
+    if (data.id) {
+      Api.remove(`${process.env.REACT_APP_DB_API}/recipes/delete/recipe`, data.id)
+          .then((response) => {
+            if (response.success) {
+              setDeleteButtonName('Sucessfuly deleted, please refresh the page');
+            } else {
+              setDeleteButtonName('Unsucessfuly deleted');
             }
           });
     }
@@ -66,12 +104,31 @@ const CustomCard = ({data}: CustomCardProps) => {
           }
         });
   };
+  console.log(data);
   return (
     <Card className="card">
-      <CardHeader
-        avatar={<Avatar src={data.avatar} />}
-        title={data.username}
-      />
+      <CardActions sx={{display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', padding: '0'}}
+        className='cardHeaderAction-focusHighlight__none' >
+        <CardActionArea
+          onClick={()=> {
+            navigate(`../recipes/user/${data.id_user}`);
+          }}
+          sx={{width: '95%'}}
+        >
+          <CardHeader
+            avatar={<Avatar src={data.avatar} />}
+            title={data.username}
+          />
+        </CardActionArea>
+        <Button
+          sx={{margin: 'auto', display: 'block', height: '72px', padding: '0'}}
+          onClick={() => {
+            navigate(`/recipes/recipe/${data.id}`);
+          }}
+        >
+          <KeyboardArrowRightIcon fontSize='large'/>
+        </Button>
+      </CardActions>
       {data.images && (
         <CardMedia component="img" height="200" image={data.images[0]} />
       )}
@@ -79,10 +136,26 @@ const CustomCard = ({data}: CustomCardProps) => {
         <IconButton onClick={addNewComment}>
           <Chat />
         </IconButton>
-        <IconButton>
-          <ThumbUpAltOutlined />
-        </IconButton>
+        {user && (!!data.isLiked || liked )? (<><IconButton onClick={dislikeTheRecipe}>
+          <ThumbUpIcon />
+        </IconButton></>
+) : (
+<> <IconButton onClick={likeTheRecipe}>
+  <ThumbUpAltOutlined />
+</IconButton>
+</>) }
+        {!user && (
+          <><IconButton onClick={() => {
+            navigate('../signin');
+          }}>
+            <ThumbUpAltOutlined />
+          </IconButton></>
+        )}
         <AddToShoppingListButton data={data.ingredients}/>
+        { user && (user.id === data.id_user) &&(
+          <Button variant="contained" sx={{backgroundColor: 'red !important'}}
+            onClick={deleteRecipe}> {deleteButtonName} </Button>
+        )}
       </CardActions>
       <CardContent>
         {data.name}

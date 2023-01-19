@@ -32,6 +32,19 @@ namespace TasTierAPI.Services
             commandsToDatabase.Connection = connectionToDatabase;
             commandsToDatabase.CommandText = methodQuery;
         }
+        public bool CheckForPrivateAccount(int id_user)
+        {
+            bool account_private = false;
+            MakeConnection("SELECT Private_account from [dbo].[User] WHERE Id_User = @id");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id", id_user);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                account_private = bool.Parse(sqlDataReader["Private_account"].ToString());
+            }
+            return account_private;
+        }
 
         public IEnumerable<Recipe> GetRecipesDTO()
         {
@@ -65,13 +78,68 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return recipes;
         }
+        public Recipe GetSingleRecipe(int id_recipe)
+        {
+            Recipe recipe = new Recipe();
+
+            recipe = GetRecipe(id_recipe);
+
+            recipe.Ingredients = GetIngriedientList(recipe.Id);
+            recipe.Images = GetRecipeImages(recipe.Id);
+            recipe.Steps = GetSteps(recipe.Id);
+            recipe.Tags = GetTags(recipe.Id);
+            
+            connectionToDatabase.Close();
+            return recipe;
+        }
+        public Recipe GetRecipe(int id_recipe)
+        {
+            Recipe tmpRecipe = new Recipe();
+            //Defining method query
+            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, Total_Calories, u.Id_User " +
+                "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
+                " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine " +
+                "WHERE Id_Recipe = @id_recipe");
+
+            //Opening the connection to database
+            connectionToDatabase.Open();
+            //Executing query and assining the results to sql reader
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+
+            //Reading content of the results and assigning values to temporary variable which then is added to result list
+            while (sqlDataReader.Read())
+            {
+                var rating = sqlDataReader["Rating"].ToString();
+                tmpRecipe = new Recipe()
+                {
+                    Id =int.Parse(sqlDataReader["Id_Recipe"].ToString()),
+                    Name = sqlDataReader["Name"].ToString(),
+                    Difficulty = int.Parse(sqlDataReader["Difficulty"].ToString()),
+                    Description = sqlDataReader["Description"].ToString(),
+                    Time = sqlDataReader["Time"].ToString()[0..^3],
+                    id_user = int.Parse(sqlDataReader["Id_User"].ToString()),
+                    Username = sqlDataReader["Username"].ToString(),
+                    Cousine = sqlDataReader["Cousine"].ToString(),
+                    Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
+                    Priv = bool.Parse(sqlDataReader["Private"].ToString()),
+                    Avatar = sqlDataReader["Avatar"].ToString(),
+                    Total_Calories = sqlDataReader["Total_Calories"].ToString(),
+                    Rating = string.IsNullOrEmpty(rating) ? 0 : float.Parse(rating),
+                };
+
+            }
+            //Closing the opened connection after reading the result contents and returning the list
+            connectionToDatabase.Close();
+            return tmpRecipe;
+        }
 
         public List<Recipe> GetRecipes()
         {
 
             List<Recipe> recipes = new List<Recipe>();
             //Defining method query
-            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, Total_Calories " +
+            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, Total_Calories, u.Private_account, u.Id_User " +
                 "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
                 " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine");
 
@@ -83,6 +151,7 @@ namespace TasTierAPI.Services
             //Reading content of the results and assigning values to temporary variable which then is added to result list
             while (sqlDataReader.Read())
             {
+                bool priv = bool.Parse(sqlDataReader["Private_account"].ToString());
                 var rating = sqlDataReader["Rating"].ToString();
                 Recipe tmpRecipe = new Recipe()
                 {
@@ -91,6 +160,7 @@ namespace TasTierAPI.Services
                     Difficulty = int.Parse(sqlDataReader["Difficulty"].ToString()),
                     Description = sqlDataReader["Description"].ToString(),
                     Time = sqlDataReader["Time"].ToString()[0..^3],
+                    id_user = int.Parse(sqlDataReader["Id_User"].ToString()),
                     Username = sqlDataReader["Username"].ToString(),
                     Cousine = sqlDataReader["Cousine"].ToString(),
                     Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
@@ -99,7 +169,10 @@ namespace TasTierAPI.Services
                     Total_Calories = sqlDataReader["Total_Calories"].ToString(),
                     Rating = string.IsNullOrEmpty(rating) ? 0 : float.Parse(rating),
                 };
-                recipes.Add(tmpRecipe);
+                if (!priv)
+                {
+                    recipes.Add(tmpRecipe);
+                }
 
             }
             //Closing the opened connection after reading the result contents and returning the list
@@ -111,7 +184,7 @@ namespace TasTierAPI.Services
 
             List<Recipe> recipes = new List<Recipe>();
             //Defining method query
-            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private " +
+            MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, u.Id_User " +
                 "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
                 " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine WHERE rec.User_Id_User = @id_user");
 
@@ -132,6 +205,7 @@ namespace TasTierAPI.Services
                     Difficulty = int.Parse(sqlDataReader["Difficulty"].ToString()),
                     Description = sqlDataReader["Description"].ToString(),
                     Time = sqlDataReader["Time"].ToString()[0..^3],
+                    id_user = int.Parse(sqlDataReader["Id_User"].ToString()),
                     Username = sqlDataReader["Username"].ToString(),
                     Cousine = sqlDataReader["Cousine"].ToString(),
                     Date = Convert.ToDateTime(sqlDataReader["Date"].ToString()),
@@ -150,10 +224,11 @@ namespace TasTierAPI.Services
         public List<IngriedientInRecipe> GetIngriedientList(int Id_Recipe)
         {
             List<IngriedientInRecipe> ingredientList = new List<IngriedientInRecipe>();
-            MakeConnection("SELECT r.Id_Ingredient, r.Name,r.Calories_Per_100g, ri.Amount, md.Name as MetricName, md.WeightPerUnit, ai.Id_Allergen, ri.Total_Mass FROM [dbo].[Recipe_Ingredient] as ri" +
+            MakeConnection("SELECT r.Id_Ingredient, r.Name,r.Calories_Per_100g, ri.Amount, md.Name as MetricName, md.WeightPerUnit, ai.Id_Allergen, ri.Total_Mass, ii.type FROM [dbo].[Recipe_Ingredient] as ri" +
             " inner join[dbo].[Ingredient] as r on ri.Ingredient_Id_Ingredient = r.Id_Ingredient" +
             " inner join[dbo].[Metric_Definiton] as md on ri.Id_Metric_Definition = md.Id_Metric_Definiton" +
             " inner join [dbo].[Allergen_Ingredient] as ai on r.Id_Ingredient = ai.Id_Ingredient" +
+            " inner join [dbo].[Allergen] as ii on ai.Id_Allergen = ii.Id_Allergen" +
             " WHERE ri.Recipe_Id_Recipe = @id; ");
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@id", Id_Recipe);
@@ -166,10 +241,11 @@ namespace TasTierAPI.Services
                     Id = int.Parse(sqlDataReader["Id_Ingredient"].ToString()),
                     Name = sqlDataReader["Name"].ToString(),
                     Calories = int.Parse(sqlDataReader["Calories_Per_100g"].ToString()),
-                    Allergen = String.IsNullOrEmpty(sqlDataReader["Id_Allergen"].ToString()),
                     Amount = int.Parse(sqlDataReader["Amount"].ToString()),
                     Unit = sqlDataReader["MetricName"].ToString(),
-                    TotalMass = sqlDataReader["Total_Mass"].ToString()
+                    TotalMass = sqlDataReader["Total_Mass"].ToString(),
+                    Id_Allergen = int.Parse(sqlDataReader["Id_Allergen"].ToString()),
+                    Allergen_name = sqlDataReader["type"].ToString()
                 };
                 ingredientList.Add(ingredient);
             }
@@ -295,6 +371,40 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return success;
 
+        }
+        public bool IsRecipeLiked(int id_recipe,int id_user)
+        {
+            bool isLiked = false;
+            MakeConnection("SELECT fl.Id_Favorites FROM [dbo].[FavoriteLIst_Recipe] as flr " +
+                "inner join [dbo].[FavoriteList] as fl on flr.FavoriteList_Id_Favorites = fl.Id_Favorites " +
+                "WHERE flr.Recipe_Id_Recipe = @id_recipe AND fl.User_Id_User = @id_user");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
+            commandsToDatabase.Parameters.AddWithValue("id_user", id_user);
+
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                isLiked = int.Parse(sqlDataReader["Id_Favorites"].ToString()) > 0;
+            }
+            connectionToDatabase.Close();
+            return isLiked;
+        }
+        public bool DeleteRecipe (int id_recipe,int id_user)
+        {
+            bool success = false;
+            MakeConnection("exec DeleteRecipe @id_user = @user,@id_recipe=@recipe");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@user", id_user);
+            commandsToDatabase.Parameters.AddWithValue("@recipe", id_recipe);
+
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                success = int.Parse(sqlDataReader["Id_Recipe"].ToString()) > 0;
+            }
+            connectionToDatabase.Close();
+            return success;
         }
         public bool AddRecipeImages(List<string> urls, int id_recipe)
         {

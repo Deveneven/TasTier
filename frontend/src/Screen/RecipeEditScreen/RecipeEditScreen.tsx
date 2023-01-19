@@ -50,12 +50,15 @@ const RecipeEditScreen = () => {
   };
   const checkIsValid = (elem: ({name: string, isValid: boolean})) => {
     const index = results.findIndex((x) => x.name == elem.name);
+    console.log(index);
+    console.log(results);
     if (index !== -1) {
       results[index] = elem;
     } else {
       results.push(elem);
     }
     const isAnyInValid = results.some((x) => x.isValid == false);
+    console.log(isAnyInValid);
     setIsValid(isAnyInValid);
   };
   const submitSteps = async () => {

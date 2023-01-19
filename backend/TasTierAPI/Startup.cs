@@ -32,6 +32,7 @@ namespace TasTierAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -48,6 +49,7 @@ namespace TasTierAPI
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("verysecretoken5912359213"))
                 };
             });
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllers();
             services.AddScoped<IAccountSettingService, AccountSettingService>();

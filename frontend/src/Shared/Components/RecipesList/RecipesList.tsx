@@ -3,7 +3,9 @@ import {RecipeDTO} from '../../DTOs/RecipeDTO';
 import BaseLayout from '../BaseLayout/BaseLayout';
 import CustomCard from '../Card/CustomCard';
 type Props = {
-    dataAll: RecipeDTO[];
+    dataAll?: RecipeDTO[];
+    recipeSingle? : RecipeDTO;
+    children?;
     input?:any;
 };
 
@@ -57,12 +59,15 @@ const RecipesList = (props: Props) => {
     setFilteredData(computedData);
   };
   return (
-    <BaseLayout onSearch={onSearch} onFilter={onFilter}>
+      <BaseLayout onSearch={onSearch} onFilter={onFilter}>
+          {props.children}
       {fiteredData?.map((recipe: RecipeDTO) => {
         return (
           <CustomCard key={recipe.id} data={recipe} />
         );
-      })}
+      }):
+ props.recipeSingle && ( <CustomCard key={props.recipeSingle?.id} data={props.recipeSingle} />)
+      }
     </BaseLayout >
   );
 };
