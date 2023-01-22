@@ -69,7 +69,7 @@ const CustomCard = ({data}: CustomCardProps) => {
   };
   const dislikeTheRecipe = () => {
     if (data.id) {
-      Api.remove(`${process.env.REACT_APP_DB_API}/recipes/delete/recipe/favorites`, data.id)
+      Api.remove(`${process.env.REACT_APP_DB_API}/recipes/delete/recipes/favorites`, data.id)
           .then((response) => {
             if (response.success) {
               setLiked(false);
@@ -136,21 +136,36 @@ const CustomCard = ({data}: CustomCardProps) => {
         <IconButton onClick={addNewComment}>
           <Chat />
         </IconButton>
-        {user && (!!data.isLiked || liked )? (<><IconButton onClick={dislikeTheRecipe}>
+        {/* {user && (!!data.isLiked || liked ) && (<><IconButton onClick={dislikeTheRecipe}>
           <ThumbUpIcon />
         </IconButton></>
-) : (
-<> <IconButton onClick={likeTheRecipe}>
+        ) }
+        { user && !(!!data.isLiked || liked ) && (
+          <> <IconButton onClick={likeTheRecipe}>
+            <ThumbUpAltOutlined />
+          </IconButton>
+          </>) } */}
+        { user ? ( (data.isLiked || liked) ? (
+          <> <IconButton onClick={dislikeTheRecipe}>
+            <ThumbUpIcon />
+          </IconButton>
+          </>) : (<><IconButton onClick={likeTheRecipe}>
+            <ThumbUpAltOutlined />
+          </IconButton></>
+        ) ) : (
+<><IconButton onClick={() => {
+  navigate('../signin');
+}}>
   <ThumbUpAltOutlined />
-</IconButton>
-</>) }
-        {!user && (
+</IconButton></>
+)}
+        {/* {!user && (
           <><IconButton onClick={() => {
             navigate('../signin');
           }}>
             <ThumbUpAltOutlined />
           </IconButton></>
-        )}
+        )} */}
         <AddToShoppingListButton data={data.ingredients}/>
         { user && (user.id === data.id_user) &&(
           <Button variant="contained" sx={{backgroundColor: 'red !important'}}

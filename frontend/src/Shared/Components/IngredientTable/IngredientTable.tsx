@@ -40,7 +40,6 @@ const IngredientTable = (props: IngredientTableProps) => {
   const [units, setUnits] = useState<MetricsDTO[]>([]);
   const [allIngredients, setAllIngredients] = useState<TableIngredientDTO[]>([]);
   const [isValid, setIsValid] = useState<boolean>(false);
-
   useEffect(() => {
     if (!!testData) {
       const sum = testData.reduce((partSum, ingredient) => partSum + ingredient.calories, 0);

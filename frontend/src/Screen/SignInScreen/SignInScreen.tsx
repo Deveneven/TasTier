@@ -3,8 +3,8 @@ import './SignInScreen.scss';
 import Grid from '@mui/material/Grid';
 import {Avatar, Box, Button, Card, CircularProgress} from '@mui/material';
 import Typography from '@mui/material/Typography';
-import {Facebook, LockOutlined} from '@material-ui/icons';
-import GoogleIcon from '@mui/icons-material/Google';
+import {LockOutlined} from '@material-ui/icons'; // Facebook
+// import GoogleIcon from '@mui/icons-material/Google';
 import Divider from '@mui/material/Divider';
 import {useNavigate} from 'react-router-dom';
 import ResetPasswordButton from '../../Shared/Components/ResetPasswordButton/ResetPasswordButton';
@@ -125,7 +125,7 @@ const SignInScreen = () => {
             <Typography component="h1" variant="h6">
               <Divider> OR </Divider>
             </Typography>
-            <Button startIcon={<Facebook style={{color: 'white'}}/>}
+            {/* <Button startIcon={<Facebook style={{color: 'white'}}/>}
               sx={[{backgroundColor: '#2374E1',
                 color: 'white', width: '100%'}, {
                 '&:hover': {
@@ -142,7 +142,7 @@ const SignInScreen = () => {
                 },
               }]} >
              Sign in with Google
-            </Button>
+            </Button> */}
             <Button onClick={ () => navigate('../register')}>
                Dont have an account ?
               <br />

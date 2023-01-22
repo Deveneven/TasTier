@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
@@ -6,10 +6,12 @@ import BookmarkBorderOutlinedIcon from '@material-ui/icons/BookmarkBorderOutline
 import {useNavigate} from 'react-router-dom';
 import MobileDrawer from './MobileDrawer';
 import UserAvatar from '../UserAvatar/UserAvatar';
+import UserContext from '../../../Contexts/UserContext';
 function BottomNavigate() {
   const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const {user} = useContext(UserContext);
   return (
     <>
       <MobileDrawer
@@ -39,15 +41,23 @@ function BottomNavigate() {
           }}
         />
         <BottomNavigationAction
-          label="My Recipes"
+          label="Favorites"
           icon={<BookmarkBorderOutlinedIcon fontSize="large" />}
           onClick={() => {
-            navigate(`../recipes/favorite`);
+            if (!!user) {
+              navigate(`../recipes/favorite`);
+            } else {
+              navigate('../signin');
+            }
           }}
         />
         <BottomNavigationAction
           onClick={() => {
-            setIsDrawerOpen(true);
+            if (!!user) {
+              setIsDrawerOpen(true);
+            } else {
+              navigate(`../signin`);
+            }
           }}
           label="Menu"
           icon={

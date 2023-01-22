@@ -93,6 +93,7 @@ function SideMenu() {
           <ListItem>
             <ListItemButton
               onClick={() => {
+                localStorage.removeItem('TastierToken');
                 navigate('../signin');
               }}>
               <ListItemIcon>
