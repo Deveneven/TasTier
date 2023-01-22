@@ -21,10 +21,12 @@ namespace TasTierAPI.Controllers
     public class AccountController : ControllerBase
     {
         private IAccountService _dbService;
+        private IDietSettingsService _dietService;
 
-        public AccountController(IAccountService dbService)
+        public AccountController(IAccountService dbService,IDietSettingsService dietSettingsService)
         {
             _dbService = dbService;
+            _dietService = dietSettingsService;
         }
 
         [AllowAnonymous]
@@ -105,7 +107,18 @@ namespace TasTierAPI.Controllers
             var securityToken = handler.ReadJwtToken(jwt);
             System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
-            return Ok(_dbService.GetUserDTO(int.Parse(id.ToString())));
+            UserInfoDTO userInfoDTO = new UserInfoDTO()
+            {
+                user = _dbService.GetUserDTO(int.Parse(id.ToString())),
+                diet = _dietService.GetUserDiet(int.Parse(id.ToString())),
+                cousines = _dietService.GetUserCousines(int.Parse(id.ToString())),
+                allergens = _dietService.GetUserAllergens(int.Parse(id.ToString())),
+                favoritesIngr = _dietService.GetUserFavIngredients(int.Parse(id.ToString())),
+                dislikedIngrs = _dietService.GetUserDislikedIngredients(int.Parse(id.ToString()))
+
+            };
+
+            return Ok(userInfoDTO);
         }
 
 
