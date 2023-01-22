@@ -34,8 +34,11 @@ namespace TasTierAPI.Controllers
                 IEnumerable<Recipe> result = _dbService.GetRecipesDTO();
                 if (result.Count() > 0)
                 {
-                    return Ok(_dbService.GetRecipesDTO());
-                }
+                    foreach (Recipe recipe in result)
+                    {
+                        recipe.isLiked = false;
+                    }
+                    return Ok(result);                }
                 return BadRequest("Something went wrong");
             }
             else
@@ -224,8 +227,16 @@ namespace TasTierAPI.Controllers
             var securityToken = handler.ReadJwtToken(jwt);
             var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
             int id = int.Parse(idd);
-            return Ok(_dbService.GetFavoriteRecipesDTO(id));
-
+            IEnumerable<Recipe> result = _dbService.GetFavoriteRecipesDTO(id);
+            if (result.Count() > 0)
+            {
+                foreach (Recipe recipe in result)
+                {
+                    recipe.isLiked = _dbService.IsRecipeLiked(recipe.Id, id);
+                }
+                return Ok(result);
+            }
+            return BadRequest("No recipes to be seen");
         }
         [HttpDelete]
         [Route("delete/recipes/favorites")]
