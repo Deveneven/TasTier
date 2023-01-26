@@ -107,6 +107,19 @@ namespace TasTierAPI.Controllers
             var securityToken = handler.ReadJwtToken(jwt);
             System.Diagnostics.Debug.WriteLine(securityToken.Claims);
             var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
+
+
+            return Ok(_dbService.GetUserDTO(int.Parse(id.ToString())));
+        }
+        [Route("user/perferences")]
+        [HttpGet]
+        public IActionResult GetUserPreferences()
+        {
+            var jwt = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.ReadJwtToken(jwt);
+            System.Diagnostics.Debug.WriteLine(securityToken.Claims);
+            var id = securityToken.Claims.First(claim => claim.Type == "id").Value;
             UserInfoDTO userInfoDTO = new UserInfoDTO()
             {
                 user = _dbService.GetUserDTO(int.Parse(id.ToString())),
@@ -120,7 +133,6 @@ namespace TasTierAPI.Controllers
 
             return Ok(userInfoDTO);
         }
-
 
     }
 }
