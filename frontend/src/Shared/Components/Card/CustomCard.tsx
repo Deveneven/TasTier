@@ -218,9 +218,10 @@ const CustomCard = ({data}: CustomCardProps) => {
       {!!commentIsVisible &&
       (
         <div className='expanded-content'>
-          {user && (
-            <Comment setComments={setComments} recipeId={data.id}/>
-          )}
+          {user ?
+            <Comment setComments={setComments} recipeId={data.id}/> :
+            <span>Sign in to add comment</span>
+          }
           <List>
             {comments?.map((comment, index) => {
               return (

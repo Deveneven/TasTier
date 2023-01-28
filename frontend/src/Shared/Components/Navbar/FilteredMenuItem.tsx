@@ -9,7 +9,7 @@ const FilteredMenuItem = (props: any) => {
     const [dislikedOptions, setDisLikedOptions] = useState([]);
     const [likedOptions, setLikedOptions] = useState([]);
     const [defaultLiked, setDefaultLiked] = useState<string[]>([]);
-    const [defaultDisliked, setDefaultDisliked] = useState([]);
+    const [defaultDisliked, setDefaultDisliked] = useState<string[]>([]);
     const {user} = useContext(UserContext);
 
     useEffect(() => {
@@ -33,8 +33,8 @@ const FilteredMenuItem = (props: any) => {
                 setDefaultDisliked(def['disliked']);
             }
             setAllOptions(all);
-            setLikedOptions(all);
-            setDisLikedOptions(all);
+            setLikedOptions(all.filter((elem) => !defaultDisliked.includes(elem)));
+            setDisLikedOptions(all.filter((elem) => !defaultLiked.includes(elem)));
         }
     }, [props.allOptions, user]);
 
