@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-// import './RegisterScreen.scss';
 import Grid from '@mui/material/Grid';
 import {Avatar, Box, Button, Card, CircularProgress} from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -62,7 +61,6 @@ const RegisterScreen = () => {
             setLoading(false);
           });
     }
-    // navigate('../signin');
   };
 
   return (
@@ -171,7 +169,12 @@ const RegisterScreen = () => {
                 }}
               />
               {registered.display && (
-                <CustomizableAlert setOpen={setRegistered} message={registered.text} type={'success'}/>
+                <CustomizableAlert
+                  setOpen={setRegistered}
+                  message={registered.text}
+                  type={'success'}
+                  time={5000}
+                  redirectUri='/signin'/>
               )}
               {error.display && (
                 <CustomizableAlert setOpen={setError} message={error.text} type={'error'}/>
