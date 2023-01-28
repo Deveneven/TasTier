@@ -139,6 +139,31 @@ namespace TasTierAPI.Controllers
             return BadRequest("Request did not contain form content");
 
         }
-
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("password/forgot")]
+        public IActionResult SendNewPassword([FromBody]string mail)
+        {
+            string newpass = _dbService.CreateRandomPassword();
+            String salt;
+            ForgotPasswordDTO loginAuthDTO = _dbService.GetUserIdByEmail(mail);
+            salt = loginAuthDTO.salt;
+            string userPassword = newpass;
+            byte[] saltBytes = Convert.FromBase64String(salt);
+            string passedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                userPassword,
+                saltBytes,
+                KeyDerivationPrf.HMACSHA1,
+                10000,
+                256 / 8
+              ));
+            string salt2 = _dbService.ChangePassword(passedPassword, loginAuthDTO.id);
+            if (!salt2.IsNullOrEmpty())
+            {
+                bool success = _dbService.sendNewPassword(mail, newpass);
+                if (success) { return Ok("Send email with password"); }
+            }
+            return BadRequest("Could not change the password");
+        }
     }
 }

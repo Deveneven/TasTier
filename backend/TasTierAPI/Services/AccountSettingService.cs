@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using TasTierAPI.Models;
+using System.Net;
+using System.Net.Mail;
+using System.Linq;
 
 namespace TasTierAPI.Services
 {
@@ -222,6 +225,52 @@ namespace TasTierAPI.Services
                 connectionToDatabase.Close();
             }
             return "Error";
+        }
+        public bool sendNewPassword(string mail,string pass)
+        {
+            if (mail.Contains('@'))
+            {
+                string[] mailSliced = mail.Split('@');
+                string mailWithNoDots = mailSliced[0].Replace(".", String.Empty);
+                string finalmail = mailWithNoDots + "@" + mailSliced[1];
+                SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("tastierservice@gmail.com", "klvubvjndcqfnawr\n"),
+                    EnableSsl = true,
+                };
+
+                var subjectforBrand = "New password for your Tastier account";
+                var bodyforBrand = "Here is your new password:\n" + pass + "\nYou can now log in with this password.\nPlease change it as soon as possible.";
+                try
+                {
+                    smtpClient.Send("tastierservice@gmail.com", finalmail, subjectforBrand, bodyforBrand);
+                }catch(Exception e) { return false; }
+                return true;
+            }
+            return false;
+        }
+        public ForgotPasswordDTO GetUserIdByEmail(string email)
+        {
+            ForgotPasswordDTO forgot = new ForgotPasswordDTO();
+            MakeConnection("SELECT Id_User,salt FROM [dbo].[User] WHERE Email = @email");
+            connectionToDatabase.Open();
+            commandsToDatabase.Parameters.AddWithValue("@email", email);
+            SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                forgot.id = int.Parse(sqlDataReader["Id_User"].ToString());
+                forgot.salt = sqlDataReader["salt"].ToString();
+            }
+            connectionToDatabase.Close();
+            return forgot;
+        }
+        public string CreateRandomPassword()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 7)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

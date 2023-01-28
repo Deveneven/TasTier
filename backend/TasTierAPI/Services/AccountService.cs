@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Net;
+using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using TasTierAPI.Models;
 
