@@ -85,7 +85,6 @@ namespace TasTierAPI.Services
                     avatar = (sqlDataReader["Avatar"] != null ? sqlDataReader["Avatar"].ToString() : null),
                     email = (sqlDataReader["Email"] != null ? sqlDataReader["Email"].ToString() : null),
                     admin = (sqlDataReader["Admin"] != null ? bool.Parse(sqlDataReader["Admin"].ToString()) : false),
-                    // diet_id = int.Parse(sqlDataReader["Diet_Id_Diet"].ToString())
                 };
 
 

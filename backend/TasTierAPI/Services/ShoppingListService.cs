@@ -220,7 +220,7 @@ namespace TasTierAPI.Services
             }
             
             connectionToDatabase.Close();
-            return result; //-1 -> exists, 0 -> error or no right to list, else -> success
+            return result; 
         }
         public int GetIdFromEmail (string email)
         {
