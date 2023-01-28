@@ -67,7 +67,8 @@ const ResetPasswordButton = () => {
         <DialogContent>
           <DialogContentText>
 To reset your password, be sure to give an email that is registered for the account,
-and we will send you temporary password to log in and change it later on in user settings
+and we will send you a new password to log in and change it later on in user settings.
+Please also check spam.
           </DialogContentText>
           <TextField
             margin="normal"
@@ -87,9 +88,7 @@ and we will send you temporary password to log in and change it later on in user
             <CustomizableAlert
               setOpen={setAlert}
               message={alert.text}
-              type={'success'}
-              time={5000}
-              redirectUri='/signin'/>
+              type={'success'} />
           )}
 
           {error.display && (
