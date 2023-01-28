@@ -33,11 +33,9 @@ const ResetPasswordButton = () => {
   };
 
   const resetPassword = () => {
-    console.log(email);
     Api.post(
         `${process.env.REACT_APP_DB_API}/settings/password/forgot`, email,
     ).then( (res) => {
-      console.log(res);
       if (res.success) {
         setAlert({display: true, text: res.text});
       } else {
