@@ -28,7 +28,6 @@ const SignInScreen = () => {
   const [error, setError] = useState({display: false, text: ''});
 
   const signIn = async () => {
-    console.log('Logowanie');
     if (emailIsValid && passwordIsValid) {
       setLoading(true);
       await Api.post(`${process.env.REACT_APP_DB_API}/accounts/login`, {

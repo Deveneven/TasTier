@@ -86,7 +86,6 @@ function Navbar(props: any) {
   const setSearchText = (event) => {
     event.preventDefault();
     const {value} = event.target;
-    console.log(value);
     setSearchTexta(value.toLowerCase())
     if (props.onSearch) {
       props.onSearch(value.toLowerCase());

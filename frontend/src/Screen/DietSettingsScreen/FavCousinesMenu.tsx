@@ -29,7 +29,6 @@ type: 'warning' | 'success' |'error' | 'info'
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/diet/cousine/get`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setCousines(response.text);
           }
@@ -39,7 +38,6 @@ type: 'warning' | 'success' |'error' | 'info'
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/diet/cousine/user`)
         .then((response) => {
-          console.log(response.text);
           if (response.success) {
             if (response.text.length > 0) {
               const names = response.text.map(function(item) {
@@ -55,7 +53,6 @@ type: 'warning' | 'success' |'error' | 'info'
 
   // set array of strings as user cousine choices
   const handleChange = (event: SelectChangeEvent<typeof cousines>) => {
-    console.log(event.target.value);
     const {
       target: {value},
     } = event;
@@ -63,13 +60,11 @@ type: 'warning' | 'success' |'error' | 'info'
         // On autofill we get a stringified value.
         typeof value === 'string' ? value.split(',') : value,
     );
-    console.log(cousinesOptionValue);
   };
   // post user diets
   const sendCousinesToDatabase = () => {
     Api.post(`${process.env.REACT_APP_DB_API}/diet/cousine/set`, cousinesOptionValue)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setAlert({display: true, text: response.text, type: 'success'});
           } else setAlert({display: true, text: response.text, type: 'error'});

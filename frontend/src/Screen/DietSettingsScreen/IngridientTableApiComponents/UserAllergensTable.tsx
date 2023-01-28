@@ -9,7 +9,6 @@ const UserAllergensTable = () => {
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/diet/allergens/get`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             const names = response.text.map(function(item) {
               return item['name'];
@@ -21,7 +20,6 @@ const UserAllergensTable = () => {
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/diet/allergens/user`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             const names = response.text.map(function(item) {
               return item['name'];

@@ -19,7 +19,7 @@ import {
   ListItemText,
   CardActionArea,
 } from '@mui/material';
-import {Chat, ExpandMore, ThumbUpAltOutlined} from '@material-ui/icons';
+import {Chat, ExpandMore} from '@material-ui/icons';
 import IngredientTable from '../IngredientTable/IngredientTable';
 import Comment from '../Comment/Comment';
 import {CardMedia, Typography} from '@material-ui/core';
@@ -30,7 +30,8 @@ import AddToShoppingListButton from './AddToShoppingListButton/AddToShoppingList
 import {CommentDTO} from '../../DTOs/CommentDTO';
 import {Api} from '../../../Utils/Api';
 import UserContext from '../../../Contexts/UserContext';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import {useNavigate} from 'react-router-dom';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 type CustomCardProps = {
@@ -100,11 +101,9 @@ const CustomCard = ({data}: CustomCardProps) => {
     Api.post(`${process.env.REACT_APP_DB_API}/recipes/rating`, payload)
         .then((response) => {
           if (response.success) {
-            console.log(response);
           }
         });
   };
-  console.log(data);
   return (
     <Card className="card">
       <CardActions sx={{display: 'flex', flexDirection: 'row', justifyContent: 'left', alignItems: 'center', padding: '0'}}
@@ -136,36 +135,20 @@ const CustomCard = ({data}: CustomCardProps) => {
         <IconButton onClick={addNewComment}>
           <Chat />
         </IconButton>
-        {/* {user && (!!data.isLiked || liked ) && (<><IconButton onClick={dislikeTheRecipe}>
-          <ThumbUpIcon />
-        </IconButton></>
-        ) }
-        { user && !(!!data.isLiked || liked ) && (
-          <> <IconButton onClick={likeTheRecipe}>
-            <ThumbUpAltOutlined />
-          </IconButton>
-          </>) } */}
         { user ? ( (data.isLiked || liked) ? (
           <> <IconButton onClick={dislikeTheRecipe}>
-            <ThumbUpIcon />
+            <BookmarkIcon />
           </IconButton>
           </>) : (<><IconButton onClick={likeTheRecipe}>
-            <ThumbUpAltOutlined />
+            <BookmarkBorderIcon />
           </IconButton></>
         ) ) : (
 <><IconButton onClick={() => {
   navigate('../signin');
 }}>
-  <ThumbUpAltOutlined />
+  <BookmarkBorderIcon />
 </IconButton></>
 )}
-        {/* {!user && (
-          <><IconButton onClick={() => {
-            navigate('../signin');
-          }}>
-            <ThumbUpAltOutlined />
-          </IconButton></>
-        )} */}
         <AddToShoppingListButton data={data.ingredients}/>
         { user && (user.id === data.id_user) &&(
           <Button variant="contained" sx={{backgroundColor: 'red !important'}}

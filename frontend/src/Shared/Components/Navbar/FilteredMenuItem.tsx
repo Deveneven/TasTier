@@ -1,7 +1,8 @@
 /*eslint-disable*/
 import { Checkbox, FormControl, Grid, IconButton, InputLabel, ListItemText, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
+import UserContext from '../../../Contexts/UserContext';
 
 const FilteredMenuItem = (props: any) => {
     const [allOptions, setAllOptions] = useState([]);
@@ -9,8 +10,18 @@ const FilteredMenuItem = (props: any) => {
     const [likedOptions, setLikedOptions] = useState([]);
     const [defaultLiked, setDefaultLiked] = useState<string[]>([]);
     const [defaultDisliked, setDefaultDisliked] = useState([]);
+    const {user} = useContext(UserContext);
 
     useEffect(() => {
+        if (user && user[props.name]) {
+            if (user[props.name].disliked) {
+                setDefaultDisliked(user[props.name].disliked.map((elem) => elem.name));
+            }
+            if (user[props.name].liked) {
+                setDefaultLiked(user[props.name].liked.map((elem) => elem.name));
+            }
+        }
+
         if(props.allOptions) { 
             let all = props.allOptions;
             const def = props.defaultItems[props.name];
@@ -25,11 +36,10 @@ const FilteredMenuItem = (props: any) => {
             setLikedOptions(all);
             setDisLikedOptions(all);
         }
-    }, [props.allOptions]);
+    }, [props.allOptions, user]);
 
     const changeLikedOptions = (event) => {
         const value = event.target? event.target.value : event;
-        console.log(value);
         setDefaultLiked(value)
         const filteredList = allOptions.filter((elem) => !value.includes(elem));
         setDisLikedOptions(filteredList);
@@ -39,7 +49,6 @@ const FilteredMenuItem = (props: any) => {
     };
     const changeDisLikedOptions = (event) => {
         const value = event.target? event.target.value : event;
-        console.log(value);
         setDefaultDisliked(value);
         const filteredList = allOptions.filter((elem) => !value.includes(elem));
         setLikedOptions(filteredList);

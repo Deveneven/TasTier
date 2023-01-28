@@ -17,7 +17,6 @@ const ShoppingList = () => {
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/shoppinglist/get/userlists`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setLists(response.text);
           }
@@ -26,7 +25,6 @@ const ShoppingList = () => {
   const deleteListFromAPI = (id) => {
     Api.remove(`${process.env.REACT_APP_DB_API}/shoppinglist/delete?id_list=${id}`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setLists(lists.filter((item) => item.id !== id));
           }

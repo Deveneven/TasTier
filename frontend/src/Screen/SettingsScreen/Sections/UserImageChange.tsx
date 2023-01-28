@@ -18,12 +18,9 @@ type: 'warning' | 'success' |'error' | 'info'
   const fileUpload = (e) => {
     const formData = new FormData();
     formData.append('file', e.target.files[0]);
-    console.log(e.target.files[0]);
-    console.log(formData);
     Api.postImage(`${process.env.REACT_APP_DB_API}/settings/avatar/change`, formData).then((response) => {
       if (response.success) {
         const jsonResp = JSON.parse(response.text);
-        console.log(jsonResp);
         setAlert({display: true, text: jsonResp.message, type: 'success'});
         updateUser('avatar', jsonResp.avatarURL);
       } else setAlert({display: true, text: response.text, type: 'error'});

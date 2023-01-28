@@ -11,8 +11,6 @@ const UserName = (props:any) => {
       </Typography>);
   }
   if (user && user.name || user.lastname) {
-    console.log('drugi if userAvatar');
-    console.log(user);
     return (
       <Typography component="h4" variant="h6" sx={{wordWrap: ' break-word', textAlign: 'left'}} {...props} >
         {user.name} {user.lastname}

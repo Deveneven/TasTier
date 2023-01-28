@@ -39,7 +39,6 @@ const ListScreen = () => {
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/shoppinglist/get/shoppinglist?Id_ShoppingList=${params.id}`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setList(response.text);
             setFriends(response.text.friends);
@@ -60,7 +59,6 @@ const ListScreen = () => {
   const sendDeleteToApi = (name) => {
     Api.remove(`${process.env.REACT_APP_DB_API}/shoppinglist/delete/friend`, {id_list: params.id, email: name})
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setFriends(friends.filter((item) => item.id_user !== response.text));
           } else {
@@ -72,7 +70,6 @@ const ListScreen = () => {
     return Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/edit/ingredient`,
         {ingredient: ingrid.name, id_list: params.id, amount: ingrid.amount})
         .then((response) => {
-          console.log(response);
           if (response.success) {
             return true;
           } else {
@@ -85,9 +82,7 @@ const ListScreen = () => {
     return Api.remove(`${process.env.REACT_APP_DB_API}/shoppinglist/delete/ingredient`,
         {ingredient: ingridName, id_list: params.id})
         .then((response) => {
-          console.log(response);
           if (response.success) {
-            console.log('list edit zwraca true');
             return true;
           } else {
             setIngredientError({display: true, text: response.text});
@@ -99,7 +94,6 @@ const ListScreen = () => {
     return Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add/ingredient`,
         {ingredient: ingrid.name, id_list: params.id, amount: ingrid.amount})
         .then((response) => {
-          console.log(response);
           if (response.success) {
             return true;
           } else {

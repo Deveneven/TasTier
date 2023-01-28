@@ -10,8 +10,6 @@ const RecipeScreen = () => {
     const data = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/recipe?id_recipe=${id}`);
     if (data.success) {
       // TO DO: Sortowanie po dacie
-      console.log('przepis pojedynczy !!!!!!!!!!!!!!!!!!!');
-      console.log(data);
       setData(data.text);
     }
   };

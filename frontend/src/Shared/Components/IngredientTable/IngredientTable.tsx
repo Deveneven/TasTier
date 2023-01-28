@@ -52,9 +52,7 @@ const IngredientTable = (props: IngredientTableProps) => {
 
   const deleteIngredient = async (id: number, name: string) => {
     if (!!testData && !!props.deleteIngredientInApi) {
-      console.log('przed sprawdzeniem delete w if ingrefient table');
       if (props.deleteIngredientInApi(name)) {
-        console.log('zwraca true w table');
         setTestData(testData.filter((item) => item.id !== id));
       }
     } else {
@@ -72,14 +70,12 @@ const IngredientTable = (props: IngredientTableProps) => {
   const AddIngredientToList = () => {
     const existedIndex = testData.findIndex((elem) => elem.name == ingredientName);
     if (existedIndex !== -1) {
-      console.log('jestesmy w existed element');
       testData[existedIndex].amount = amount;
       testData[existedIndex].unit = unit;
       if (!!props.editIngredientInApi) {
         props.editIngredientInApi(testData[existedIndex]);
       }
     } else if (!!ingredientName) {
-      console.log('jestesmy w ingredientName');
       const ingredient = allIngredients.find((elem) => elem.name ==ingredientName);
       // TO DO: Liczenie kalorii
       // TO DO: Określenie czy jest to składnik alergiczny
@@ -92,7 +88,6 @@ const IngredientTable = (props: IngredientTableProps) => {
           calories: 210,
           allergen: false,
         };
-        console.log('jestesmy w ingredient');
         if (isEdit && !!props.addIngredientInApi) {
           if (props.addIngredientInApi(ingrid)) {
             setTestData([...testData, ingrid]);

@@ -52,8 +52,6 @@ const RegisterScreen = () => {
             Email: email,
           },
       ).then( (response) => {
-        console.log('response from register screen');
-        console.log(response);
         if (response.success) {
           setRegistered({display: true, text: response.text});
         } else {
@@ -64,7 +62,6 @@ const RegisterScreen = () => {
             setLoading(false);
           });
     }
-    console.log('Rejestracja');
     // navigate('../signin');
   };
 

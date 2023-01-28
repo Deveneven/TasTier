@@ -15,8 +15,6 @@ async function get(url) {
   }).then( (response) => {
     return response;
   }).catch( (error) => {
-    console.log('jest to error');
-    console.log(error.message);
     if (error.message) {
       return {success: false, text: error.message};
     }
@@ -43,8 +41,6 @@ async function remove(url, payload) {
   }).then( (response) => {
     return response;
   }).catch( (error) => {
-    console.log('jest to error');
-    console.log(error.message);
     if (error.message) {
       return {success: false, text: error.message};
     }
@@ -64,18 +60,14 @@ async function post(url, payload) {
     referrerPolicy: 'no-referrer',
     body: JSON.stringify(payload),
   }).then(async (response) => {
-    console.log(response);
     const resp = {success: true, text: JSON.parse( await response.text())};
     if (response.status === 200) {
       return resp;
     }
     throw new Error(resp.text);
   }).then( (response) => {
-    console.log(response);
     return response;
   }).catch((error) => {
-    console.log('jest to error');
-    console.log(error.message);
     if (error.message) {
       return {success: false, text: error.message};
     }
@@ -102,8 +94,6 @@ async function postImage(url, payload) {
   }).then( (response) => {
     return response;
   }).catch((error) => {
-    console.log('jest to error');
-    console.log(error.message);
     if (error.message) {
       return {success: false, text: error.message};
     }

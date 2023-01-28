@@ -18,11 +18,8 @@ type: 'warning' | 'success' |'error' | 'info'
   const [lastname, setLastName] = useState<string>('');
   const [nickname, setNickname] = useState<string>('');
   const changeUserData = async () => {
-    console.log(user);
     if (user.name !== name && (name.length > 2)) {
       await Api.post(`${process.env.REACT_APP_DB_API}/settings/name/change`, name).then( (response) => {
-        console.log('ChangeDataResponse:');
-        console.log(response);
         if (response.success) {
           setAlert({display: true, text: response.text, type: 'success'});
           updateUser('name', name);
@@ -32,8 +29,6 @@ type: 'warning' | 'success' |'error' | 'info'
 
     if (user.lastname !== lastname.length && (lastname.length > 2 )) {
       await Api.post(`${process.env.REACT_APP_DB_API}/settings/lastname/change`, lastname).then( (response) => {
-        console.log('ChangeDataResponse:');
-        console.log(response);
         if (response.success) {
           setAlert({display: true, text: response.text, type: 'success'});
           updateUser('lastname', lastname);
@@ -43,8 +38,6 @@ type: 'warning' | 'success' |'error' | 'info'
 
     if (user.nickname !== nickname.length ) {
       await Api.post(`${process.env.REACT_APP_DB_API}/settings/username/change`, nickname).then( (response) => {
-        console.log('ChangeDataResponse:');
-        console.log(response);
         if (response.success) {
           setAlert({display: true, text: response.text, type: 'success'});
           updateUser('nickname', nickname);

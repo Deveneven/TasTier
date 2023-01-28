@@ -26,7 +26,6 @@ const IngredientTableDiets = ({tableName, buttonName, allOptions, userOptions, s
   const sendDeleteToApi = (name) => {
     Api.remove(`${process.env.REACT_APP_DB_API}/diet/${deleteProp}/delete`, name)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setUserOptions(userOptions.filter((item) => item !== name));
           }
@@ -37,7 +36,6 @@ const IngredientTableDiets = ({tableName, buttonName, allOptions, userOptions, s
     if (!userOptions.includes(name)) {
       Api.post(`${process.env.REACT_APP_DB_API}/diet/${deleteProp}/add`, name)
           .then((response) => {
-            console.log(response);
             if (response.success) {
               setUserOptions((testData) => ([...testData, productName] ));
             }
@@ -65,7 +63,6 @@ const IngredientTableDiets = ({tableName, buttonName, allOptions, userOptions, s
                     className="icon-hover"
                     onClick={() => {
                       sendDeleteToApi(ingredient);
-                      console.log(userOptions);
                     }}
                   />
                 </TableCell>

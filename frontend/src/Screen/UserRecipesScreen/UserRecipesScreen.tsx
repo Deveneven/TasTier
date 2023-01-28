@@ -14,8 +14,6 @@ const UserRecipes = () => {
     const data = await Api.get(`${process.env.REACT_APP_DB_API}/recipes/get/friend/recipes?id_friend=${id}`); // ?id_user=${id} po user
     if (data.success) {
       // TO DO: Sortowanie po dacie
-      console.log('przpeisy usera !!!!!!!!!!!!!!!!!!!');
-      console.log(data);
       setDataAll(data.text);
       setDataFirst(data.text[0]);
     }

@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import React, {createContext, useState} from 'react';
 import {Api} from '../Utils/Api';
 const UserContext = createContext();
@@ -12,11 +13,18 @@ export function UserProvider({children}) {
   };
 
   function setupUser() {
-    Api.get(`${process.env.REACT_APP_DB_API}/accounts/user`)
+    Api.get(`${process.env.REACT_APP_DB_API}/accounts/user/perferences`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
-            setUser(response.text);
+            const pref = response.text;
+            const usersPref = {
+              ...pref.user,
+              allergens: {disliked: pref.allergens},
+              cousine: {liked: pref.cousines},
+              diet: {liked: pref.diet},
+              ingredients: {liked: pref.favoritesIngr, disliked: pref.dislikedIngrs},
+            }
+            setUser(usersPref);
           } else {
             setUser(null);
           }

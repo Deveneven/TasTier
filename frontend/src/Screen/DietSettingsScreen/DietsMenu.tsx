@@ -28,7 +28,6 @@ type: 'warning' | 'success' |'error' | 'info'
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/diet/diet/get`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             setDiets(response.text);
           }
@@ -39,7 +38,6 @@ type: 'warning' | 'success' |'error' | 'info'
   useEffect(() => {
     Api.get(`${process.env.REACT_APP_DB_API}/diet/diet/user`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             if (response.text.name) {
               setDietsOptionValue(response.text.name);
@@ -51,7 +49,6 @@ type: 'warning' | 'success' |'error' | 'info'
 
   // functions
   const handleChange = (event: SelectChangeEvent<typeof diets>) => {
-    console.log(event.target.value);
     setDietsOptionValue(event.target.value);
   };
 

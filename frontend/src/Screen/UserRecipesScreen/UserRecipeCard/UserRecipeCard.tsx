@@ -3,7 +3,6 @@ import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import noImage from '../../../assets/no_photo.jpg';
 const UserRecipeCard = ({recipe}:any) => {
-  console.log(recipe);
   const navigate = useNavigate();
   return (
     <Card sx={{Width: 340}}>

@@ -16,12 +16,8 @@ type: 'warning' | 'success' |'error' | 'info'
 
   const [email, setEmail] = useState('');
   const changeUserMail = async () => {
-    console.log('to jest change email');
     if ( user.email !== email) {
-      console.log('maile nie jest taki sam');
       await Api.post(`${process.env.REACT_APP_DB_API}/settings/email/change`, email).then( (response) => {
-        console.log('ChangeDataResponse:');
-        console.log(response);
         if (response.success) {
           setAlert({display: true, text: response.text, type: 'success'});
           updateUser('mail', email);

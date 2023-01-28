@@ -17,8 +17,6 @@ type: 'warning' | 'success' |'error' | 'info'
   const changeUserPass = async () => {
     if ( userNewPass === userNewPassConf) {
       await Api.post(`${process.env.REACT_APP_DB_API}/settings/password/change`, userNewPass).then( (response) => {
-        console.log('ChangeDataResponse:');
-        console.log(response);
         if (response.success) setAlert({display: true, text: response.text, type: 'success'});
         else setAlert({display: true, text: response.text, type: 'error'});
       });

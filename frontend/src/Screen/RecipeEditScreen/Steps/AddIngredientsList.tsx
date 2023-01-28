@@ -9,7 +9,6 @@ const AddIngredientsList = (props: any) => {
   const onChange = (event) => {
     if (props.onChange && props.checkIsValid) {
       props.onChange(event);
-      console.log(event.value.length);
       props.checkIsValid({name: props.name, isValid: event.value.length > 0});
     }
   };

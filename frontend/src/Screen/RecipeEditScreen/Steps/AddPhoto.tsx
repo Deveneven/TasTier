@@ -30,7 +30,6 @@ const AddPhoto = (props: any) => {
   }, [image]);
 
   const deletePhoto = (index) => {
-    console.log(index);
     if (index !== -1) {
       const updatedList = selectedFile;
       updatedList.splice(index, 1);

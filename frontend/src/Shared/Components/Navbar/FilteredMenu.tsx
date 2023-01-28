@@ -54,13 +54,11 @@ const FilteredMenu = (props: any) => {
         }
     };
     const onFilter = () => {
-        console.log('On filter')
         if (props.onFilter){
             props.onFilter(filteredItem);
         }
     }
     useEffect(() => {
-        console.log('use effect');
         fetchData();
     }, []);
     return (

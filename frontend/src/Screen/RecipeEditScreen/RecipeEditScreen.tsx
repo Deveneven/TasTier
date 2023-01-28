@@ -35,7 +35,6 @@ const RecipeEditScreen = () => {
     if (activeStep < stepList.length) {
       setActiveStep(activeStep+1);
     } else {
-      console.log('Submit Action');
     }
   };
   const setStep = (step: number) => {
@@ -50,15 +49,12 @@ const RecipeEditScreen = () => {
   };
   const checkIsValid = (elem: ({name: string, isValid: boolean})) => {
     const index = results.findIndex((x) => x.name == elem.name);
-    console.log(index);
-    console.log(results);
     if (index !== -1) {
       results[index] = elem;
     } else {
       results.push(elem);
     }
     const isAnyInValid = results.some((x) => x.isValid == false);
-    console.log(isAnyInValid);
     setIsValid(isAnyInValid);
   };
   const submitSteps = async () => {
@@ -94,9 +90,7 @@ const RecipeEditScreen = () => {
     formData.append('file', images[0]);
     formData.append('id_recipe', id);
     Api.postImage(`${process.env.REACT_APP_DB_API}/recipes/add/recipe/images`, formData).then((response) => {
-      console.log(response);
       if (response.success) {
-        console.log('Upload images success');
         navigate('/myrecipes');
       } else {
         setError({display: true, text: 'Uploading photo error'});

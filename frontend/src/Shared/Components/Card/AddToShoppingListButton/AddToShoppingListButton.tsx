@@ -42,7 +42,6 @@ type: 'warning' | 'success' |'error' | 'info'
   function getListsFromApi() {
     Api.get(`${process.env.REACT_APP_DB_API}/shoppinglist/get/userlists`)
         .then((response) => {
-          console.log(response);
           if (response.success) {
             const names = response.text.map(function(item) {
               return item['name'];
@@ -59,7 +58,6 @@ type: 'warning' | 'success' |'error' | 'info'
           {list_name: listName, ingredients: data},
       )
           .then((response) => {
-            console.log(response);
             if (response.success) {
               setAlert({display: true, text: 'sucessfuly added produts to your list', type: 'success'});
             } else {
@@ -70,14 +68,11 @@ type: 'warning' | 'success' |'error' | 'info'
       // api tworzace liste
       Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add`, listName)
           .then((response) => {
-            console.log(response);
-            console.log(listName);
             if (response.success) {
               Api.post(`${process.env.REACT_APP_DB_API}/shoppinglist/add/recipe`,
                   {list_name: listName, ingredients: data},
               )
                   .then((response) => {
-                    console.log(response);
                     if (response.success) {
                       setAlert({display: true, text: 'sucessfuly added produts to your list', type: 'success'});
                     } else {
