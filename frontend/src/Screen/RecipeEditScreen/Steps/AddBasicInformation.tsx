@@ -12,15 +12,10 @@ import Checkbox from '@mui/material/Checkbox';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MaskedInput from 'react-text-mask';
 
-type MaskProps = {
-  inputRef: any,
-};
-const TextMaskCustom = (props: MaskProps) => {
-  const {inputRef, ...other} = props;
+const TextMaskCustom = (props: any) => {
   return (
     <MaskedInput
-      {...other}
-      ref={inputRef}
+      {...props}
       mask={[/[0-9]/, /[0-9]/, ':', /[0-9]/, /[0-9]/]}
       placeholderChar={'\u2000'}
       showMask
