@@ -8,9 +8,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import {Api} from '../../../Utils/Api';
+import CustomizableAlert from '../Alert/CustomizableAlert';
 const ResetPasswordButton = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [alert, setAlert] = useState({display: false, text: ''});
+  const [error, setError] = useState({display: false, text: ''});
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -25,6 +30,20 @@ const ResetPasswordButton = () => {
   const textCenter = {
     textAlign: 'center',
     marginBlock: '1rem',
+  };
+
+  const resetPassword = () => {
+    console.log(email);
+    Api.post(
+        `${process.env.REACT_APP_DB_API}/settings/password/forgot`, email,
+    ).then( (res) => {
+      console.log(res);
+      if (res.success) {
+        setAlert({display: true, text: res.text});
+      } else {
+        setError({display: true, text: res.text});
+      }
+    });
   };
 
   return (
@@ -60,8 +79,27 @@ and we will send you temporary password to log in and change it later on in user
             autoComplete="email"
             autoFocus
             inputRef={emailRef}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           />
-          <Button variant="contained" sx={textCenter} fullWidth >
+          {alert.display && (
+            <CustomizableAlert
+              setOpen={setAlert}
+              message={alert.text}
+              type={'success'}
+              time={5000}
+              redirectUri='/signin'/>
+          )}
+
+          {error.display && (
+            <CustomizableAlert
+              setOpen={setError}
+              message={error.text}
+              type={'error'} />
+          )}
+
+          <Button variant="contained" sx={textCenter} fullWidth onClick={resetPassword}>
             Reset
           </Button>
           <Button
