@@ -128,8 +128,6 @@ namespace TasTierAPI.Controllers
             var securityToken = handler.ReadJwtToken(jwt);
             var idd = securityToken.Claims.First(claim => claim.Type == "id").Value;
             int id = int.Parse(idd);
-          //  if (Request.HasFormContentType)
-          //  {
                 id_recipe = _dbService.AddRecipe(recipeInsert.recipe, recipeInsert.ingrs, recipeInsert.steps,recipeInsert.tags,id);
                 if (id_recipe>0)
                 {
@@ -137,10 +135,6 @@ namespace TasTierAPI.Controllers
 
                 }
                 return BadRequest("Something went wrong");
-
-        //    }
-
-       //     return BadRequest("Missing from content");
         }
         [Authorize]
         [Route("delete/recipe")]

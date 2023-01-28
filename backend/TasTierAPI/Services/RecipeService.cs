@@ -95,19 +95,14 @@ namespace TasTierAPI.Services
         public Recipe GetRecipe(int id_recipe)
         {
             Recipe tmpRecipe = new Recipe();
-            //Defining method query
             MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, Total_Calories, u.Id_User " +
                 "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
                 " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine " +
                 "WHERE Id_Recipe = @id_recipe");
 
-            //Opening the connection to database
             connectionToDatabase.Open();
-            //Executing query and assining the results to sql reader
             commandsToDatabase.Parameters.AddWithValue("@id_recipe", id_recipe);
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
-
-            //Reading content of the results and assigning values to temporary variable which then is added to result list
             while (sqlDataReader.Read())
             {
                 var rating = sqlDataReader["Rating"].ToString();
@@ -129,7 +124,6 @@ namespace TasTierAPI.Services
                 };
 
             }
-            //Closing the opened connection after reading the result contents and returning the list
             connectionToDatabase.Close();
             return tmpRecipe;
         }
@@ -138,17 +132,11 @@ namespace TasTierAPI.Services
         {
 
             List<Recipe> recipes = new List<Recipe>();
-            //Defining method query
             MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, Total_Calories, u.Private_account, u.Id_User " +
                 "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
                 " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine");
-
-            //Opening the connection to database
             connectionToDatabase.Open();
-            //Executing query and assining the results to sql reader
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
-
-            //Reading content of the results and assigning values to temporary variable which then is added to result list
             while (sqlDataReader.Read())
             {
                 bool priv = bool.Parse(sqlDataReader["Private_account"].ToString());
@@ -175,7 +163,6 @@ namespace TasTierAPI.Services
                 }
 
             }
-            //Closing the opened connection after reading the result contents and returning the list
             connectionToDatabase.Close();
             return recipes;
         }
@@ -183,18 +170,13 @@ namespace TasTierAPI.Services
         {
 
             List<Recipe> recipes = new List<Recipe>();
-            //Defining method query
             MakeConnection("SELECT Id_Recipe, rec.Name, Difficulty,Description, Time, u.Name as Username,Avatar, c.Name as Cousine, Date, Rating, Private, u.Id_User " +
                 "FROM [dbo].[Recipe] AS rec  INNER JOIN [dbo].[User] as u ON rec.User_Id_User = u.Id_User" +
                 " INNER JOIN [dbo].[Cousine] as c ON rec.Cousine_Id_Cousine = c.Id_Cousine WHERE rec.User_Id_User = @id_user");
-
-            //Opening the connection to database
             connectionToDatabase.Open();
             commandsToDatabase.Parameters.AddWithValue("@id_user", id_user);
-            //Executing query and assining the results to sql reader
             SqlDataReader sqlDataReader = commandsToDatabase.ExecuteReader();
 
-            //Reading content of the results and assigning values to temporary variable which then is added to result list
             while (sqlDataReader.Read())
             {
                 var rating = sqlDataReader["Rating"].ToString();
@@ -216,7 +198,6 @@ namespace TasTierAPI.Services
                 recipes.Add(tmpRecipe);
 
             }
-            //Closing the opened connection after reading the result contents and returning the list
             connectionToDatabase.Close();
             return recipes;
         }
@@ -548,8 +529,6 @@ namespace TasTierAPI.Services
             connectionToDatabase.Close();
             return id_recipe;
         }
-
-        //public bool AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, IFormFileCollection images, int id_user)
         public int AddRecipe(RecipeInsertDTO recipe, List<IngredientInRecipeInsertDTO> ingrs, List<Step> steps, List<string> tags, int id_user)
         {
             int id_recipe = AddRecipeDefinition(recipe, id_user);
@@ -566,14 +545,7 @@ namespace TasTierAPI.Services
                     }
 
                 }
-                /*
-            {
-                List<string> urls = UploadRecipeImages(images);
-                bool images_success = AddRecipeImages(urls,id_recipe);
-                if (images_success) return true;
-                return false;
-            }
-            return false;*/
+
 
             }
             return 0;
@@ -807,9 +779,4 @@ namespace TasTierAPI.Services
         }
     }
 }
-//TODO DODAC DO ZWROTU SKLADNIKOW KALORIE NA 100 G I ILOSC SKLADNIKU
-//TODO DODAC POLE SUMY KALORI DO BAZY DO TABELI RECIPE I PRZYJMOWAC ZMIENNA SUMY W KONCOWCE ADD RECIPE
-//TODO DODAWANIA USUWANIE GETOWANIE KOMENTARZY / USUWAC MOZE TEZ ADMINISTRATOR
-//TODO DODAWNIE USUWANIA PRZPISOW > USUWAC MOZE TEZ ADMIN
-//TODO DODAC RATING I DODAC DO DODAWNIA RATINGU DODAC DO GET RECIPES POLE NA SREDNI RATING
-//
+
